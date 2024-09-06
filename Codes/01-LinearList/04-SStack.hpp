@@ -107,6 +107,8 @@ namespace Test_S_Stack
 {
     void MainTest()
     {
+        std::cout << "--------------------------------------------------" << "\n";
+
         //对象初始化测试
         SStack<int> stack(2);
 
@@ -136,7 +138,9 @@ namespace Test_S_Stack
         stack.Push(55);
         std::cout << stack.GetCapacity() << "\n";
         //8
-    }   
+
+        std::cout << "--------------------------------------------------" << "\n";
+    }
 }
 
 #endif

@@ -169,6 +169,8 @@ namespace Test_Sequential_List
 
     void MainTest()
     {
+        std::cout << "--------------------------------------------------" << "\n";
+
         //测试构造函数
         SequentialList<Item> itemList(10);
         SequentialList<int> intList(10);
@@ -220,6 +222,8 @@ namespace Test_Sequential_List
         //输出结果为空白
         std::cout << intList.IsEmpty() << "\n";
         //1
+
+        std::cout << "--------------------------------------------------" << "\n";
     }
 }
 

@@ -57,29 +57,40 @@ namespace Test_L_Stack
 {
     void MainTest()
     {
+        std::cout << "--------------------------------------------------" << "\n";
+
         //对象初始化测试
         LStack<int> stack;
 
-        //IsEmpty函数测试
-        std::cout << stack.IsEmpty() << "\n";
-        //1
+        // //IsEmpty函数测试
+        // std::cout << "##IsEmpty: " << stack.IsEmpty() << "\n";
+        // //##IsEmpty: 1
         
         //测试Push与GetTop函数
-        stack.Push(11);
-        std::cout << stack.GetTop() << "\n";
-        //11
-        stack.Push(22);
-        std::cout << stack.GetTop() << "\n";
-        //22
+        stack.Push(11); std::cout << "**Push [11]" << "\n";
+        std::cout << "##GetTop: " << stack.GetTop() << "\n";
+        //##GetTop: 11
+        stack.Push(22); std::cout << "**Push [22]" << "\n";
+        std::cout << "##GetTop: " << stack.GetTop() << "\n";
+        //##GetTop: 22
 
-        //测试Pop函数
-        stack.Pop();
-        std::cout << stack.GetTop() << "\n";
-        //11
+        stack.Push(33); std::cout << "**Push [33]" << "\n";
+        std::cout << "##GetTop: " << stack.GetTop() << "\n";
+        //##GetTop: 33
         
-        //IsEmpty函数测试
-        std::cout << stack.IsEmpty() << "\n";
-        //0
+        //测试Pop函数
+        stack.Pop(); std::cout << "**Pop" << "\n";
+        std::cout << "##GetTop: " << stack.GetTop() << "\n";
+        //##GetTop: 22
+        stack.Pop(); std::cout << "**Pop" << "\n";
+        std::cout << "##GetTop: " << stack.GetTop() << "\n";
+        //##GetTop: 11
+
+        // //IsEmpty函数测试
+        // std::cout << "##IsEmpty: " << stack.IsEmpty() << "\n";
+        // //##IsEmpty: 0
+
+        std::cout << "--------------------------------------------------" << "\n";
     }
 }
 

@@ -52,6 +52,8 @@ namespace Test_L_Queue
 {
     void MainTest()
     {
+        std::cout << "--------------------------------------------------" << "\n";
+
         //初始化测试
         LQueue<std::string> queue;
 
@@ -68,8 +70,10 @@ namespace Test_L_Queue
         std::cout << queue.GetFront() << "\n";
         //Nina
         queue.Pop();
-        std::cout << queue.GetFront() << "\n";
-        //ERROR: Queue Is Empty
+        std::cout << queue.IsEmpty() << "\n";
+        //1
+
+        std::cout << "--------------------------------------------------" << "\n";
     }
 }
 
