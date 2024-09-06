@@ -167,14 +167,16 @@ bool LinkedList<T>::Insert(T _obj, int _idx)
 template <typename T>
 void LinkedList<T>::PushFront(T const& _obj)
 {
-    //插入到头部
+    //插入新元素到头部
     Insert(_obj, 0);
 }
 
 template <typename T>
 void LinkedList<T>::PushBack(T const& _obj)
 {
-    //插入到尾部
+    //插入新元素到尾部
+    //由于此处Insert方法内是仅使用头指针head进行遍历，所以PushBack的复杂度为O(n)
+    //这里因为懒并没有使用尾指针tail来重写，使用tail是可以将复杂度降到O(1)的
     Insert(_obj, length);
 }
 
@@ -228,6 +230,7 @@ template <typename T>
 void LinkedList<T>::PopBack()
 {
     //删除尾部元素
+    //同理可使用tail重写来使得此函数复杂度降为O(1)，但是我懒
     Erase(length - 1);
 }
 

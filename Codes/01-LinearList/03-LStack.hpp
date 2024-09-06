@@ -2,7 +2,6 @@
 #define _L_STACK_HPP_
 
 #include <iostream>
-
 //引入之前写好的单向链表实现
 #include "02-LinkedList.hpp"
 
