@@ -34,7 +34,7 @@ T LStack<T>::GetTop() const
     if (IsEmpty())
         throw std::runtime_error("ERROR: Stack Is Empty");
     //否则返回栈顶部元素，即头部元素
-    return list.GetElem(0);
+    return list.GetFront();
 }
 
 template <typename T>

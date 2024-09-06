@@ -26,11 +26,15 @@ public:
     bool IsEmpty() const;       //查询当前列表是否为空
     T GetElem(int) const;       //检索特定索引的元素（只读）
     int Find(T) const;          //查找某元素的位置索引
+    T GetFront() const;         //返回链表头部元素
+    T GetBack() const;          //返回链表尾部元素
 
     bool Insert(T, int);        //插入元素到指定位置
     void PushFront(T const&);   //将元素插入到链表头部
+    void PushBack(T const&);    //将元素插入到链表尾部
     void Erase(int);            //删除指定位置的元素
     void PopFront();            //删除头部元素
+    void PopBack();             //删除尾部元素
 };
 
 template <typename T>
@@ -102,6 +106,18 @@ int LinkedList<T>::Find(T _obj) const
 }
 
 template <typename T>
+T LinkedList<T>::GetFront() const
+{
+    return GetElem(0);
+}
+
+template <typename T>
+T LinkedList<T>::GetBack() const
+{
+    return GetElem(length - 1);
+}
+
+template <typename T>
 bool LinkedList<T>::Insert(T _obj, int _idx)
 {
     //创建指向新节点的指针
@@ -156,6 +172,13 @@ void LinkedList<T>::PushFront(T const& _obj)
 }
 
 template <typename T>
+void LinkedList<T>::PushBack(T const& _obj)
+{
+    //插入到尾部
+    Insert(_obj, length);
+}
+
+template <typename T>
 void LinkedList<T>::Erase(int _idx)
 {
     //排除非法索引
@@ -201,6 +224,13 @@ void LinkedList<T>::PopFront()
     Erase(0);
 }
 
+template <typename T>
+void LinkedList<T>::PopBack()
+{
+    //删除尾部元素
+    Erase(length - 1);
+}
+
 namespace Test_Linked_List
 {
     class Item
@@ -234,7 +264,7 @@ namespace Test_Linked_List
         std::cout << intList.IsEmpty() << "\n";
         //1
         
-        //测试Insert函数
+        //测试Insert、PushFront、PushBack函数
         int a = 0, b = 11, c = 22, d = 33, x = 99;
         intList.Insert(a, 0);
         intList.Insert(b, 1);
@@ -242,7 +272,7 @@ namespace Test_Linked_List
         intList.Insert(d, 3);
         PrintListInt(intList);
         //0 11 22 33
-        intList.Insert(x, 4);
+        intList.PushBack(x);
         PrintListInt(intList);
         //0 11 22 33 99
         intList.PushFront(x);
@@ -252,14 +282,14 @@ namespace Test_Linked_List
         PrintListInt(intList);
         //99 0 99 11 22 33 99
         
-        //测试Erase函数
+        //测试Erase、PopFront、PopBack函数
         intList.Erase(2);
         PrintListInt(intList);
         //99 0 11 22 33 99
         intList.PopFront();
         PrintListInt(intList);
         //0 11 22 33 99
-        intList.Erase(4);
+        intList.PopBack();
         PrintListInt(intList);
         //0 11 22 33
 
