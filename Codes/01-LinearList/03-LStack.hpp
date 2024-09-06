@@ -2,7 +2,6 @@
 #define _L_STACK_HPP_
 
 #include <iostream>
-//引入之前写好的单向链表实现
 #include "02-LinkedList.hpp"
 
 //由于此栈基于写好的单向链表的栈实现（构造函数无需传入参数），所以不需写构造析构函数
@@ -62,9 +61,9 @@ namespace Test_L_Stack
         //对象初始化测试
         LStack<int> stack;
 
-        // //IsEmpty函数测试
-        // std::cout << "##IsEmpty: " << stack.IsEmpty() << "\n";
-        // //##IsEmpty: 1
+        //IsEmpty函数测试
+        std::cout << "##IsEmpty: " << stack.IsEmpty() << "\n";
+        //##IsEmpty: 1
         
         //测试Push与GetTop函数
         stack.Push(11); std::cout << "**Push [11]" << "\n";
@@ -86,9 +85,9 @@ namespace Test_L_Stack
         std::cout << "##GetTop: " << stack.GetTop() << "\n";
         //##GetTop: 11
 
-        // //IsEmpty函数测试
-        // std::cout << "##IsEmpty: " << stack.IsEmpty() << "\n";
-        // //##IsEmpty: 0
+        //IsEmpty函数测试
+        std::cout << "##IsEmpty: " << stack.IsEmpty() << "\n";
+        //##IsEmpty: 0
 
         std::cout << "--------------------------------------------------" << "\n";
     }

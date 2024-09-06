@@ -8,8 +8,8 @@
 void TestLinearList()
 {
     // Test_Sequential_List::MainTest();
-    Test_Linked_List::MainTest();
-    Test_L_Stack::MainTest();
+    // Test_Linked_List::MainTest();
+    // Test_L_Stack::MainTest();
     // Test_S_Stack::MainTest();
     // Test_L_Queue::MainTest();
     // Test_S_Queue::MainTest();

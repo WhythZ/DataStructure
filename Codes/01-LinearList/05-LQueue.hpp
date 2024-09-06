@@ -58,20 +58,20 @@ namespace Test_L_Queue
         LQueue<std::string> queue;
 
         //函数测试
-        queue.Push("Tamako");
-        queue.Push("Yui");
-        queue.Push("Nina");
-        std::cout << queue.GetFront() << "\n";
-        //Tamako
-        queue.Pop();
-        std::cout << queue.GetFront() << "\n";
-        //Yui
-        queue.Pop();
-        std::cout << queue.GetFront() << "\n";
-        //Nina
-        queue.Pop();
-        std::cout << queue.IsEmpty() << "\n";
-        //1
+        queue.Push("Tamako"); std::cout << "**Push(\"Tamako\")\n";
+        queue.Push("Yui"); std::cout << "**Push(\"Yui\")\n";
+        queue.Push("Nina"); std::cout << "**Push(\"Nina\")\n";
+        std::cout << "##GetFront: " << queue.GetFront() << "\n";
+        //##GetFront: Tamako
+        queue.Pop(); std::cout << "**Pop\n";
+        std::cout << "##GetFront: " << queue.GetFront() << "\n";
+        //##GetFront: Yui
+        queue.Pop(); std::cout << "**Pop\n";
+        std::cout << "##GetFront: " << queue.GetFront() << "\n";
+        //##GetFront: Nina
+        queue.Pop(); std::cout << "**Pop\n";
+        std::cout << "##IsEmpty: " << queue.IsEmpty() << "\n";
+        //##IsEmpty: 1
 
         std::cout << "--------------------------------------------------" << "\n";
     }

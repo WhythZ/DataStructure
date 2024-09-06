@@ -253,9 +253,8 @@ void LinkedList<T>::PopBack()
 
 namespace Test_Linked_List
 {
-    class Item
+    struct Item
     {
-    public:
         int id = 0;
         Item() = default;
         Item(int _id) :id(_id) {}

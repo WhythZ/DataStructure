@@ -150,9 +150,8 @@ void SequentialList<T>::Clear()
 
 namespace Test_Sequential_List
 {
-    class Item
+    struct Item
     {
-    public:
         int id = 0;
         Item() = default;
         Item(int _id) :id(_id) {}
@@ -176,52 +175,52 @@ namespace Test_Sequential_List
         SequentialList<int> intList(10);
 
         //测试GetCapacity与GetLength函数
-        std::cout << intList.GetCapacity() << "\n";
-        //10
-        std::cout << intList.GetLength() << "\n";
-        //0
+        std::cout << "##GetCapacity: " << intList.GetCapacity() << "\n";
+        //##GetCapacity: 10
+        std::cout << "##GetLength: "  << intList.GetLength() << "\n";
+        //##GetLength: 0
 
         //测试Insert函数
         int a = 0, b = 11, c = 22, d = 33, x = 99;
-        intList.Insert(a, 0);
-        intList.Insert(b, 1);
-        intList.Insert(c, 2);
-        intList.Insert(d, 3);
+        intList.Insert(a, 0); std::cout << "**Insert(0, 0)\n";
+        intList.Insert(b, 1); std::cout << "**Insert(11, 1)\n";
+        intList.Insert(c, 2); std::cout << "**Insert(22, 2)\n";
+        intList.Insert(d, 3); std::cout << "**Insert(33, 3)\n";
         PrintListInt(intList);
         //0 11 22 33
-        intList.Insert(x, 4);
+        intList.Insert(x, 4); std::cout << "**Insert(99, 4)\n";
         PrintListInt(intList);
         //0 11 22 33 99
-        intList.Insert(x, 0);
+        intList.Insert(x, 0); std::cout << "**Insert(99, 0)\n";
         PrintListInt(intList);
         //99 0 11 22 33 99
-        intList.Insert(x, 2);
+        intList.Insert(x, 2); std::cout << "**Insert(99, 2)\n";
         PrintListInt(intList);
         //99 0 99 11 22 33 99
 
         //测试Erase函数
-        intList.Erase(2);
+        intList.Erase(2); std::cout << "**Erase(2)\n";
         PrintListInt(intList);
         //99 0 11 22 33 99
-        intList.Erase(0);
+        intList.Erase(0); std::cout << "**Erase(0)\n";
         PrintListInt(intList);
         //0 11 22 33 99
-        intList.Erase(4);
+        intList.Erase(4); std::cout << "**Erase(4)\n";
         PrintListInt(intList);
         //0 11 22 33
 
         //测试Find函数
-        std::cout << intList.Find(22) << "\n";
-        //2
+        std::cout << "##Find(22): " << intList.Find(22) << "\n";
+        //##Find(22): 2
 
         //测试Clear函数与IsEmpty函数
-        std::cout << intList.IsEmpty() << "\n";
-        //0
+        std::cout << "##IsEmpty: " << intList.IsEmpty() << "\n";
+        //##IsEmpty: 0
         intList.Clear();
         PrintListInt(intList);
         //输出结果为空白
-        std::cout << intList.IsEmpty() << "\n";
-        //1
+        std::cout << "##IsEmpty: " << intList.IsEmpty() << "\n";
+        //##IsEmpty: 1
 
         std::cout << "--------------------------------------------------" << "\n";
     }

@@ -2,6 +2,7 @@
 #define _S_STACK_HPP_
 
 #include <iostream>
+#include <algorithm>
 
 template <typename T>
 class SStack
@@ -12,7 +13,7 @@ private:
     T* array;                    //使用C++内置数组实现栈
 
 public:
-    SStack(int);                 //构造函数
+    SStack(int = 10);            //构造函数
     ~SStack();                   //析构函数
 
     bool IsEmpty() const;        //返回栈是否为空栈
@@ -30,8 +31,8 @@ template <typename T>
 SStack<T>::SStack(int _capacity)
 {
     stackSize = 0;
-    arrayCapacity = _capacity;
-    array = new T[_capacity];
+    arrayCapacity = std::max(1, _capacity);
+    array = new T[arrayCapacity];
 }
 
 template <typename T>
@@ -113,31 +114,31 @@ namespace Test_S_Stack
         SStack<int> stack(2);
 
         //IsEmpty函数测试
-        std::cout << stack.IsEmpty() << "\n";
-        //1
+        std::cout << "##IsEmpty: " << stack.IsEmpty() << "\n";
+        //##IsEmpty: 1
 
         //Push、Pop、GetTop函数测试
-        stack.Push(11);
-        std::cout << stack.GetTop() << "\n";
-        //11
-        stack.Push(22);
-        std::cout << stack.GetTop() << "\n";
-        //22
-        stack.Pop();
-        std::cout << stack.GetTop() << "\n";
-        //11
+        stack.Push(11); std::cout << "**Push(11)\n";
+        std::cout << "##GetTop: " << stack.GetTop() << "\n";
+        //##GetTop: 11
+        stack.Push(22); std::cout << "**Push(22)\n";
+        std::cout << "##GetTop: " << stack.GetTop() << "\n";
+        //##GetTop: 22
+        stack.Pop(); std::cout << "**Pop\n";
+        std::cout << "##GetTop: " << stack.GetTop() << "\n";
+        //##GetTop: 11
 
         //IsEmpty函数测试
-        std::cout << stack.IsEmpty() << "\n";
-        //0
+        std::cout << "##IsEmpty: " << stack.IsEmpty() << "\n";
+        //##IsEmpty: 0
 
         //扩容测试
-        stack.Push(22);
-        stack.Push(33);
-        stack.Push(44);
-        stack.Push(55);
-        std::cout << stack.GetCapacity() << "\n";
-        //8
+        stack.Push(22); std::cout << "**Push(22)\n";
+        stack.Push(33); std::cout << "**Push(33)\n";
+        std::cout << "##GetTop: " << stack.GetTop() << "\n";
+        //##GetTop: 33
+        std::cout << "##GetCapacity: " << stack.GetCapacity() << "\n";
+        //##GetCapacity: 4
 
         std::cout << "--------------------------------------------------" << "\n";
     }
