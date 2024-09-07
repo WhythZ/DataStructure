@@ -1,5 +1,5 @@
-#ifndef _LINKED_LIST_HPP_
-#define _LINKED_LIST_HPP_
+#ifndef _SINGLE_LINKED_LIST_HPP_
+#define _SINGLE_LINKED_LIST_HPP_
 
 #include <iostream>
 
@@ -11,34 +11,34 @@ struct Node
 };
 
 template <typename T>
-class LinkedList
+class SingleLinkedList
 {
 private:
-    int length = 0;             //列表当前长度
-    Node<T>* head = nullptr;    //头节点指针
-    Node<T>* tail = nullptr;    //尾节点指针
+    int length = 0;               //列表当前长度
+    Node<T>* head = nullptr;      //头节点指针
+    Node<T>* tail = nullptr;      //尾节点指针
 
 public:
-    LinkedList() = default;     //构造函数
-    ~LinkedList();              //析构函数
+    SingleLinkedList() = default; //构造函数
+    ~SingleLinkedList();          //析构函数
 
-    int GetLength() const;      //获取当前链表长度
-    bool IsEmpty() const;       //查询当前列表是否为空
-    T GetElem(int) const;       //检索特定索引的元素（只读）
-    int Find(T) const;          //查找某元素的位置索引
-    T GetFront() const;         //返回链表头部元素
-    T GetBack() const;          //返回链表尾部元素
+    int GetLength() const;        //获取当前链表长度
+    bool IsEmpty() const;         //查询当前列表是否为空
+    T GetElem(int) const;         //检索特定索引的元素（只读）
+    int Find(T) const;            //查找某元素的位置索引
+    T GetFront() const;           //返回链表头部元素
+    T GetBack() const;            //返回链表尾部元素
 
-    bool Insert(T, int);        //插入元素到指定位置
-    void PushFront(T const&);   //将元素插入到链表头部
-    void PushBack(T const&);    //将元素插入到链表尾部
-    void Erase(int);            //删除指定位置的元素
-    void PopFront();            //删除头部元素
-    void PopBack();             //删除尾部元素
+    bool Insert(T, int);          //插入元素到指定位置
+    void PushFront(T const&);     //将元素插入到链表头部
+    void PushBack(T const&);      //将元素插入到链表尾部
+    void Erase(int);              //删除指定位置的元素
+    void PopFront();              //删除头部元素
+    void PopBack();               //删除尾部元素
 };
 
 template <typename T>
-LinkedList<T>::~LinkedList()
+SingleLinkedList<T>::~SingleLinkedList()
 {
     //由于此链表的节点都是开辟在堆区的，所以要销毁所有节点开辟的内存
     while (head != nullptr)
@@ -58,19 +58,19 @@ LinkedList<T>::~LinkedList()
 }
 
 template <typename T>
-int LinkedList<T>::GetLength() const
+int SingleLinkedList<T>::GetLength() const
 {
     return length;
 }
 
 template <typename T>
-bool LinkedList<T>::IsEmpty() const
+bool SingleLinkedList<T>::IsEmpty() const
 {
     return (length == 0);
 }
 
 template <typename T>
-T LinkedList<T>::GetElem(int _idx) const
+T SingleLinkedList<T>::GetElem(int _idx) const
 {
     //排除非法索引
     if (_idx < 0 || _idx >= length)
@@ -92,7 +92,7 @@ T LinkedList<T>::GetElem(int _idx) const
 }
 
 template <typename T>
-int LinkedList<T>::Find(T _obj) const
+int SingleLinkedList<T>::Find(T _obj) const
 {
     //计数器
     int _counter = 0;
@@ -112,21 +112,21 @@ int LinkedList<T>::Find(T _obj) const
 }
 
 template <typename T>
-T LinkedList<T>::GetFront() const
+T SingleLinkedList<T>::GetFront() const
 {
     //时间复杂度为O(1)
     return GetElem(0);
 }
 
 template <typename T>
-T LinkedList<T>::GetBack() const
+T SingleLinkedList<T>::GetBack() const
 {
     //通过尾指针访问，可以使得时间复杂度为O(1)
     return GetElem(length - 1);
 }
 
 template <typename T>
-bool LinkedList<T>::Insert(T _obj, int _idx)
+bool SingleLinkedList<T>::Insert(T _obj, int _idx)
 {
     //创建指向新节点的指针
     Node<T>* _new = new Node<T>;
@@ -182,14 +182,14 @@ bool LinkedList<T>::Insert(T _obj, int _idx)
 }
 
 template <typename T>
-void LinkedList<T>::PushFront(T const& _obj)
+void SingleLinkedList<T>::PushFront(T const& _obj)
 {
     //插入新元素到头部，时间复杂度为O(1)
     Insert(_obj, 0);
 }
 
 template <typename T>
-void LinkedList<T>::PushBack(T const& _obj)
+void SingleLinkedList<T>::PushBack(T const& _obj)
 {
     //插入新元素到尾部
     //由于可以通过尾指针添加新元素到尾部，所以时间复杂度为O(1)
@@ -197,7 +197,7 @@ void LinkedList<T>::PushBack(T const& _obj)
 }
 
 template <typename T>
-void LinkedList<T>::Erase(int _idx)
+void SingleLinkedList<T>::Erase(int _idx)
 {
     //排除非法索引
     if (_idx < 0 || _idx > length)
@@ -237,21 +237,21 @@ void LinkedList<T>::Erase(int _idx)
 }
 
 template <typename T>
-void LinkedList<T>::PopFront()
+void SingleLinkedList<T>::PopFront()
 {
 	//删除头部元素，时间复杂度为O(1)
     Erase(0);
 }
 
 template <typename T>
-void LinkedList<T>::PopBack()
+void SingleLinkedList<T>::PopBack()
 {
     //删除尾部元素
     //由于此链表是单向链表，Erase函数无法通过尾指针访问倒数第二个元素，所以必须从头指针开始遍历，所以PopBack的复杂度为O(n)
     Erase(length - 1);
 }
 
-namespace Test_Linked_List
+namespace Test_Single_Linked_List
 {
     struct Item
     {
@@ -260,7 +260,7 @@ namespace Test_Linked_List
         Item(int _id) :id(_id) {}
     };
 
-    void PrintListInt(LinkedList<int>& _list)
+    void PrintListInt(SingleLinkedList<int>& _list)
     {
         std::cout << "List Elements: ";
         for (int i = 0; i < _list.GetLength(); i++)
@@ -275,8 +275,8 @@ namespace Test_Linked_List
         std::cout << "--------------------------------------------------" << "\n";
 
         //测试构造函数
-        LinkedList<Item> itemList;
-        LinkedList<int> intList;
+        SingleLinkedList<Item> itemList;
+        SingleLinkedList<int> intList;
 
         //测试IsEmpty函数
         std::cout << "##IsEmpty: " << intList.IsEmpty() << "\n";

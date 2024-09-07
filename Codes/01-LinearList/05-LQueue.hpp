@@ -2,13 +2,13 @@
 #define _L_QUEUE_HPP_
 
 #include <iostream>
-#include "02-LinkedList.hpp"
+#include "02-SingleLinkedList.hpp"
 
 template <typename T>
 class LQueue
 {
 private:
-    LinkedList<T> list;        //单向链表内核
+    SingleLinkedList<T> list;  //单向链表内核
 
 public:
     bool IsEmpty() const;      //判断是否为空

@@ -2,21 +2,21 @@
 #define _L_STACK_HPP_
 
 #include <iostream>
-#include "02-LinkedList.hpp"
+#include "02-SingleLinkedList.hpp"
 
 //由于此栈基于写好的单向链表的栈实现（构造函数无需传入参数），所以不需写构造析构函数
 template <typename T>
 class LStack
 {
 private:
-    LinkedList<T> list;    //使用单向链表实现栈
+    SingleLinkedList<T> list; //使用单向链表实现栈
 
 public:
-    bool IsEmpty() const;  //返回栈是否为空栈
-    T GetTop() const;      //返回栈顶部的元素值
+    bool IsEmpty() const;     //返回栈是否为空栈
+    T GetTop() const;         //返回栈顶部的元素值
     
-    void Push(T const&);   //将元素推送到栈的顶端
-    void Pop();            //将顶端元素删除（此处不返回栈顶值）
+    void Push(T const&);      //将元素推送到栈的顶端
+    void Pop();               //将顶端元素删除（此处不返回栈顶值）
 };
 
 template <typename T>
