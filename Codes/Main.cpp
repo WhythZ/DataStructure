@@ -5,7 +5,7 @@
 #include "01-LinearList/05-SStack.hpp"
 #include "01-LinearList/06-LQueue.hpp"
 #include "01-LinearList/07-SQueue.hpp"
-#include "02-Tree/01-MultiTree.hpp"
+#include "02-Tree/01-TreeNode.hpp"
 #include "02-Tree/02-BinaryTree.hpp"
 
 void TestLinearList()
@@ -21,7 +21,7 @@ void TestLinearList()
 
 void TestTree()
 {
-    Test_Multi_Tree::MainTest();
+    Test_Tree_Node::MainTest();
     Test_Binary_Tree::MainTest();
 }
 
