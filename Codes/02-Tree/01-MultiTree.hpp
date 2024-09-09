@@ -1,11 +1,10 @@
-```cpp
-#ifndef _XXX_HPP_
-#define _XXX_HPP_
+#ifndef _MULTI_TREE_HPP_
+#define _MULTI_TREE_HPP_
 
 #include <iostream>
 
 template <typename T>
-class XXX
+class MultiTree
 {
 private:
 
@@ -13,7 +12,7 @@ public:
 
 };
 
-namespace Test_XXX
+namespace Test_Multi_Tree
 {
     void MainTest()
     {
@@ -26,4 +25,3 @@ namespace Test_XXX
 }
 
 #endif
-```

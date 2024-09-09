@@ -8,7 +8,7 @@ template <typename T>
 class SequentialList
 {
 private:
-	int capacity = 0;           //数组最大容量
+    int capacity = 0;           //数组最大容量
     T* head = nullptr;          //数组首地址
     int length = 0;             //数组当前长度
 

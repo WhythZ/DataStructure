@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 
-//使用双端数组作为内核，使得首尾两端插入或删除元素的时间复杂度均为O(1)
+//使用循环数组作为内核，使得首尾两端插入或删除元素的时间复杂度均为O(1)
 template <typename T>
 class SQueue
 {
@@ -12,8 +12,8 @@ private:
     T* array;                   //数组首地址
     int queueSize;              //队列当前存了多少对象
     int arrayCapacity;          //内核数组的（初始）容量
-    int frontIdx;               //双端数组的头部元素（队列前端）索引
-    int backIdx;                //双端数组的尾部元素（队列后端）索引
+    int frontIdx;               //循环数组的头部元素（队列前端）索引
+    int backIdx;                //循环数组的尾部元素（队列后端）索引
 
 public:
     SQueue(int = 10);           //构造函数
