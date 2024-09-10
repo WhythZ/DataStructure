@@ -22,7 +22,7 @@ public:
     bool IsRoot() const;                     //该节点是否是根节点（树的发端）
     bool IsLeaf() const;                     //该节点是否是叶节点（树的末端）
     // int GetDepth() const;                    //获取以该节点为根节点的树的深度
-    // int GetSize() const;                     //获取以该节点及其所有后代的个数
+    int GetSize() const;                     //获取以该节点及其所有后代的个数
     int GetDegree() const;                   //获取该节点的度，即子节点个数
     TreeNode<T>* GetParentPtr() const;       //获取指向父节点的指针
     TreeNode<T>* GetChildPtr(int) const;     //以索引获取指向某子节点的指针
@@ -67,11 +67,24 @@ bool TreeNode<T>::IsLeaf() const
     
 // }
 
-// template <typename T>
-// int TreeNode<T>::GetSize() const
-// {
+template <typename T>
+int TreeNode<T>::GetSize() const
+{
+    //将自身算进去
+    int _counter = 1;
+
+    //如果有子节点，那就需要加上子节点的节点数
+    if (!IsLeaf())
+    {
+        //遍历子节点，加上每个子节点的所拥节点数（递归思想）
+        for (int i = 0; i < GetDegree(); i++)
+        {
+            _counter += GetChildPtr(i)->GetSize();
+        }
+    }
     
-// }
+    return _counter;
+}
 
 template <typename T>
 int TreeNode<T>::GetDegree() const
@@ -169,10 +182,8 @@ void TreeNode<T>::Detach()
 
 namespace Test_Tree_Node
 {
-    void MainTest()
+    void TestSingleTreeNodeAndItsNeighbor()
     {
-        std::cout << "--------------------------------------------------" << "\n";
-
         //测试初始化
         TreeNode<int> tree(999);
         tree.PrintSelf();
@@ -180,7 +191,7 @@ namespace Test_Tree_Node
         // |
         // {999}
 
-        //测试两种新增子节点的方式
+        //测试以值新增子节点
         tree.AddChild(111); std::cout << "**AddChild(111)\n";
         tree.AddChild(222); std::cout << "**AddChild(222)\n";
         tree.PrintSelf();
@@ -190,10 +201,12 @@ namespace Test_Tree_Node
         // |       |
         // {111}   {222}
 
-        TreeNode<int> node222(333);
-        TreeNode<int> node333(444);
-        tree.AddChild(&node222); std::cout << "**AddChild(node333)\n";
-        tree.AddChild(&node333); std::cout << "**AddChild(node444)\n";
+        //测试以已有节点新增子节点，但是node333的地址不等于树中新增的对应节点的地址
+        //因为这种方式是由SingleLinkedList将此节点PushBack到了链表内，是在堆区新开辟的内存地址
+        TreeNode<int> node333(333);
+        TreeNode<int> node444(444);
+        tree.AddChild(&node333); std::cout << "**AddChild(node333)\n";
+        tree.AddChild(&node444); std::cout << "**AddChild(node444)\n";
         tree.PrintSelf();
         // NULLPTR
         // |
@@ -201,7 +214,7 @@ namespace Test_Tree_Node
         // |       |       |       |
         // {111}   {222}   {333}   {444}
         
-        //测试两种删除子节点的方式
+        //测试以索引删除子节点
         tree.DelChild(0); std::cout << "**DelChild(0)\n";
         tree.PrintSelf();
         // NULLPTR
@@ -209,6 +222,42 @@ namespace Test_Tree_Node
         // {999}
         // |       |       |
         // {222}   {333}   {444}
+
+        //测试以传入子节点地址的方式删除该子节点
+        TreeNode<int>* realNode333 = tree.GetChildPtr(1);
+        tree.DelChild(realNode333);
+        tree.PrintSelf();
+        // NULLPTR
+        // |
+        // {999}
+        // |       |
+        // {222}   {444}
+    }
+
+    void TestMultipleNodesAsTree()
+    {
+        //初始化一个树
+        TreeNode<int> tree(99);
+        tree.AddChild(11);
+        tree.AddChild(22);
+        TreeNode<int>* child11 = tree.GetChildPtr(0);
+        child11->AddChild(33);
+        child11->AddChild(44);
+        TreeNode<int>* child22 = tree.GetChildPtr(1);
+        child22->AddChild(55);
+        TreeNode<int>* grandChild33 = child11->GetChildPtr(0);
+        grandChild33->AddChild(66);
+
+        //测试获取节点总数的函数
+        std::cout << "GetSize(): " << tree.GetSize() << "\n";
+    }
+
+    void MainTest()
+    {
+        std::cout << "--------------------------------------------------" << "\n";
+
+        // TestSingleTreeNodeAndItsNeighbor();
+        TestMultipleNodesAsTree();
 
         std::cout << "--------------------------------------------------" << "\n";
     }
