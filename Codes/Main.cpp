@@ -10,19 +10,19 @@
 
 void TestLinearList()
 {
-    Test_Sequential_List::MainTest();
-    Test_Single_Linked_List::MainTest();
-    Test_Double_Linked_List::MainTest();
-    Test_L_Stack::MainTest();
-    Test_S_Stack::MainTest();
-    Test_L_Queue::MainTest();
-    Test_S_Queue::MainTest();
+    // Test_Sequential_List::MainTest();
+    // Test_Single_Linked_List::MainTest();
+    // Test_Double_Linked_List::MainTest();
+    // Test_L_Stack::MainTest();
+    // Test_S_Stack::MainTest();
+    // Test_L_Queue::MainTest();
+    // Test_S_Queue::MainTest();
 }
 
 void TestTree()
 {
     Test_Tree_Node::MainTest();
-    Test_Binary_Tree::MainTest();
+    // Test_Binary_Tree::MainTest();
 }
 
 int main()

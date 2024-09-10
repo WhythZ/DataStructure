@@ -40,7 +40,7 @@ SequentialList<T>::SequentialList(int _capacity)
     if (!head)
     {
 	    //中断程序并返回某错误码
-	    throw std::runtime_error("ERROR: Contruct Failed");
+	    throw std::runtime_error("ERROR: SequentialList Contruct Failed");
     }
     //初始化长度为零
     length = 0;
@@ -64,7 +64,7 @@ T SequentialList<T>::GetElem(int _idx) const
 {
     //排除越界索引
     if (_idx < 0 || _idx >= length)
-        throw std::runtime_error("ERROR: Illegal Access");
+        throw std::invalid_argument("ERROR: Invalid Index Calling {T SequentialList<T>::GetElem(int _idx) const}");
     return head[_idx];
 }
 
@@ -127,7 +127,7 @@ void SequentialList<T>::Erase(int _idx)
 {
     //排除越界索引
     if (_idx < 0 || _idx >= length)
-        throw std::runtime_error("ERROR: Illegal Access");
+        throw std::invalid_argument("ERROR: Invalid Index Calling {void SequentialList<T>::Erase(int _idx)}");
     for (int i = _idx; i < length - 1; i++)
         head[i] = head[i + 1];
     //长度递减，这样原本的最后一个元素就是越界而无法访问的了，不用管

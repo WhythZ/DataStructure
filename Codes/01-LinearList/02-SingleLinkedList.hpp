@@ -7,34 +7,36 @@ template <typename T>
 struct SingleNode
 {
     T data;
-    SingleNode* next;
+    SingleNode<T>* next;
 };
 
 template <typename T>
 class SingleLinkedList
 {
 private:
-    int length = 0;                 //列表当前长度
-    SingleNode<T>* head = nullptr;  //头节点指针
-    SingleNode<T>* tail = nullptr;  //尾节点指针
+    int length = 0;                       //列表当前长度
+    SingleNode<T>* head = nullptr;        //头节点指针
+    SingleNode<T>* tail = nullptr;        //尾节点指针
 
 public:
-    SingleLinkedList() = default;   //构造函数
-    ~SingleLinkedList();            //析构函数
+    SingleLinkedList() = default;         //构造函数
+    ~SingleLinkedList();                  //析构函数
 
-    int GetLength() const;          //获取当前链表长度
-    bool IsEmpty() const;           //查询当前列表是否为空
-    T GetElem(int) const;           //检索特定索引的元素（只读）
-    int Find(T) const;              //查找某元素的位置索引
-    T GetFront() const;             //返回链表头部元素
-    T GetBack() const;              //返回链表尾部元素
+    int GetLength() const;                //获取当前链表长度
+    bool IsEmpty() const;                 //查询当前列表是否为空
+    T GetElem(int) const;                 //返回特定索引对应的元素值
+    T* GetElemPtr(int) const;             //检索特定索引的元素的指针
+    int Find(T) const;                    //返回第一个等于传入值的元素索引
+    int Find(T*) const;                   //准确定位传入指针对应的元素索引
+    T GetFront() const;                   //返回链表头部元素值
+    T GetBack() const;                    //返回链表尾部元素值
 
-    bool Insert(T, int);            //插入元素到指定位置
-    void PushFront(T const&);       //将元素插入到链表头部
-    void PushBack(T const&);        //将元素插入到链表尾部
-    void Erase(int);                //删除指定位置的元素
-    void PopFront();                //删除头部元素
-    void PopBack();                 //删除尾部元素
+    bool Insert(T, int);                  //插入元素到指定位置
+    void PushFront(T const&);             //将元素插入到链表头部
+    void PushBack(T const&);              //将元素插入到链表尾部
+    void Erase(int);                      //删除指定位置的元素
+    void PopFront();                      //删除头部元素
+    void PopBack();                       //删除尾部元素
 };
 
 template <typename T>
@@ -74,7 +76,7 @@ T SingleLinkedList<T>::GetElem(int _idx) const
 {
     //排除非法索引
     if (_idx < 0 || _idx >= length)
-        throw std::runtime_error("ERROR: Illegal Access");
+        throw std::invalid_argument("ERROR: Invalid Index Calling {T SingleLinkedList<T>::GetElem(int _idx) const}");
     
     //通过尾指针使得尾部元素的获取的时间复杂度降到O(1)
     if (_idx == length - 1)
@@ -92,6 +94,28 @@ T SingleLinkedList<T>::GetElem(int _idx) const
 }
 
 template <typename T>
+T* SingleLinkedList<T>::GetElemPtr(int _idx) const
+{
+    //排除非法索引
+    if (_idx < 0 || _idx >= length)
+        throw std::invalid_argument("ERROR: Invalid Index Calling {T* SingleLinkedList<T>::GetElemPtr(int _idx) const}");
+    
+    //通过尾指针使得尾部元素的获取的时间复杂度降到O(1)
+    if (_idx == length - 1)
+        return &(tail->data);
+    
+    //以_temp作为迭代器，从头指针开始追溯到指定索引位置的链节点
+    SingleNode<T>* _temp = head;
+    for (int i = 0; i < _idx; i++)
+    {
+        _temp = _temp->next;
+    }
+
+    //返回的是值而非引用
+    return &(_temp->data);
+}
+
+template <typename T>
 int SingleLinkedList<T>::Find(T _obj) const
 {
     //计数器
@@ -101,6 +125,26 @@ int SingleLinkedList<T>::Find(T _obj) const
     while (_temp != nullptr)
     {
         if (_temp->data == _obj)
+        {
+            return _counter;
+        }
+        _temp = _temp->next;
+        _counter++;
+    }
+    //没找到就返回-1
+    return -1;
+}
+
+template <typename T>
+int SingleLinkedList<T>::Find(T* _obj) const
+{
+    //计数器
+    int _counter = 0;
+    //迭代查找第一个相符的节点
+    SingleNode<T>* _temp = head;
+    while (_temp != nullptr)
+    {
+        if (_obj == &(_temp->data))
         {
             return _counter;
         }
@@ -201,7 +245,7 @@ void SingleLinkedList<T>::Erase(int _idx)
 {
     //排除非法索引
     if (_idx < 0 || _idx > length)
-        throw std::runtime_error("ERROR: Illegal Access");
+        throw std::invalid_argument("ERROR: Invalid Index Calling {void SingleLinkedList<T>::Erase(int _idx)}");
 
     //创建迭代器
     SingleNode<T>* _temp = head;

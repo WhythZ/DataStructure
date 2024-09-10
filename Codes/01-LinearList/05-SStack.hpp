@@ -52,7 +52,7 @@ template <typename T>
 T SStack<T>::GetTop() const
 {
     if (IsEmpty())
-        throw std::runtime_error("ERROR: Stack Is Empty");
+        throw std::invalid_argument("ERROR: SStack Is Empty Calling {T SStack<T>::GetTop() const}");
     return array[stackSize - 1];
 }
 
@@ -81,7 +81,7 @@ template <typename T>
 void SStack<T>::Pop()
 {
     if (IsEmpty())
-        throw std::runtime_error("ERROR: Stack Is Empty");
+        throw std::invalid_argument("ERROR: SStack Is Empty Calling {void SStack<T>::Pop()}");
     //将栈大小递减就相当于删除了尾部元素，因为越界的元素无法访问
     --stackSize;
 }

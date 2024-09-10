@@ -28,7 +28,7 @@ template <typename T>
 T LQueue<T>::GetFront() const
 {
     if (IsEmpty())
-        throw std::runtime_error("ERROR: Queue Is Empty");
+        throw std::invalid_argument("ERROR: LQueue Is Empty Calling {T LQueue<T>::GetFront() const}");
     return list.GetFront();
 }
 
@@ -43,7 +43,7 @@ template <typename T>
 void LQueue<T>::Pop()
 {
     if (IsEmpty())
-        throw std::runtime_error("ERROR: Queue Is Empty");
+        throw std::invalid_argument("ERROR: LQueue Is Empty Calling {void LQueue<T>::Pop()}");
     //删除链表头部元素
     list.PopFront();
 }

@@ -59,7 +59,7 @@ template <typename T>
 T SQueue<T>::GetFront() const
 {
     if (IsEmpty())
-        throw std::runtime_error("ERROR: Queue Is Empty");
+        throw std::invalid_argument("ERROR: SQueue Is Empty Calling {T SQueue<T>::GetFront() const}");
     //返回队列前端元素
     return array[frontIdx];
 }
@@ -129,7 +129,7 @@ void SQueue<T>::Push(T const& _obj)
     }
 
     //正常经历了以上步骤就应当结束了，执行到了这里说明扩容失败了
-    throw std::runtime_error("ERROR: Fail To Expand Queue Capacity");
+    throw std::runtime_error("ERROR: Fail To Expand SQueue Capacity");
 }
 
 template <typename T>
@@ -137,7 +137,7 @@ void SQueue<T>::Pop()
 {
     //排除异常
     if (IsEmpty())
-        throw std::runtime_error("ERROR: Queue Is Empty");
+        throw std::invalid_argument("ERROR: SQueue Is Empty Calling {void SQueue<T>::Pop()}");
 
     //直接递增
     if (frontIdx < arrayCapacity - 1)

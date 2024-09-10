@@ -30,7 +30,7 @@ T LStack<T>::GetTop() const
 {
     //若栈为空，则报错
     if (IsEmpty())
-        throw std::runtime_error("ERROR: Stack Is Empty");
+        throw std::invalid_argument("ERROR: LStack Is Empty Calling {T LStack<T>::GetTop() const}");
     //否则返回栈顶部元素，即头部元素
     return list.GetFront();
 }
@@ -47,7 +47,7 @@ void LStack<T>::Pop()
 {
     //若栈为空，则报错
     if (IsEmpty())
-        throw std::runtime_error("ERROR: Stack Is Empty");
+        throw std::invalid_argument("ERROR: LStack Is Empty Calling {void LStack<T>::Pop()}");
     //否则删除栈的头部元素
     list.PopFront();
 }
