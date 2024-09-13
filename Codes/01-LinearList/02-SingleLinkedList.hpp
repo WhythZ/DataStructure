@@ -32,8 +32,8 @@ public:
     T GetBack() const;                    //返回链表尾部元素值
 
     bool Insert(T, int);                  //插入元素到指定位置
-    void PushFront(T const&);             //将元素插入到链表头部
-    void PushBack(T const&);              //将元素插入到链表尾部
+    void PushFront(T);                    //将元素插入到链表头部
+    void PushBack(T);                     //将元素插入到链表尾部
     void Erase(int);                      //删除指定位置的元素
     void PopFront();                      //删除头部元素
     void PopBack();                       //删除尾部元素
@@ -43,7 +43,7 @@ template <typename T>
 SingleLinkedList<T>::~SingleLinkedList()
 {
     //由于此链表的节点都是开辟在堆区的，所以要销毁所有节点开辟的内存
-    while (head != nullptr)
+    while (head != tail)
     {
         //用_temp保存头节点指向的内存
         SingleNode<T>* _temp = head;
@@ -111,7 +111,7 @@ T* SingleLinkedList<T>::GetElemPtr(int _idx) const
         _temp = _temp->next;
     }
 
-    //返回的是值而非引用
+    //返回的是指向该地址的指针
     return &(_temp->data);
 }
 
@@ -131,8 +131,8 @@ int SingleLinkedList<T>::Find(T _obj) const
         _temp = _temp->next;
         _counter++;
     }
-    //没找到就返回-1
-    return -1;
+    //没找到就报错
+    throw std::runtime_error("ERROR: Failed To Find The Object Using {int SingleLinkedList<T>::Find(T _obj) const}");
 }
 
 template <typename T>
@@ -151,8 +151,8 @@ int SingleLinkedList<T>::Find(T* _obj) const
         _temp = _temp->next;
         _counter++;
     }
-    //没找到就返回-1
-    return -1;
+    //没找到就报错
+    throw std::runtime_error("ERROR: Failed To Find The Object Using {int SingleLinkedList<T>::Find(T* _obj) const}");
 }
 
 template <typename T>
@@ -226,14 +226,14 @@ bool SingleLinkedList<T>::Insert(T _obj, int _idx)
 }
 
 template <typename T>
-void SingleLinkedList<T>::PushFront(T const& _obj)
+void SingleLinkedList<T>::PushFront(T _obj)
 {
     //插入新元素到头部，时间复杂度为O(1)
     Insert(_obj, 0);
 }
 
 template <typename T>
-void SingleLinkedList<T>::PushBack(T const& _obj)
+void SingleLinkedList<T>::PushBack(T _obj)
 {
     //插入新元素到尾部
     //由于可以通过尾指针添加新元素到尾部，所以时间复杂度为O(1)
@@ -297,13 +297,6 @@ void SingleLinkedList<T>::PopBack()
 
 namespace Test_Single_Linked_List
 {
-    struct Item
-    {
-        int id = 0;
-        Item() = default;
-        Item(int _id) :id(_id) {}
-    };
-
     void PrintListInt(SingleLinkedList<int>& _list)
     {
         std::cout << "List Elements: ";
@@ -314,12 +307,9 @@ namespace Test_Single_Linked_List
         std::cout << "\n";
     }
 
-    void MainTest()
+    void TestIntList()
     {
-        std::cout << "--------------------------------------------------" << "\n";
-
         //测试构造函数
-        SingleLinkedList<Item> itemList;
         SingleLinkedList<int> intList;
 
         //测试IsEmpty函数
@@ -379,6 +369,31 @@ namespace Test_Single_Linked_List
         //List Elements: 33
         std::cout << "##GetElem [0]: " << intList.GetElem(0) << "\n";
         //##GetElem [0]: 33
+    }
+
+    struct Item
+    {
+        int id = 0;
+        Item() = default;
+        Item(int _id) :id(_id) {}
+    };
+
+    void TestOtherList()
+    {
+        SingleLinkedList<Item> itemList;
+        itemList.PushBack(Item(111));
+
+        SingleLinkedList<std::string> stringList;
+        stringList.PushBack("hahaha");
+        stringList.PopBack();
+    }
+
+    void MainTest()
+    {
+        std::cout << "--------------------------------------------------" << "\n";
+
+        // TestIntList();
+        TestOtherList();
 
         std::cout << "--------------------------------------------------" << "\n";
     }

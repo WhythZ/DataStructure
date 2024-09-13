@@ -17,8 +17,6 @@ private:
 public:
     //构造函数，初始化节点存储的数据以及该节点的父节点指针
     TreeNode(const T & = T(), TreeNode<T>* = nullptr);
-    //应当从叶节点开始析构，若从根节点开始的话会导致存储子节点的链表析构，导致子节点的子节点的地址丢失而无法被释放内存
-    ~TreeNode();
 
     T GetNodeData() const;                   //获取该树节点存储的数据值
     bool IsRoot() const;                     //该节点是否是根节点（树的发端）
@@ -43,24 +41,6 @@ TreeNode<T>::TreeNode(const T & _data, TreeNode<T> * _node)
 {
     nodeData = _data;
     parentNode = _node;
-}
-
-template <typename T>
-TreeNode<T>::~TreeNode()
-{
-    //只有当该节点是叶节点的时候才能析构，否则应当先析构子节点以防内存泄漏
-    if (IsLeaf())
-    {
-        Detach();
-        delete this;
-    }
-    else
-    {
-        for (int i = 0; i < GetDegree(); i++)
-        {
-            GetChildPtr(i)->~TreeNode();
-        }
-    }
 }
 
 template <typename T>
@@ -276,12 +256,8 @@ namespace Test_Tree_Node
     {
         std::cout << "--------------------------------------------------" << "\n";
 
-        // TestSingleTreeNodeAndItsNeighbor();
-
-        //这个函数不知道为什么会偶尔导致程序运行失败（退出代码为1）
-        //破案了：是单向链表的析构导致的，当根节点先析构了之后，子节点的子节点的地址就会丢失，从而导致其无法释放内存
-        //VSCode也不告诉我是哪里错的，真垃圾吧，我把代码放到VS上VS立刻就给我指出是链表的析构有问题，找个时间把这个项目转移到VS上去
-        TestMultipleNodesAsTree();
+        TestSingleTreeNodeAndItsNeighbor();
+        // TestMultipleNodesAsTree();
 
         std::cout << "--------------------------------------------------" << "\n";
     }
