@@ -168,7 +168,7 @@ namespace Test_Sequential_List
 
     void MainTest()
     {
-        std::cout << "--------------------------------------------------" << "\n";
+        std::cout << "--------------------------------------------------\n";
 
         //测试构造函数
         SequentialList<Item> itemList(10);
@@ -222,7 +222,7 @@ namespace Test_Sequential_List
         std::cout << "##IsEmpty: " << intList.IsEmpty() << "\n";
         //##IsEmpty: 1
 
-        std::cout << "--------------------------------------------------" << "\n";
+        std::cout << "--------------------------------------------------\n";
     }
 }
 
