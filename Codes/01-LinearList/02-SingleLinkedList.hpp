@@ -252,8 +252,12 @@ void SingleLinkedList<T>::Erase(int _idx)
     //特殊处理第一个元素
     if (_idx == 0)
     {
-        //将头指针后移
-        head = head->next;
+        //若链表仅有一个元素的时候，将head右移（指向nullptr，且会与还指向0位元素的tail错开）会导致析构的时候判断出错
+        if (length > 1)
+        {
+            //将头指针后移
+            head = head->next;
+        }
         //删除头节点原先的内存
         delete _temp;
     }
@@ -270,7 +274,6 @@ void SingleLinkedList<T>::Erase(int _idx)
         _temp->next = _temp->next->next;
         //然后销毁对应节点
         delete _delete;
-
         //检查删除的是不是尾部节点，若是，则需要转移tail的指向
         if (_temp->next == nullptr)
             tail = _temp;
@@ -378,22 +381,19 @@ namespace Test_Single_Linked_List
         Item(int _id) :id(_id) {}
     };
 
-    void TestOtherList()
+    void TestOther()
     {
         SingleLinkedList<Item> itemList;
         itemList.PushBack(Item(111));
-
-        SingleLinkedList<std::string> stringList;
-        stringList.PushBack("hahaha");
-        stringList.PopBack();
+        itemList.PopBack();
     }
 
     void MainTest()
     {
         std::cout << "--------------------------------------------------" << "\n";
 
-        // TestIntList();
-        TestOtherList();
+        TestIntList();
+        TestOther();
 
         std::cout << "--------------------------------------------------" << "\n";
     }

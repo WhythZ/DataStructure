@@ -21,26 +21,23 @@ public:
     T GetNodeData() const;                   //获取该树节点存储的数据值
     bool IsRoot() const;                     //该节点是否是根节点（树的发端）
     bool IsLeaf() const;                     //该节点是否是叶节点（树的末端）
-    // int GetDepth() const;                    //获取以该节点为根节点的树的深度
     int GetSize() const;                     //获取以该节点及其所有后代的个数
     int GetDegree() const;                   //获取该节点的度，即子节点个数
     TreeNode<T>* GetParentPtr() const;       //获取指向父节点的指针
     TreeNode<T>* GetChildPtr(int) const;     //以索引获取指向某子节点的指针
     void PrintSelf() const;                  //打印该节点自身及其父子（调试用）
 
-    void AddChild(TreeNode<T>*);             //以传入节点的方式添加子节点
+    void AddChild(TreeNode<T>*);            //以传入节点的方式添加子节点
     void AddChild(T);                        //以传入新元素的方式添加子节点
     void DelChild(int);                      //通过索引删除子节点
     void DelChild(TreeNode<T>*);             //通过地址删除子节点
-    void AttachTo(TreeNode<T>*);             //为此节点变更父节点
-    void Detach();                           //解除自身与父节点的链接
 };
 
 template <typename T>
-TreeNode<T>::TreeNode(const T & _data, TreeNode<T> * _node)
+TreeNode<T>::TreeNode(const T & _data, TreeNode<T> * _parent)
 {
     nodeData = _data;
-    parentNode = _node;
+    parentNode = _parent;
 }
 
 template <typename T>
@@ -60,12 +57,6 @@ bool TreeNode<T>::IsLeaf() const
 {
     return (GetDegree() == 0);
 }
-
-// template <typename T>
-// int TreeNode<T>::GetDepth() const
-// {
-    
-// }
 
 template <typename T>
 int TreeNode<T>::GetSize() const
@@ -133,51 +124,47 @@ void TreeNode<T>::PrintSelf() const
 template <typename T>
 void TreeNode<T>::AddChild(TreeNode<T>* _node)
 {
-    _node->AttachTo(this);
+    //将传入节点本身（不论其是否是根节点）添加到this节点的子节点列表
+    AddChild(_node->GetNodeData());
+
+    //记录刚被添加到子节点列表的新节点
+    TreeNode<T>* _newRoot = this->childList.GetElemPtr(childList.GetLength() - 1);
+
+    //如果传入节点有子节点，将其加入刚被添加到this的子节点链表的那个子节点的子节点列表
+    if (!_node->IsLeaf())
+    {
+        //迭代遍历传入的根节点的所有后代节点
+        TreeNode<T>* _itr;
+        for (int i = 0; i < _node->GetDegree(); i++)
+        {
+            _itr = _node->GetChildPtr(i);
+            _newRoot->AddChild(_itr);
+        }
+    }
 }
 
 template <typename T>
 void TreeNode<T>::AddChild(T _obj)
 {
-    //将传入的值在堆区包装成节点类后添加为子节点，其堆区内存会被单向链表类的析构函数销毁
-    AddChild(new TreeNode<T>(_obj, nullptr));
+    //以传入数据构造节点，推送到子节点链表的末尾
+    childList.PushBack(TreeNode<T>(_obj));
+    //将链表末尾的新增节点的父节点设置为this节点
+    childList.GetElemPtr(childList.GetLength() - 1)->parentNode = this;
 }
 
 template <typename T>
 void TreeNode<T>::DelChild(int _idx)
 {
-    childList.GetElemPtr(_idx)->Detach();
+    if (_idx < 0 || _idx >= childList.GetLength())
+        throw std::invalid_argument("ERROR: Invalid Index When Calling {void TreeNode<T>::DelChild(int _idx)}");
+    //在链表中删除该节点元素即可
+    childList.Erase(_idx);
 }
 
 template <typename T>
 void TreeNode<T>::DelChild(TreeNode<T>* _node)
 {
-    _node->Detach();
-}
-
-template <typename T>
-void TreeNode<T>::AttachTo(TreeNode<T>* _node)
-{
-    //只有根节点才能被附加到别的节点上作为子节点
-    if (IsRoot())
-    {
-        //需要维护的两个成员：一个是自身的父节点，一个是父节点的子节点列表
-        parentNode = _node;
-        _node->childList.PushBack(*this);
-    }
-    else
-        throw std::invalid_argument("ERROR: Unable To Attach Internal TreeNode To Another");
-}
-
-template <typename T>
-void TreeNode<T>::Detach()
-{
-    if (IsRoot())
-        return;
-
-    //需要维护的两个成员：一个是父节点的子节点列表，一个是自身的父节点
-    parentNode->childList.Erase(parentNode->childList.Find(this));
-    parentNode = nullptr;
+    DelChild(childList.Find(_node));
 }
 
 namespace Test_Tree_Node
@@ -225,7 +212,7 @@ namespace Test_Tree_Node
 
         //测试以传入子节点地址的方式删除该子节点
         TreeNode<int>* realNode333 = tree.GetChildPtr(1);
-        tree.DelChild(realNode333);
+        tree.DelChild(realNode333); std::cout << "**DelChild(realNode333)\n";
         tree.PrintSelf();
         // NULLPTR
         // |
@@ -249,15 +236,25 @@ namespace Test_Tree_Node
         grandChild33->AddChild(66);
 
         //测试获取节点总数的函数
-        std::cout << "GetSize(): " << tree.GetSize() << "\n";
+        std::cout << "tree.GetSize(): " << tree.GetSize() << "\n";
+        //tree.GetSize(): 7
+
+        //将tree树附加到别的树上
+        TreeNode<int> bigTree(77);
+        bigTree.AddChild(&tree);
+        bigTree.AddChild(&tree);
+        std::cout << "bigTree.GetSize(): " << bigTree.GetSize() << "\n";
+        //bigTree.GetSize(): 15
+
+        
     }
 
     void MainTest()
     {
         std::cout << "--------------------------------------------------" << "\n";
 
-        TestSingleTreeNodeAndItsNeighbor();
-        // TestMultipleNodesAsTree();
+        // TestSingleTreeNodeAndItsNeighbor();
+        TestMultipleNodesAsTree();
 
         std::cout << "--------------------------------------------------" << "\n";
     }
