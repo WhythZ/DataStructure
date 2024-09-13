@@ -18,8 +18,8 @@ public:
     //构造函数，初始化节点存储的数据以及该节点的父节点指针
     TreeNode(const T & = T(), TreeNode<T>* = nullptr);
     //拷贝构造函数以及运算符=的重载，实现深拷贝
-    TreeNode(const TreeNode<T>&);
-    TreeNode<T>& operator=(const TreeNode<T>&);
+    // TreeNode(const TreeNode<T>&);
+    // TreeNode<T>& operator=(const TreeNode<T>&);
 
     T GetNodeData() const;                    //获取该树节点存储的数据值
     bool IsRoot() const;                      //该节点是否是根节点（树的发端）
@@ -29,7 +29,8 @@ public:
     int GetDegree() const;                    //获取该节点的度，即子节点个数
     TreeNode<T>* GetParentPtr() const;        //获取指向父节点的指针
     TreeNode<T>* GetChildPtr(int) const;      //以索引获取指向某子节点的指针
-    void PrintSelf() const;                   //打印该节点自身及其父子（调试用）
+    void PrintNeighbor() const;               //打印该节点自身及其相邻两层，共三层
+    void PrintTree() const;                   //完整打印以该节点为根节点的树
 
     void AddChild(TreeNode<T>*);              //以传入节点的方式添加子节点
     void AddChild(T);                         //以传入新元素的方式添加子节点
@@ -44,34 +45,33 @@ TreeNode<T>::TreeNode(const T & _data, TreeNode<T> * _parent)
     parentNode = _parent;
 }
 
-template <typename T>
-TreeNode<T>::TreeNode(const TreeNode<T>& _obj)
-{
-    //这里将拷贝构造设计为不继承被拷贝节点的父节点，不然的话会出很多问题
-    parentNode = nullptr;
-    nodeData = _obj.GetNodeData();
+// template <typename T>
+// TreeNode<T>::TreeNode(const TreeNode<T>& _obj)
+// {
+//     //这里将拷贝构造设计为不继承被拷贝节点的父节点，不然的话会出很多问题
+//     parentNode = nullptr;
+//     nodeData = _obj.GetNodeData();
+//     //将被拷贝对象的子节点拷贝
+//     if (!_obj.IsLeaf())
+//     {
+//         //迭代器，用于遍历被拷贝对象的子节点链表
+//         TreeNode<T>* _itr;
+//         for (int i = 0; i < _obj.GetDegree(); i++)
+//         {
+//             _itr = _obj.GetChildPtr(i);
+//             //AddChild函数的实现是内存上安全的，以帮我们实现深拷贝
+//             this->AddChild(_itr);
+//         }
+//     }
+// }
 
-    //将被拷贝对象的子节点拷贝
-    if (!_obj.IsLeaf())
-    {
-        //迭代器，用于遍历被拷贝对象的子节点链表
-        TreeNode<T>* _itr;
-        for (int i = 0; i < _obj.GetDegree(); i++)
-        {
-            _itr = _obj.GetChildPtr(i);
-            //AddChild函数的实现是内存上安全的，以帮我们实现深拷贝
-            this->AddChild(_itr);
-        }
-    }
-}
-
-template <typename T>
-TreeNode<T>& TreeNode<T>::operator=(const TreeNode<T>& _obj)
-{
-    //基于拷贝构造函数，开辟在堆区，即提供深拷贝
-    TreeNode<T>* _result = new TreeNode<T>(_obj);
-    return *_result;
-}
+// template <typename T>
+// TreeNode<T>& TreeNode<T>::operator=(const TreeNode<T>& _obj)
+// {
+//     //基于拷贝构造函数，开辟在堆区，即提供深拷贝
+//     TreeNode<T>* _result = new TreeNode<T>(_obj);
+//     return *_result;
+// }
 
 template <typename T>
 T TreeNode<T>::GetNodeData() const
@@ -162,28 +162,74 @@ TreeNode<T>* TreeNode<T>::GetChildPtr(int _idx) const
 }
 
 template <typename T>
-void TreeNode<T>::PrintSelf() const
+void TreeNode<T>::PrintNeighbor() const
 {
+    //父节点的打印
     if (parentNode == nullptr)
         std::cout << "NULLPTR\n";
     else
         std::cout << "{" << parentNode->GetNodeData() << "}\n";
+
+    //this节点的打印
     std::cout << "|\n";
     std::cout << "{" << this->GetNodeData() << "}\n";
-    for (int i = 0; i < childList.GetLength(); i++)
-    {
-        std::cout << "|\t";
-    }
-    std::cout << "\n";
+
+    //子节点的打印
     if (!IsLeaf())
     {
         for (int i = 0; i < childList.GetLength(); i++)
         {
-            std::cout << "{" << childList.GetElemPtr(i)->GetNodeData() << "}\t";
+            std::cout << "|\t";
+        }
+        std::cout << "\n";
+
+        for (int i = 0; i < childList.GetLength(); i++)
+        {
+            std::cout << "{" << this->GetChildPtr(i)->GetNodeData() << "}\t";
         }
         std::cout << "\n";
     }
 }
+
+// template <typename T>
+// void TreeNode<T>::PrintTree() const
+// {
+//     //如果是根节点则打印父节点
+//     if (IsRoot())
+//     {
+//         if (parentNode == nullptr)
+//             std::cout << "[NULL]\n";
+//         else
+//             std::cout << "[" << parentNode->GetNodeData() << "]\n";
+//         std::cout << "|\n";   
+//     }
+//     //打印节点本身
+//     std::cout << "[" << this->GetNodeData() << "]\n";
+//     //打印后代节点
+//     if (!IsLeaf())
+//     {
+//         //深度迭代器，遍历每层深度
+//         TreeNode<T>* _depthItr = this;
+//         //两层循环，以两个坐标（Depth、Degree）锁定每个节点（类似二维的图的遍历）
+//         for (int i = 0; i < this->GetDepth(); i++)
+//         {
+//             //根据每层的子节点数打印中间层示意符号
+//             for (int j = 0; j < _depthItr->GetDegree(); j++)
+//             {
+//                 std::cout << "|\t";
+//             }
+//             std::cout << "\n";
+//             //度数迭代器，打印子节点存储的数据
+//             TreeNode<T>* _degreeItr;
+//             for (int j = 0; j < _depthItr->GetDegree(); j++)
+//             {
+//                 _degreeItr = _depthItr->GetChildPtr(j);
+//                 std::cout << "[" << _degreeItr->GetNodeData() << "]";
+//             }
+//             std::cout << "\n";
+//         }
+//     }
+// }
 
 template <typename T>
 void TreeNode<T>::AddChild(TreeNode<T>* _node)
@@ -237,7 +283,7 @@ namespace Test_Tree_Node
     {
         //测试初始化
         TreeNode<int> tree(999);
-        tree.PrintSelf();
+        tree.PrintNeighbor();
         // NULLPTR
         // |
         // {999}
@@ -245,7 +291,7 @@ namespace Test_Tree_Node
         //测试以值新增子节点
         tree.AddChild(111); std::cout << "**AddChild(111)\n";
         tree.AddChild(222); std::cout << "**AddChild(222)\n";
-        tree.PrintSelf();
+        tree.PrintNeighbor();
         // NULLPTR
         // |
         // {999}
@@ -258,7 +304,7 @@ namespace Test_Tree_Node
         TreeNode<int> node444(444);
         tree.AddChild(&node333); std::cout << "**AddChild(node333)\n";
         tree.AddChild(&node444); std::cout << "**AddChild(node444)\n";
-        tree.PrintSelf();
+        tree.PrintNeighbor();
         // NULLPTR
         // |
         // {999}
@@ -267,7 +313,7 @@ namespace Test_Tree_Node
         
         //测试以索引删除子节点
         tree.DelChild(0); std::cout << "**DelChild(0)\n";
-        tree.PrintSelf();
+        tree.PrintNeighbor();
         // NULLPTR
         // |
         // {999}
@@ -277,7 +323,7 @@ namespace Test_Tree_Node
         //测试以传入子节点地址的方式删除该子节点
         TreeNode<int>* realNode333 = tree.GetChildPtr(1);
         tree.DelChild(realNode333); std::cout << "**DelChild(realNode333)\n";
-        tree.PrintSelf();
+        tree.PrintNeighbor();
         // NULLPTR
         // |
         // {999}
@@ -316,34 +362,32 @@ namespace Test_Tree_Node
         std::cout << "##bigTree.GetDepth(): " << bigTree.GetDepth() << "\n";
         //##bigTree.GetDepth(): 5
 
-        //测试树的打印
-        bigTree.PrintSelf();
-        bigTree.GetChildPtr(0)->PrintSelf();
+        //测试整颗树的打印
+        // bigTree.PrintTree();
+        // bigTree.GetChildPtr(0)->PrintTree();
     }
 
-    void TestCopyConstructor()
-    {
-        //初始化一个树
-        TreeNode<int> tree(99);
-        tree.AddChild(11);
-        tree.AddChild(22);
-        tree.GetChildPtr(0)->AddChild(33);
-        tree.GetChildPtr(0)->AddChild(44);
-        tree.GetChildPtr(1)->AddChild(55);
-        tree.GetChildPtr(0)->GetChildPtr(0)->AddChild(66);
-        std::cout << "##tree.GetDepth(): " << tree.GetDepth() << "\n";
-        std::cout << "##tree.GetSize(): " << tree.GetSize() << "\n";
-
-        //测试拷贝构造
-        TreeNode<int> copy1(tree);
-        std::cout << "##copy1.GetDepth(): " << copy1.GetDepth() << "\n";
-        std::cout << "##copy1.GetSize(): " << copy1.GetSize() << "\n";
-        
-        //测试赋值运算符初始化
-        TreeNode<int> copy2 = tree;
-        std::cout << "##copy2.GetDepth(): " << copy2.GetDepth() << "\n";
-        std::cout << "##copy2.GetSize(): " << copy2.GetSize() << "\n";
-    }
+    // void TestCopyConstructor()
+    // {
+    //     //初始化一个树
+    //     TreeNode<int> tree(99);
+    //     tree.AddChild(11);
+    //     tree.AddChild(22);
+    //     tree.GetChildPtr(0)->AddChild(33);
+    //     tree.GetChildPtr(0)->AddChild(44);
+    //     tree.GetChildPtr(1)->AddChild(55);
+    //     tree.GetChildPtr(0)->GetChildPtr(0)->AddChild(66);
+    //     std::cout << "##tree.GetDepth(): " << tree.GetDepth() << "\n";
+    //     std::cout << "##tree.GetSize(): " << tree.GetSize() << "\n";
+    //     //测试拷贝构造
+    //     TreeNode<int> copy1(tree);
+    //     std::cout << "##copy1.GetDepth(): " << copy1.GetDepth() << "\n";
+    //     std::cout << "##copy1.GetSize(): " << copy1.GetSize() << "\n";
+    //     //测试赋值运算符初始化
+    //     TreeNode<int> copy2 = tree;
+    //     std::cout << "##copy2.GetDepth(): " << copy2.GetDepth() << "\n";
+    //     std::cout << "##copy2.GetSize(): " << copy2.GetSize() << "\n";
+    // }
 
     void MainTest()
     {
@@ -353,8 +397,8 @@ namespace Test_Tree_Node
         TestSingleTreeNodeAndItsNeighbor();
         std::cout << "--------------------TestArea02--------------------\n";
         TestMultipleNodesAsTree();
-        std::cout << "--------------------TestArea03--------------------\n";
-        TestCopyConstructor();
+        // std::cout << "--------------------TestArea03--------------------\n";
+        // TestCopyConstructor();
         
         std::cout << "--------------------------------------------------\n";
     }
