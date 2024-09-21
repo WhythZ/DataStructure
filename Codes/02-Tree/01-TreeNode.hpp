@@ -36,6 +36,9 @@ public:
     void AddChild(T);                         //以传入新元素的方式添加子节点
     void DelChild(int);                       //通过索引删除子节点
     void DelChild(TreeNode<T>*);              //通过地址删除子节点
+
+protected:
+    void PrintTree(int) const;                //依据传入深度打印出基于相应层级的树
 };
 
 template <typename T>
@@ -191,53 +194,20 @@ void TreeNode<T>::PrintNeighbor() const
     }
 }
 
-// template <typename T>
-// void TreeNode<T>::PrintTree() const
-// {
-//     //如果是根节点则打印父节点
-//     if (IsRoot())
-//     {
-//         if (parentNode == nullptr)
-//             std::cout << "[NULL]\n";
-//         else
-//             std::cout << "[" << parentNode->GetNodeData() << "]\n";
-//         std::cout << "|\n";   
-//     }
-//     //打印节点本身
-//     std::cout << "[" << this->GetNodeData() << "]\n";
-//     //打印后代节点
-//     if (!IsLeaf())
-//     {
-//         //深度迭代器，遍历每层深度
-//         TreeNode<T>* _depthItr = this;
-//         //两层循环，以两个坐标（Depth、Degree）锁定每个节点（类似二维的图的遍历）
-//         for (int i = 0; i < this->GetDepth(); i++)
-//         {
-//             //根据每层的子节点数打印中间层示意符号
-//             for (int j = 0; j < _depthItr->GetDegree(); j++)
-//             {
-//                 std::cout << "|\t";
-//             }
-//             std::cout << "\n";
-//             //度数迭代器，打印子节点存储的数据
-//             TreeNode<T>* _degreeItr;
-//             for (int j = 0; j < _depthItr->GetDegree(); j++)
-//             {
-//                 _degreeItr = _depthItr->GetChildPtr(j);
-//                 std::cout << "[" << _degreeItr->GetNodeData() << "]";
-//             }
-//             std::cout << "\n";
-//         }
-//     }
-// }
+template <typename T>
+void TreeNode<T>::PrintTree() const
+{
+    //传入的初始深度为一，即以此节点为根节点打印整个树
+    this->PrintTree(1);
+}
 
 template <typename T>
 void TreeNode<T>::AddChild(TreeNode<T>* _node)
 {
-    //将传入节点本身（不论其是否是根节点）添加到this节点的子节点列表
+    //将传入节点（不论其是否是根节点）的值（包装成新的TreeNode对象）添加到this节点的子节点列表
     AddChild(_node->GetNodeData());
 
-    //记录刚被添加到子节点列表的新节点
+    //记录刚被添加到子节点列表的新节点的地址
     TreeNode<T>* _newRoot = this->childList.GetElemPtr(childList.GetLength() - 1);
 
     //如果传入节点有子节点，将其加入刚被添加到this的子节点链表的那个子节点的子节点列表
@@ -248,6 +218,7 @@ void TreeNode<T>::AddChild(TreeNode<T>* _node)
         for (int i = 0; i < _node->GetDegree(); i++)
         {
             _itr = _node->GetChildPtr(i);
+            //递归调用此重载函数
             _newRoot->AddChild(_itr);
         }
     }
@@ -275,6 +246,35 @@ template <typename T>
 void TreeNode<T>::DelChild(TreeNode<T>* _node)
 {
     DelChild(childList.Find(_node));
+}
+
+template <typename T>
+void TreeNode<T>::PrintTree(int _depth) const
+{
+    //根据传入的深度参数，得知当前节点处于多深，即得出打印时需要在前面打印几个横线
+    for (int i = 0; i < _depth; i++)
+    {
+        std::cout << "--";
+    }
+
+    //打印节点本身
+    std::cout << "[" << this->GetNodeData() << "]\n";
+
+    //如果有后代，就以深度优先遍历所有后代
+    if (!IsLeaf())
+    {
+        //用于遍历子节点的迭代器
+        TreeNode<T>* _itr;
+        //最外层的循环，遍历第一层后代节点
+        for (int i = 0; i < this->GetDegree(); i++)
+        {
+            //更新迭代器指向
+            _itr = this->GetChildPtr(i);
+
+            //递归的方式进行打印，让子节点在下一层深度打印
+            _itr->PrintTree(_depth + 1);
+        }
+    }
 }
 
 namespace Test_Tree_Node
@@ -336,17 +336,17 @@ namespace Test_Tree_Node
         //初始化一个树
         TreeNode<int> smallTree(99);
         smallTree.AddChild(11);
-        smallTree.AddChild(22);
         smallTree.GetChildPtr(0)->AddChild(33);
-        smallTree.GetChildPtr(0)->AddChild(44);
-        smallTree.GetChildPtr(1)->AddChild(55);
         smallTree.GetChildPtr(0)->GetChildPtr(0)->AddChild(66);
+        smallTree.GetChildPtr(0)->AddChild(44);
+        smallTree.AddChild(22);
+        smallTree.GetChildPtr(1)->AddChild(55);
 
         //测试获取节点总数的函数
         std::cout << "##smallTree.GetSize(): " << smallTree.GetSize() << "\n";
         //##smallTree.GetSize(): 7
 
-        //将tree树附加到别的树上
+        //将smallTree附加到别的树上
         TreeNode<int> bigTree(77);
         bigTree.AddChild(&smallTree);
         bigTree.GetChildPtr(0)->AddChild(&smallTree);
@@ -363,8 +363,32 @@ namespace Test_Tree_Node
         //##bigTree.GetDepth(): 5
 
         //测试整颗树的打印
-        // bigTree.PrintTree();
-        // bigTree.GetChildPtr(0)->PrintTree();
+        std::cout << "##Print smallTree:\n"; smallTree.PrintTree();
+        //##Print smallTree:
+        //--[99]
+        //----[11]
+        //------[33]
+        //--------[66]
+        //------[44]
+        //----[22]
+        //------[55]
+        std::cout << "##Print bigTree:\n"; bigTree.PrintTree();
+        //##Print bigTree:
+        //--[77]
+        //----[99]
+        //------[11]
+        //--------[33]
+        //----------[66]
+        //--------[44]
+        //------[22]
+        //--------[55]
+        //------[99]
+        //--------[11]
+        //----------[33]
+        //------------[66]
+        //----------[44]
+        //--------[22]
+        //----------[55]
     }
 
     // void TestCopyConstructor()
