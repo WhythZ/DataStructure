@@ -89,7 +89,16 @@ TreeNode<T>& TreeNode<T>::operator=(const TreeNode<T>& _obj)
     for (int i = 0; i < _obj.GetDegree(); ++i)
     {
         _itr = _obj.GetChildPtr(i);
-        childList.PushBack(TreeNode<T>(_itr->GetNodeData()));
+        //如果是叶节点，那便可以直接添加
+        if (_itr->IsLeaf())
+            this->childList.PushBack(TreeNode<T>(_itr->GetNodeData()));
+        //如果有子节点，那就递归调用赋值重载运算符
+        else
+        {
+            this->childList.PushBack(TreeNode<T>(T()));
+            //解引用获取刚刚推送到链表末尾的值（TreeNode<T>类型的值）的引用，对其进行赋值（递归）
+            *this->childList.GetElemPtr(this->GetDegree() - 1) = *_itr;
+        }
     }
 
     //返回自身引用
