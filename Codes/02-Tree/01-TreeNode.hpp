@@ -4,6 +4,9 @@
 #include <iostream>
 //引入单向链表进行子节点的存储
 #include "../01-LinearList/02-SingleLinkedList.hpp"
+//引入队列与栈分别用于BFS与DFS的搜索遍历
+#include "../01-LinearList/07-SQueue.hpp"
+#include "../01-LinearList/05-SStack.hpp"
 
 //最基本的树节点结构，存储其父子两层节点的指针，以及存储在该节点数据
 template <typename T>
@@ -17,10 +20,10 @@ private:
 public:
     //构造函数，初始化节点存储的数据以及该节点的父节点指针
     TreeNode(const T & = T(), TreeNode<T>* = nullptr);
-    //拷贝构造，实现深拷贝
-    TreeNode(const TreeNode<T>&);
     //运算符=的重载，实现深拷贝
     TreeNode<T>& operator=(const TreeNode<T>&);
+    //拷贝构造，实现深拷贝
+    TreeNode(const TreeNode<T>&);
 
     T GetNodeData() const;                    //获取该树节点存储的数据值
     bool IsRoot() const;                      //该节点是否是根节点（树的发端）
@@ -30,8 +33,11 @@ public:
     int GetDegree() const;                    //获取该节点的度，即子节点个数
     TreeNode<T>* GetParentPtr() const;        //获取指向父节点的指针
     TreeNode<T>* GetChildPtr(int) const;      //以索引获取指向某子节点的指针
+
     void PrintNeighbor() const;               //打印该节点自身及其相邻两层，共三层
     void PrintTree() const;                   //完整打印以该节点为根节点的树
+    void TraversalBFS() const;                //以BFS打印以该节点为根的树的所有节点
+    void TraversalDFS() const;                //以DFS打印以该节点为根的树的所有节点
 
     void AddChild(TreeNode<T>*);              //以传入节点的方式添加子节点
     void AddChild(T);                         //以传入新元素的方式添加子节点
@@ -47,23 +53,6 @@ TreeNode<T>::TreeNode(const T & _data, TreeNode<T> * _parent)
 {
     nodeData = _data;
     parentNode = _parent;
-}
-
-template <typename T>
-TreeNode<T>::TreeNode(const TreeNode<T>& _obj)
-{
-    //拷贝构造不继承被拷贝对象的父节点，不然会出很多问题
-    this->parentNode = nullptr;
-    this->nodeData = _obj.GetNodeData();
-
-    //迭代器，遍历被传入节点的所有子节点，并将其一一附加到this节点上
-    TreeNode<T>* _itr;
-    for (int i = 0; i < _obj.GetDegree(); i++)
-    {
-        _itr = _obj.GetChildPtr(i);
-        //AddChild函数是安全的深拷贝
-        this->AddChild(_itr);
-    }
 }
 
 template <typename T>
@@ -103,6 +92,23 @@ TreeNode<T>& TreeNode<T>::operator=(const TreeNode<T>& _obj)
 
     //返回自身引用
     return *this;
+}
+
+template <typename T>
+TreeNode<T>::TreeNode(const TreeNode<T>& _obj)
+{
+    //拷贝构造不继承被拷贝对象的父节点，不然会出很多问题
+    this->parentNode = nullptr;
+    this->nodeData = _obj.GetNodeData();
+
+    //迭代器，遍历被传入节点的所有子节点，并将其一一附加到this节点上
+    TreeNode<T>* _itr;
+    for (int i = 0; i < _obj.GetDegree(); i++)
+    {
+        _itr = _obj.GetChildPtr(i);
+        //AddChild函数是安全的深拷贝
+        this->AddChild(_itr);
+    }
 }
 
 template <typename T>
@@ -226,8 +232,22 @@ void TreeNode<T>::PrintNeighbor() const
 template <typename T>
 void TreeNode<T>::PrintTree() const
 {
-    //传入的初始深度为一，即以此节点为根节点打印整个树
-    this->PrintTree(1);
+    //传入的初始深度为零，表示打印以此节点为根节点的整个树
+    this->PrintTree(0);
+}
+
+template <typename T>
+void TreeNode<T>::TraversalBFS() const
+{
+    //用于广度优先遍历的队列
+    SQueue<TreeNode> queue;
+}
+
+template <typename T>
+void TreeNode<T>::TraversalDFS() const
+{
+    //用于深度优先遍历队列
+    SStack<TreeNode> stack;
 }
 
 template <typename T>
@@ -283,14 +303,14 @@ void TreeNode<T>::DelChild(TreeNode<T>* _node)
 template <typename T>
 void TreeNode<T>::PrintTree(int _depth) const
 {
-    //根据传入的深度参数，得知当前节点处于多深，即得出打印时需要在前面打印几个横线
+    //根据传入的深度参数，得知当前节点处于多深，打印时需要在前面垫上相应的深度
     for (int i = 0; i < _depth; i++)
     {
-        std::cout << "--";
+        std::cout << "\t";
     }
 
     //打印节点本身
-    std::cout << "[" << this->GetNodeData() << "]\n";
+    std::cout << "-[" << this->GetNodeData() << "]\n";
 
     //如果有后代，就以深度优先遍历所有后代
     if (!IsLeaf())
@@ -394,30 +414,30 @@ namespace Test_Tree_Node
         //测试整颗树的打印
         std::cout << "##Print smallTree:\n"; smallTree.PrintTree();
         //##Print smallTree:
-        //--[99]
-        //----[11]
-        //------[33]
-        //--------[66]
-        //------[44]
-        //----[22]
-        //------[55]
+        //-[99]
+        //        -[11]
+        //                -[33]
+        //                        -[66]
+        //                -[44]
+        //        -[22]
+        //                -[55]
         std::cout << "##Print bigTree:\n"; bigTree.PrintTree();
         //##Print bigTree:
-        //--[77]
-        //----[99]
-        //------[11]
-        //--------[33]
-        //----------[66]
-        //--------[44]
-        //------[22]
-        //--------[55]
-        //------[99]
-        //--------[11]
-        //----------[33]
-        //------------[66]
-        //----------[44]
-        //--------[22]
-        //----------[55]
+        //-[77]
+        //        -[99]
+        //                -[11]
+        //                        -[33]
+        //                                -[66]
+        //                        -[44]
+        //                -[22]
+        //                        -[55]
+        //                -[99]
+        //                        -[11]
+        //                                -[33]
+        //                                        -[66]
+        //                                -[44]
+        //                        -[22]
+        //                                -[55]
 
         //程序健壮性：运行下面的代码（近亲结婚产生后代）不会导致错误
         smallTree.AddChild(&smallTree);
@@ -436,36 +456,36 @@ namespace Test_Tree_Node
         tree.GetChildPtr(0)->GetChildPtr(0)->AddChild(66);
         std::cout << "##Print tree:\n"; tree.PrintTree();
         //##Print tree:
-        //--[99]
-        //----[11]
-        //------[33]
-        //--------[66]
-        //------[44]
-        //----[22]
-        //------[55]
+        //-[99]
+        //        -[11]
+        //                -[33]
+        //                        -[66]
+        //                -[44]
+        //        -[22]
+        //                -[55]
         
         //测试拷贝构造
         TreeNode<int> copy1(tree);
         std::cout << "##Print copy1:\n"; copy1.PrintTree();
         //##Print copy1:
-        //--[99]
-        //----[11]
-        //------[33]
-        //--------[66]
-        //------[44]
-        //----[22]
-        //------[55]
+        //-[99]
+        //        -[11]
+        //                -[33]
+        //                        -[66]
+        //                -[44]
+        //        -[22]
+        //                -[55]
 
         //测试赋值运算符初始化
         copy1.DelChild(1);
         TreeNode<int> copy2 = copy1;
         std::cout << "##Print copy2:\n"; copy2.PrintTree();
         //##Print copy2:
-        //--[99]
-        //----[11]
-        //------[33]
-        //--------[66]
-        //------[44]
+        //-[99]
+        //        -[11]
+        //                -[33]
+        //                        -[66]
+        //                -[44]
     }
 
     void MainTest()
