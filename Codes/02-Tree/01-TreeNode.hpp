@@ -43,7 +43,7 @@ public:
     void DelChild(int);                       //通过索引删除子节点
     void DelChild(TreeNode<T>*);              //通过地址删除子节点
 
-protected:
+private:
     void PrintTree(int) const;                //依据传入深度打印出基于相应层级的树
 };
 
