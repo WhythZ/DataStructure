@@ -29,7 +29,9 @@ public:
     int Find(T) const;                    //返回第一个等于传入值的元素索引
     int Find(T*) const;                   //准确定位传入指针对应的元素索引
     T GetFront() const;                   //返回链表头部元素值
+    T* GetFrontPtr() const;               //返回链表头部元素指针
     T GetBack() const;                    //返回链表尾部元素值
+    T* GetBackPtr() const;                //返回链表尾部元素值
 
     bool Insert(T, int);                  //插入元素到指定位置
     void PushFront(T);                    //将元素插入到链表头部
@@ -163,10 +165,24 @@ T SingleLinkedList<T>::GetFront() const
 }
 
 template <typename T>
+T* SingleLinkedList<T>::GetFrontPtr() const
+{
+    //时间复杂度为O(1)
+    return GetElemPtr(0);
+}
+
+template <typename T>
 T SingleLinkedList<T>::GetBack() const
 {
     //通过尾指针访问，可以使得时间复杂度为O(1)
     return GetElem(length - 1);
+}
+
+template <typename T>
+T* SingleLinkedList<T>::GetBackPtr() const
+{
+    //通过尾指针访问，可以使得时间复杂度为O(1)
+    return GetElemPtr(length - 1);
 }
 
 template <typename T>

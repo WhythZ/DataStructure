@@ -33,11 +33,10 @@ public:
     int GetDegree() const;                    //获取该节点的度，即子节点个数
     TreeNode<T>* GetParentPtr() const;        //获取指向父节点的指针
     TreeNode<T>* GetChildPtr(int) const;      //以索引获取指向某子节点的指针
+    int FindChildIdx(TreeNode<T>*) const;     //搜索子节点在链表中的索引
 
     void PrintNeighbor() const;               //打印该节点自身及其相邻两层，共三层
     void PrintTree() const;                   //完整打印以该节点为根节点的树
-    void TraversalBFS() const;                //以BFS打印以该节点为根的树的所有节点
-    void TraversalDFS() const;                //以DFS打印以该节点为根的树的所有节点
 
     void AddChild(TreeNode<T>*);              //以传入节点的方式添加子节点
     void AddChild(T);                         //以传入新元素的方式添加子节点
@@ -46,6 +45,24 @@ public:
 
 protected:
     void PrintTree(int) const;                //依据传入深度打印出基于相应层级的树
+};
+
+template <typename T>
+class TreeIterator
+{
+private:
+    TreeNode<T>* root;                        //被遍历的树对象的根节点
+    SQueue<TreeNode<T>*> queue;               //队列，存储以BFS遍历的树节点指针结果
+    SStack<TreeNode<T>*> stack;               //栈，存储以DFS遍历的树节点指针结果
+
+public:
+    TreeIterator(TreeNode<T>*);               //构造函数初始化被遍历的对象
+    void TraversalBFS();                      //以BFS遍历打印树的所有节点
+    void TraversalDFS();                      //以DFS遍历打印树的所有节点
+
+private:
+    void TraversalBFS(TreeNode<T>*);          //以BFS遍历打印传入节点的所有后代节点
+    void TraversalDFS(TreeNode<T>*, int = 0); //以DFS遍历打印传入节点的所有后代节点
 };
 
 template <typename T>
@@ -200,6 +217,12 @@ TreeNode<T>* TreeNode<T>::GetChildPtr(int _idx) const
 }
 
 template <typename T>
+int TreeNode<T>::FindChildIdx(TreeNode<T>* _obj) const
+{
+    return childList.Find(_obj);
+}
+
+template <typename T>
 void TreeNode<T>::PrintNeighbor() const
 {
     //父节点的打印
@@ -234,20 +257,6 @@ void TreeNode<T>::PrintTree() const
 {
     //传入的初始深度为零，表示打印以此节点为根节点的整个树
     this->PrintTree(0);
-}
-
-template <typename T>
-void TreeNode<T>::TraversalBFS() const
-{
-    //用于广度优先遍历的队列
-    SQueue<TreeNode> queue;
-}
-
-template <typename T>
-void TreeNode<T>::TraversalDFS() const
-{
-    //用于深度优先遍历队列
-    SStack<TreeNode> stack;
 }
 
 template <typename T>
@@ -326,6 +335,92 @@ void TreeNode<T>::PrintTree(int _depth) const
             //递归的方式进行打印，让子节点在下一层深度打印
             _itr->PrintTree(_depth + 1);
         }
+    }
+}
+
+template <typename T>
+TreeIterator<T>::TreeIterator(TreeNode<T>* _treeRootNode)
+{
+    //每个树迭代器只为一个树服务
+    root = _treeRootNode;
+    //不论是队列还是栈，都要先将根节点添加进去
+    queue.Push(_treeRootNode);
+    stack.Push(_treeRootNode);
+}
+
+template <typename T>
+void TreeIterator<T>::TraversalBFS()
+{
+    //因为根节点的入队是在构造函数进行的，所以只有此处可以打印此信息
+    std::cout << "<" << queue.GetFront()->GetNodeData() << ">";
+    //取出根节点进行递归遍历
+    this->TraversalBFS(root);
+    //待上述遍历打印完成后，换行
+    std::cout << "\n";
+}
+
+template <typename T>
+void TreeIterator<T>::TraversalDFS()
+{
+    //注意此处使用的是栈
+    std::cout << "<" << stack.GetTop()->GetNodeData() << ">";
+    //取出根节点进行递归遍历，默认从根节点的第一个子节点开始搜索
+    this->TraversalDFS(root, 0);
+    std::cout << "\n";
+}
+
+template <typename T>
+void TreeIterator<T>::TraversalBFS(TreeNode<T>* _node)
+{
+    //调用此函数就说明队首节点被取出了，故而使用Pop函数将其删除（删除的实际上就是传入节点）
+    std::cout << "</" << queue.GetFront()->GetNodeData() << ">";
+    queue.Pop();
+
+    //遍历传入节点的子节点
+    for (int i = 0; i < _node->GetDegree(); i++)
+    {
+        //将子节点入队
+        std::cout << "<" << _node->GetChildPtr(i)->GetNodeData() << ">";
+        queue.Push(_node->GetChildPtr(i));
+    }
+
+    //然后将队首节点出队（记得使用Pop删除），递归执行此遍历函数
+    if (!queue.IsEmpty())
+    {
+        TraversalBFS(queue.GetFront());
+    }
+}
+
+template <typename T>
+void TreeIterator<T>::TraversalDFS(TreeNode<T>* _node, int _idx)
+{
+    //如果刚刚取出的节点为叶节点，或索引数超出了最大索引范围，则应当折返回上一个分支处
+    if (_node->IsLeaf() || _idx > (_node->GetDegree() - 1))
+    {
+        //将栈顶节点（其实就是传入的节点）出栈
+        std::cout << "</" << stack.GetTop()->GetNodeData() << ">";
+        stack.Pop();
+
+        //防止无限循环
+        if (stack.IsEmpty())
+            return;
+
+        //记录这个叶节点的父节点，不能用_node->GetParentPtr()获取，因为调用TraversalDFS()重载函数的节点不一定是根节点（只是把它当成根节点来打印而已）
+        TreeNode<T>* _parent = stack.GetTop();
+        //获取该父节点的下一个子节点分支的索引
+        int _nextBranchIdx = _parent->FindChildIdx(_node) + 1;
+        //然后继续递归搜索父节点
+        TraversalDFS(_parent, _nextBranchIdx);
+    }
+    else
+    {            
+        //将传入节点的索引为_idx的子节点入栈
+        TreeNode<T>* _next = _node->GetChildPtr(_idx);
+        std::cout << "<" << _next->GetNodeData() << ">";
+        stack.Push(_next);
+
+        //然后继续递归遍历，默认从0索引的子节点开始搜索
+        TraversalDFS(_next, 0);
     }
 }
 
@@ -412,8 +507,7 @@ namespace Test_Tree_Node
         //##bigTree.GetDepth(): 5
 
         //测试整颗树的打印
-        std::cout << "##Print smallTree:\n"; smallTree.PrintTree();
-        //##Print smallTree:
+        std::cout << "**Print smallTree:\n"; smallTree.PrintTree();
         //-[99]
         //        -[11]
         //                -[33]
@@ -421,8 +515,7 @@ namespace Test_Tree_Node
         //                -[44]
         //        -[22]
         //                -[55]
-        std::cout << "##Print bigTree:\n"; bigTree.PrintTree();
-        //##Print bigTree:
+        std::cout << "**Print bigTree:\n"; bigTree.PrintTree();
         //-[77]
         //        -[99]
         //                -[11]
@@ -454,8 +547,7 @@ namespace Test_Tree_Node
         tree.GetChildPtr(0)->AddChild(44);
         tree.GetChildPtr(1)->AddChild(55);
         tree.GetChildPtr(0)->GetChildPtr(0)->AddChild(66);
-        std::cout << "##Print tree:\n"; tree.PrintTree();
-        //##Print tree:
+        std::cout << "**Print tree:\n"; tree.PrintTree();
         //-[99]
         //        -[11]
         //                -[33]
@@ -466,8 +558,7 @@ namespace Test_Tree_Node
         
         //测试拷贝构造
         TreeNode<int> copy1(tree);
-        std::cout << "##Print copy1:\n"; copy1.PrintTree();
-        //##Print copy1:
+        std::cout << "**Print copy1:\n"; copy1.PrintTree();
         //-[99]
         //        -[11]
         //                -[33]
@@ -479,13 +570,46 @@ namespace Test_Tree_Node
         //测试赋值运算符初始化
         copy1.DelChild(1);
         TreeNode<int> copy2 = copy1;
-        std::cout << "##Print copy2:\n"; copy2.PrintTree();
-        //##Print copy2:
+        std::cout << "**Print copy2:\n"; copy2.PrintTree();
         //-[99]
         //        -[11]
         //                -[33]
         //                        -[66]
         //                -[44]
+    }
+
+    void TestTraversal()
+    {
+        //创建用于测试的树
+        TreeNode<int> tree(99);
+        tree.AddChild(11);
+        tree.AddChild(22);
+        tree.GetChildPtr(0)->AddChild(33);
+        tree.GetChildPtr(0)->AddChild(44);
+        tree.GetChildPtr(1)->AddChild(55);
+        tree.GetChildPtr(0)->GetChildPtr(0)->AddChild(66);
+        std::cout << "**Print tree:\n"; tree.PrintTree();
+        //-[99]
+        //        -[11]
+        //                -[33]
+        //                        -[66]
+        //                -[44]
+        //        -[22]
+        //                -[55]
+
+        //测试广度优先遍历，记得使用int（树节点存储的数据类型）作为模板类型
+        TreeIterator<int> itr1(&tree);
+        std::cout << "**Traverse &tree By BFS\n"; itr1.TraversalBFS();
+        //<99></99><11><22></11><33><44></22><55></33><66></44></55></66>
+
+        //测试深度优先遍历
+        std::cout << "**Traverse &tree By DFS\n"; itr1.TraversalDFS();
+        //<99><11><33><66></66></33><44></44></11><22><55></55></22></99>
+
+        //测试深度优先遍历的特殊情况（即遍历对象有父节点，我们应当忽略这个父节点）
+        TreeIterator<int> itr2(tree.GetChildPtr(0));
+        std::cout << "**Traverse tree.GetChildPtr(0) By DFS\n"; itr2.TraversalDFS();
+        //<11><33><66></66></33><44></44></11>
     }
 
     void MainTest()
@@ -498,7 +622,9 @@ namespace Test_Tree_Node
         TestMultipleNodesAsTree();
         std::cout << "--------------------TestArea03--------------------\n";
         TestDeepCopy();
-        
+        std::cout << "--------------------TestArea04--------------------\n";
+        TestTraversal();
+
         std::cout << "--------------------------------------------------\n";
     }
 }

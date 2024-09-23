@@ -18,7 +18,8 @@ public:
 
     bool IsEmpty() const;        //返回栈是否为空栈
     T GetTop() const;            //返回栈顶部的元素值
-    int GetCapacity() const;     //用于测试
+    T* GetTopPtr() const;        //返回栈顶部的元素指针
+    int GetCapacity() const;     //返回当前容量
 
     void Push(T const&);         //将元素推送到栈的顶端
     void Pop();                  //删除栈的顶端元素
@@ -54,6 +55,14 @@ T SStack<T>::GetTop() const
     if (IsEmpty())
         throw std::invalid_argument("ERROR: SStack Is Empty Calling {T SStack<T>::GetTop() const}");
     return array[stackSize - 1];
+}
+
+template <typename T>
+T* SStack<T>::GetTopPtr() const
+{
+    if (IsEmpty())
+        throw std::invalid_argument("ERROR: SStack Is Empty Calling {T* SStack<T>::GetTopPtr() const}");
+    return &array[stackSize - 1];
 }
 
 template <typename T>

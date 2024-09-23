@@ -14,6 +14,7 @@ private:
 public:
     bool IsEmpty() const;     //返回栈是否为空栈
     T GetTop() const;         //返回栈顶部的元素值
+    T* GetTopPtr() const;     //返回栈顶部的元素指针
     
     void Push(T const&);      //将元素推送到栈的顶端
     void Pop();               //将顶端元素删除（此处不返回栈顶值）
@@ -33,6 +34,16 @@ T LStack<T>::GetTop() const
         throw std::invalid_argument("ERROR: LStack Is Empty Calling {T LStack<T>::GetTop() const}");
     //否则返回栈顶部元素，即头部元素
     return list.GetFront();
+}
+
+template <typename T>
+T* LStack<T>::GetTopPtr() const
+{
+    //若栈为空，则报错
+    if (IsEmpty())
+        throw std::invalid_argument("ERROR: LStack Is Empty Calling {T* LStack<T>::GetTopPtr() const}");
+    //否则返回栈顶部元素的指针，即头部元素的指针
+    return list.GetFrontPtr();
 }
 
 template <typename T>

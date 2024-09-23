@@ -20,7 +20,8 @@ public:
     ~SQueue();                  //析构函数
 
     bool IsEmpty() const;       //空判断
-    T GetFront() const;         //获得队列前端元素
+    T GetFront() const;         //获得队列前端元素值
+    T* GetFrontPtr() const;     //获得队列前端元素指针
     void PrintArray() const;    //从头到尾打印内核数组（调试用）
 
     void Push(T const&);        //将新元素推送到数组尾部
@@ -62,6 +63,15 @@ T SQueue<T>::GetFront() const
         throw std::invalid_argument("ERROR: SQueue Is Empty Calling {T SQueue<T>::GetFront() const}");
     //返回队列前端元素
     return array[frontIdx];
+}
+
+template <typename T>
+T* SQueue<T>::GetFrontPtr() const
+{
+    if (IsEmpty())
+        throw std::invalid_argument("ERROR: SQueue Is Empty Calling {T* SQueue<T>::GetFrontPtr() const}");
+    //返回队列前端元素指针
+    return &array[frontIdx];
 }
 
 template <typename T>

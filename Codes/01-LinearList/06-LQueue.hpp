@@ -12,7 +12,8 @@ private:
 
 public:
     bool IsEmpty() const;      //判断是否为空
-    T GetFront() const;        //获取下一个将被取出队列的元素
+    T GetFront() const;        //获取下一个将被取出队列的元素值
+    T* GetFrontPtr() const;    //获取下一个将被取出队列的元素指针
 
     void Push(T const&);       //将新加入的元素放入链表尾部
     void Pop();                //将链表头部的元素删除
@@ -30,6 +31,14 @@ T LQueue<T>::GetFront() const
     if (IsEmpty())
         throw std::invalid_argument("ERROR: LQueue Is Empty Calling {T LQueue<T>::GetFront() const}");
     return list.GetFront();
+}
+
+template <typename T>
+T* LQueue<T>::GetFrontPtr() const
+{
+    if (IsEmpty())
+        throw std::invalid_argument("ERROR: LQueue Is Empty Calling {T* LQueue<T>::GetFrontPtr() const}");
+    return list.GetFrontPtr();
 }
 
 template <typename T>
