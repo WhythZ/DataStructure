@@ -16,7 +16,7 @@ protected:
 
 public:
     //构造函数，初始化节点存储的数据以及该节点的父节点指针
-    TreeNode(const T & = T(), TreeNode<T>* = nullptr);
+    TreeNode(const T& = T(), TreeNode<T>* = nullptr);
     //运算符=的重载，实现深拷贝
     TreeNode<T>& operator=(const TreeNode<T>&);
     //拷贝构造，实现深拷贝
@@ -31,12 +31,11 @@ public:
     TreeNode<T>* GetParentPtr() const;        //获取指向父节点的指针
     TreeNode<T>* GetChildPtr(int) const;      //以索引获取指向某子节点的指针
     int FindChildIdx(TreeNode<T>*) const;     //搜索子节点在链表中的索引
-
     void PrintNeighbor() const;               //打印该节点自身及其相邻两层，共三层
     void PrintTree() const;                   //完整打印以该节点为根节点的树
 
-    virtual void AddChild(TreeNode<T>*);      //以传入节点的方式添加子节点
-    virtual void AddChild(T);                 //以传入新元素的方式添加子节点
+    void AddChild(TreeNode<T>*);              //以传入节点的方式添加子节点
+    void AddChild(T);                         //以传入新元素的方式添加子节点
     void DelChild(int);                       //通过索引删除子节点
     void DelChild(TreeNode<T>*);              //通过地址删除子节点
 
