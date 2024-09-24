@@ -15,8 +15,7 @@ protected:
     BinaryTreeNode<T>* rightSubNode;                  //右子节点指针
     
 public:
-    //构造函数
-    BinaryTreeNode(const T & = T(), BinaryTreeNode<T>* = nullptr);
+    BinaryTreeNode(const T & = T());                  //构造函数，初始化节点存储的数据
     
     T GetNodeData() const;                            //获取该树节点存储的数据值
     bool IsRoot() const;                              //该节点是否是根节点（树的发端）
@@ -24,6 +23,7 @@ public:
     int GetSize() const;                              //获取以该节点及其所有后代的个数
     int GetDepth() const;                             //获取以该节点为根节点的树的深度
     int GetDegree() const;                            //获取该节点的度，即子节点个数
+    TreeNode<T>* GetCoreNode() const;                 //获取内核节点指针
     BinaryTreeNode<T>* GetParentPtr() const;          //获取指向父节点的指针
     BinaryTreeNode<T>* GetLeftSubNodePtr() const;     //获取左节点指针
     BinaryTreeNode<T>* GetRightSubNodePtr() const;    //获取右节点指针
@@ -39,10 +39,10 @@ public:
 };
 
 template <typename T>
-BinaryTreeNode<T>::BinaryTreeNode(const T& _data, BinaryTreeNode<T>* _parent)
+BinaryTreeNode<T>::BinaryTreeNode(const T& _data)
 {
     //在堆区初始化一个TreeNode<T>对象
-    coreNode = new TreeNode<T>(_data, _parent);
+    coreNode = new TreeNode<T>(_data);
     //初始化为指向空指针
     leftSubNode = nullptr;
     rightSubNode = nullptr;

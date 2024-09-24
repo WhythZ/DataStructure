@@ -10,44 +10,42 @@ template <typename T>
 class TreeNode
 {
 protected:
-    T nodeData;                               //该节点存储的数据
-    TreeNode<T>* parentNode;                  //该节点的父节点指针
-    SingleLinkedList<TreeNode<T>> childList;  //该节点的子节点
+    T nodeData;                                  //该节点存储的数据
+    TreeNode<T>* parentNode;                     //该节点的父节点指针
+    SingleLinkedList<TreeNode<T>> childList;     //该节点的子节点
 
 public:
-    //构造函数，初始化节点存储的数据以及该节点的父节点指针
-    TreeNode(const T& = T(), TreeNode<T>* = nullptr);
-    //运算符=的重载，实现深拷贝
-    TreeNode<T>& operator=(const TreeNode<T>&);
-    //拷贝构造，实现深拷贝
-    TreeNode(const TreeNode<T>&);
+    TreeNode(const T& = T());                    //构造函数，初始化节点存储的数据
+    TreeNode<T>& operator=(const TreeNode<T>&);  //运算符=的重载，实现深拷贝
+    TreeNode(const TreeNode<T>&);                //拷贝构造，实现深拷贝
 
-    T GetNodeData() const;                    //获取该树节点存储的数据值
-    bool IsRoot() const;                      //该节点是否是根节点（树的发端）
-    bool IsLeaf() const;                      //该节点是否是叶节点（树的末端）
-    int GetSize() const;                      //获取以该节点及其所有后代的个数
-    int GetDepth() const;                     //获取以该节点为根节点的树的深度
-    int GetDegree() const;                    //获取该节点的度，即子节点个数
-    TreeNode<T>* GetParentPtr() const;        //获取指向父节点的指针
-    TreeNode<T>* GetChildPtr(int) const;      //以索引获取指向某子节点的指针
-    int FindChildIdx(TreeNode<T>*) const;     //搜索子节点在链表中的索引
-    void PrintNeighbor() const;               //打印该节点自身及其相邻两层，共三层
-    void PrintTree() const;                   //完整打印以该节点为根节点的树
+    T GetNodeData() const;                       //获取该树节点存储的数据值
+    bool IsRoot() const;                         //该节点是否是根节点（树的发端）
+    bool IsLeaf() const;                         //该节点是否是叶节点（树的末端）
+    int GetSize() const;                         //获取以该节点及其所有后代的个数
+    int GetDepth() const;                        //获取以该节点为根节点的树的深度
+    int GetDegree() const;                       //获取该节点的度，即子节点个数
+    TreeNode<T>* GetParentPtr() const;           //获取指向父节点的指针
+    TreeNode<T>* GetChildPtr(int) const;         //以索引获取指向某子节点的指针
+    int FindChildIdx(TreeNode<T>*) const;        //搜索子节点在链表中的索引
+    void PrintNeighbor() const;                  //打印该节点自身及其相邻两层，共三层
+    void PrintTree() const;                      //完整打印以该节点为根节点的树
 
-    void AddChild(TreeNode<T>*);              //以传入节点的方式添加子节点
-    void AddChild(T);                         //以传入新元素的方式添加子节点
-    void DelChild(int);                       //通过索引删除子节点
-    void DelChild(TreeNode<T>*);              //通过地址删除子节点
+    void AddChild(TreeNode<T>*);                 //以传入节点的方式添加子节点
+    void AddChild(T);                            //以传入新元素的方式添加子节点
+    void DelChild(int);                          //通过索引删除子节点
+    void DelChild(TreeNode<T>*);                 //通过地址删除子节点
 
 protected:
-    void PrintTree(int) const;                //依据传入深度打印出基于相应层级的树
+    void PrintTree(int) const;                   //依据传入深度打印出基于相应层级的树
 };
 
 template <typename T>
-TreeNode<T>::TreeNode(const T & _data, TreeNode<T> * _parent)
+TreeNode<T>::TreeNode(const T & _data)
 {
     nodeData = _data;
-    parentNode = _parent;
+    //初始化父节点指针为空指针，只有在AddChild或DelChild的时候才会对父节点指针产生修改
+    parentNode = nullptr;
 }
 
 template <typename T>
@@ -65,7 +63,7 @@ TreeNode<T>& TreeNode<T>::operator=(const TreeNode<T>& _obj)
 
     //拷贝节点数据
     this->nodeData = _obj.GetNodeData();
-    //保持父节点为空（即不拷贝等号右侧对象的父节点）
+    //保持父节点为空（即不拷贝等号右侧对象的父节点，不然会出问题）
     this->parentNode = nullptr;
 
     //手动复制子节点，避免使用AddChild函数以避免循环依赖
