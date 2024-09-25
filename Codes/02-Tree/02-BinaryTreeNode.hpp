@@ -2,163 +2,308 @@
 #define _BINARY_TREE_NODE_HPP_
 
 #include <iostream>
-//引入树节点类
-#include "../02-Tree/01-TreeNode.hpp"
 
-//包装一个TreeNode<T>对象，对外构成一个二叉树节点类（使用继承要重写好多，太麻烦了）
+//二叉树节点类
 template <typename T>
 class BinaryTreeNode
 {
 protected:
-    TreeNode<T>* coreNode;                            //作为内核节点，其子节点受到约束
-    BinaryTreeNode<T>* leftSubNode;                   //左子节点指针
-    BinaryTreeNode<T>* rightSubNode;                  //右子节点指针
-    
+    T nodeData;                                              //该节点存储的数据
+    BinaryTreeNode<T>* parentNode;                           //该节点的父节点指针
+    BinaryTreeNode<T>* leftChild;                            //该节点的左子节点（树）指针
+    BinaryTreeNode<T>* rightChild;                           //该节点的右子节点（树）指针
+
 public:
-    BinaryTreeNode(const T & = T());                  //构造函数，初始化节点存储的数据
-    
-    T GetNodeData() const;                            //获取该树节点存储的数据值
-    bool IsRoot() const;                              //该节点是否是根节点（树的发端）
-    bool IsLeaf() const;                              //该节点是否是叶节点（树的末端）
-    int GetSize() const;                              //获取以该节点及其所有后代的个数
-    int GetDepth() const;                             //获取以该节点为根节点的树的深度
-    int GetDegree() const;                            //获取该节点的度，即子节点个数
-    TreeNode<T>* GetCoreNode() const;                 //获取内核节点指针
-    BinaryTreeNode<T>* GetParentPtr() const;          //获取指向父节点的指针
-    BinaryTreeNode<T>* GetLeftSubNodePtr() const;     //获取左节点指针
-    BinaryTreeNode<T>* GetRightSubNodePtr() const;    //获取右节点指针
-    void PrintTree() const;                           //完整打印以该节点为根节点的树
+    BinaryTreeNode(const T& = T());                          //构造函数，初始化节点存储的数据
+    ~BinaryTreeNode();                                       //析构函数，此类没有子节点链表帮我们析构
+    BinaryTreeNode<T>& operator=(const BinaryTreeNode<T>&);  //运算符=的重载，实现深拷贝
+    BinaryTreeNode(const BinaryTreeNode<T>&);                //拷贝构造，实现深拷贝
 
-    // void SetLeftSubNode(T);                           //以值形式设置左子节点
-    // void SetLeftSubNode(BinaryTreeNode<T>*);          //以节点指针形式设置左子节点/树
-    // void SetRightSubNode(T);                          //以值形式设置右子节点
-    // void SetRightSubNode(BinaryTreeNode<T>*);         //以节点指针形式设置右子节点/树
+    T GetNodeData() const;                                   //获取该树节点存储的数据值
+    bool IsRoot() const;                                     //该节点是否是根节点（树的发端）
+    bool HasLeftChild() const;                               //该节点是否有左子节点
+    bool HasRightChild() const;                              //该节点是否有右子节点
+    bool IsLeaf() const;                                     //该节点是否是叶节点（树的末端）
+    // int GetSize() const;                                     //获取以该节点及其所有后代的个数
+    // int GetDepth() const;                                    //获取以该节点为根节点的树的深度
+    int GetDegree() const;                                   //获取该节点的度，即子节点个数
+    BinaryTreeNode<T>* GetParentPtr() const;                 //获取指向父节点的指针
+    BinaryTreeNode<T>* GetLeftChildPtr() const;              //获取指向左子节点（树）的指针
+    BinaryTreeNode<T>* GetRightChildPtr() const;             //获取指向右子节点（树）的指针
+    // void PrintTree() const;                                  //完整打印以该节点为根节点的树
 
-// protected:
-    // void PrintTree(int) const;                        //依据传入深度打印出基于相应层级的树
+    void SetLeftChild(BinaryTreeNode<T>*);                   //以传入节点的方式设置左子节点（会覆盖）
+    void SetLeftChild(T);                                    //以传入新元素的方式设置左子节点（会覆盖）
+    void SetRightChild(BinaryTreeNode<T>*);                  //以传入节点的方式设置右子节点（会覆盖）
+    void SetRightChild(T);                                   //以传入新元素的方式设置右子节点（会覆盖）
+    void DelLeftChild();                                     //删除左子节点
+    void DelRightChild();                                    //删除右子节点
+
+protected:
+    // void PrintTree(int) const;                               //依据传入深度打印出基于相应层级的树
 };
 
 template <typename T>
-BinaryTreeNode<T>::BinaryTreeNode(const T& _data)
+BinaryTreeNode<T>::BinaryTreeNode(const T & _data)
 {
-    //在堆区初始化一个TreeNode<T>对象
-    coreNode = new TreeNode<T>(_data);
-    //初始化为指向空指针
-    leftSubNode = nullptr;
-    rightSubNode = nullptr;
+    nodeData = _data;
+    //初始化父节点、左右子树的指针为空指针，只有在AddChild或DelChild的时候才会对这三者产生修改
+    parentNode = nullptr;
+    leftChild = nullptr;
+    rightChild = nullptr;
+}
+
+template <typename T>
+BinaryTreeNode<T>::~BinaryTreeNode()
+{
+    //先析构子节点，再析构自身
+    DelLeftChild();
+    DelRightChild();
+}
+
+template <typename T>
+BinaryTreeNode<T>& BinaryTreeNode<T>::operator=(const BinaryTreeNode<T>& _obj)
+{
+    //防止自我赋值
+    if (this == &_obj)
+        return *this;
+
+    //清除当前的子节点
+    while (this->GetDegree() > 0)
+    {
+        DelLeftChild();
+        DelRightChild();
+    }
+
+    //拷贝节点数据
+    this->nodeData = _obj.GetNodeData();
+    //不要拷贝等号右侧对象的父节点，也不要清空this的父节点，保持原有的就好
+    // this->parentNode = nullptr;
+
+    //复制传入节点的子节点
+    BinaryTreeNode<T>* _left = _obj.GetLeftChildPtr();
+    BinaryTreeNode<T>* _right = _obj.GetRightChildPtr();
+    //如果是叶节点，那么就可以直接复制（注意不要用接收指针的SetXXChild函数重载版本，因其使用了赋值运算符的重载，会循环引用）
+    if (_left->IsLeaf())
+        SetLeftChild(_left->GetNodeData());
+    //否则递归调用赋值运算符的重载（注意使用的是解引用，不然就是对指针的操作了）
+    else
+        *leftChild = *_left;
+    //同样的操作对右子节点进行
+    if (_right->IsLeaf())
+        SetLeftChild(_left->GetNodeData());
+    else
+        *rightChild = *_right;
+
+    //返回自身引用
+    return *this;
+}
+
+template <typename T>
+BinaryTreeNode<T>::BinaryTreeNode(const BinaryTreeNode<T>& _obj)
+{
+    //直接使用赋值运算符的重载
+    *this = _obj;
 }
 
 template <typename T>
 T BinaryTreeNode<T>::GetNodeData() const
 {
-    return coreNode->GetNodeData();
+    return nodeData;
 }
 
 template <typename T>
 bool BinaryTreeNode<T>::IsRoot() const
 {
-    return coreNode->IsRoot();
+    return (parentNode == nullptr);
+}
+
+template <typename T>
+bool BinaryTreeNode<T>::HasLeftChild() const
+{
+    return (leftChild != nullptr);
+}
+
+template <typename T>
+bool BinaryTreeNode<T>::HasRightChild() const
+{
+    return (rightChild != nullptr);
 }
 
 template <typename T>
 bool BinaryTreeNode<T>::IsLeaf() const
 {
-    return coreNode->IsLeaf();
+    return (GetDegree() == 0);
 }
 
-template <typename T>
-int BinaryTreeNode<T>::GetSize() const
-{
-    return coreNode->GetSize();
-}
+// template <typename T>
+// int BinaryTreeNode<T>::GetSize() const
+// {
+//     //将自身算进去
+//     int _counter = 1;
+//     //如果有子节点，那就需要加上子节点的节点数
+//     if (!IsLeaf())
+//     {
+//         //遍历子节点，加上每个子节点的所拥节点数（递归思想）
+//         for (int i = 0; i < GetDegree(); i++)
+//         {
+//             _counter += GetChildPtr(i)->GetSize();
+//         }
+//     }
+//     return _counter;
+// }
 
-template <typename T>
-int BinaryTreeNode<T>::GetDepth() const
-{
-    return coreNode->GetDepth();
-}
+// template <typename T>
+// int BinaryTreeNode<T>::GetDepth() const
+// {
+//     //计数器
+//     int _counter = 0;
+//     //若是叶节点，那么返回深度为0
+//     if (IsLeaf())
+//         return _counter;
+//     else
+//     {
+//         //否则不是叶节点，那么就说明还有下一层，故给计数器递增
+//         _counter++;
+//         //用于存储子结点中最大的深度
+//         int _maxDepth = 0;
+//         //迭代器，用于遍历子节点
+//         TreeNode<T>* _itr;
+//         for (int i = 0; i < GetDegree(); i++)
+//         {
+//             _itr = GetChildPtr(i);
+//             //递归的思想
+//             _maxDepth = std::max(_maxDepth, _itr->GetDepth());
+//         }
+//         //给计数器加上子结点中的最大深度
+//         _counter += _maxDepth;
+//         return _counter;
+//     }
+// }
 
 template <typename T>
 int BinaryTreeNode<T>::GetDegree() const
 {
-    return coreNode->GetDegree();
+    int _counter = 0;
+    if (HasLeftChild())
+        _counter++;
+    if (HasRightChild())
+        _counter++;
+    return _counter;
 }
 
 template <typename T>
 BinaryTreeNode<T>* BinaryTreeNode<T>::GetParentPtr() const
 {
-    // return coreNode->GetParentPtr();
+    return parentNode;
 }
 
 template <typename T>
-BinaryTreeNode<T>* BinaryTreeNode<T>::GetLeftSubNodePtr() const
+BinaryTreeNode<T>* BinaryTreeNode<T>::GetLeftChildPtr() const
 {
-    return leftSubNode;
+    return leftChild;
 }
 
 template <typename T>
-BinaryTreeNode<T>* BinaryTreeNode<T>::GetRightSubNodePtr() const
+BinaryTreeNode<T>* BinaryTreeNode<T>::GetRightChildPtr() const
 {
-    return rightSubNode;
+    return rightChild;
 }
 
 // template <typename T>
 // void BinaryTreeNode<T>::PrintTree() const
 // {
+//     //传入的初始深度为零，表示打印以此节点为根节点的整个树
 //     this->PrintTree(0);
 // }
 
-// template <typename T>
-// void BinaryTreeNode<T>::SetLeftSubNode(T _obj)
-// {
-//     if (leftSubNode == nullptr)
-//     {
-//         //通过基类的方法将传入节点添加到childList中去
-//         this->AddChild(_obj);
-//         //由于AddChild使用深拷贝，而不是直接将传入节点当作子节点，所以此处要将指针指向childList中的新节点，而非传入节点
-//         leftSubNode = this->childList.GetBackPtr();
+template <typename T>
+void BinaryTreeNode<T>::SetLeftChild(BinaryTreeNode<T>* _node)
+{
+    //将传入节点通过（赋值运算符已经过深拷贝重载）深拷贝到新的内存
+    BinaryTreeNode<T> _new = *_node;
 
-//         //返回1表示添加成功
-//         return 1;
-//     }
-//     else
-//     {
-//         //否则说明以及有了左子节点，返回0表示添加失败
-//         return 0;
-//     }
-// }
+    if (!HasLeftChild())
+    {
+        //赋值运算符拷贝给左子节点（注意解引用获取leftChild的引用）
+        *leftChild = _new;
+    }
+    else
+    {
+        delete leftChild;
+        *leftChild = _new;
+    }
+}
 
-// template <typename T>
-// void BinaryTreeNode<T>::SetLeftSubNode(BinaryTreeNode<T>* _obj)
-// {
-    
-// }
+template <typename T>
+void BinaryTreeNode<T>::SetLeftChild(T _obj)
+{
+    //若无此位置的子节点，则直接新建，否则还要销毁原本位置上的节点
+    if (!HasLeftChild())
+    {
+        //在堆区新建子节点
+        BinaryTreeNode<T>* _new = new BinaryTreeNode<T>(_obj);
+        //对子节点进行维护
+        leftChild = _new;
+        //注意对父节点进行维护
+        leftChild->GetParentPtr() = this;
+    }
+    else
+    {
+        DelLeftChild();
+        SetLeftChild(_obj);
+    }
+}
 
-// template <typename T>
-// void BinaryTreeNode<T>::SetRightSubNode(T _obj)
-// {
-//     if (rightSubNode == nullptr)
-//     {
-//         //通过基类的方法将传入节点添加到childList中去
-//         this->AddChild(_obj);
-//         //由于AddChild使用深拷贝，而不是直接将传入节点当作子节点，所以此处要将指针指向childList中的新节点，而非传入节点
-//         rightSubNode = this->childList.GetBackPtr();
+template <typename T>
+void BinaryTreeNode<T>::SetRightChild(BinaryTreeNode<T>* _node)
+{
+    //将传入节点通过（赋值运算符已经过深拷贝重载）深拷贝到新的内存
+    BinaryTreeNode<T> _new = *_node;
 
-//         //返回1表示添加成功
-//         return 1;
-//     }
-//     else
-//     {
-//         //否则说明以及有了右子节点，返回0表示添加失败
-//         return 0;
-//     }
-// }
+    if (!HasRightChild())
+    {
+        //赋值运算符拷贝给左子节点（注意解引用获取rightChild的引用）
+        *rightChild = _new;
+    }
+    else
+    {
+        delete rightChild;
+        *rightChild = _new;
+    }
+}
 
-// template <typename T>
-// void BinaryTreeNode<T>::SetRightSubNode(BinaryTreeNode<T>* _obj)
-// {
+template <typename T>
+void BinaryTreeNode<T>::SetRightChild(T _obj)
+{
+    //若无此位置的子节点，则直接新建，否则还要销毁原本位置上的节点
+    if (!HasRightChild())
+    {
+        //在堆区新建子节点
+        BinaryTreeNode<T>* _new = new BinaryTreeNode<T>(_obj);
+        //对子节点进行维护
+        rightChild = _new;
+        //注意对父节点进行维护
+        rightChild->GetParentPtr() = this;
+    }
+    else
+    {
+        DelRightChild();
+        SetRightChild(_obj);
+    }
+}
 
-// }
+template <typename T>
+void BinaryTreeNode<T>::DelLeftChild()
+{
+    delete leftChild;
+}
+
+template <typename T>
+void BinaryTreeNode<T>::DelRightChild()
+{
+    delete rightChild;
+}
 
 // template <typename T>
 // void BinaryTreeNode<T>::PrintTree(int _depth) const
@@ -168,22 +313,21 @@ BinaryTreeNode<T>* BinaryTreeNode<T>::GetRightSubNodePtr() const
 //     {
 //         std::cout << "\t";
 //     }
-
 //     //打印节点本身
 //     std::cout << "-[" << this->GetNodeData() << "]\n";
-
 //     //如果有后代，就以深度优先遍历所有后代
-//     if (!this->IsLeaf())
+//     if (!IsLeaf())
 //     {
-//         if (leftSubNode != nullptr)
-//             leftSubNode->PrintTree(_depth + 1);
-//         else
-//             std::cout << "-[]\n";
-
-//         if (rightSubNode != nullptr)
-//             rightSubNode->PrintTree(_depth + 1);
-//         else
-//             std::cout << "-[]\n";
+//         //用于遍历子节点的迭代器
+//         TreeNode<T>* _itr;
+//         //最外层的循环，遍历第一层后代节点
+//         for (int i = 0; i < this->GetDegree(); i++)
+//         {
+//             //更新迭代器指向
+//             _itr = this->GetChildPtr(i);
+//             //递归的方式进行打印，让子节点在下一层深度打印
+//             _itr->PrintTree(_depth + 1);
+//         }
 //     }
 // }
 
@@ -191,8 +335,7 @@ namespace Test_Binary_Tree_Node
 {
     void TestBasicFunctions()
     {
-        BinaryTreeNode<int> binTree(111);
-        std::cout << binTree.GetNodeData() << "\n";
+
     }
 
     void TestPrinting()

@@ -63,8 +63,8 @@ TreeNode<T>& TreeNode<T>::operator=(const TreeNode<T>& _obj)
 
     //拷贝节点数据
     this->nodeData = _obj.GetNodeData();
-    //保持父节点为空（即不拷贝等号右侧对象的父节点，不然会出问题）
-    this->parentNode = nullptr;
+    //不要拷贝等号右侧对象的父节点，也不要清空this的父节点，保持原有的就好
+    // this->parentNode = nullptr;
 
     //手动复制子节点，避免使用AddChild函数以避免循环依赖
     TreeNode<T>* _itr;
