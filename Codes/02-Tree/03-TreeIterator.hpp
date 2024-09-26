@@ -114,7 +114,6 @@ void TreeIterator<X>::TraversalDFS(X _node, int _idx)
     }
 }
 
-
 namespace Test_Tree_Iterator
 {
     void TestTreeNodeTraversal()
@@ -154,16 +153,49 @@ namespace Test_Tree_Iterator
     void TestBinaryTreeNodeTraversal()
     {
         //初始化一个二叉树
+        BinaryTreeNode<int> btn(111);
+        BinaryTreeNode<int> temp1(222);
+        BinaryTreeNode<int> temp2(555);
+        btn.SetLeftChild(&temp1);
+        btn.SetRightChild(333);
+        btn.GetLeftChildPtr()->SetLeftChild(444);
+        btn.GetRightChildPtr()->SetRightChild(&temp2);
+        btn.GetLeftChildPtr()->SetRightChild(&btn);
+        std::cout << "**Print btn\n"; btn.PrintTree();
+        //-[111]
+        //        -L[222]
+        //                -L[444]
+        //                -R[111]
+        //                        -L[222]
+        //                                -L[444]
+        //                                -R[ ]
+        //                        -R[333]
+        //                                -L[ ]
+        //                                -R[555]
+        //        -R[333]
+        //                -L[ ]
+        //                -R[555]
+
+        //创建BinaryTreeNode<int>*的迭代器
+        TreeIterator<BinaryTreeNode<int>*> itr(&btn);
+
+        //测试广度优先遍历
+        itr.TraversalBFS();
+        //<111></111><222><333></222><444><111></333><555></444></111><222><333></555></222><444></333><555></444></555>
+
+        //测试深度优先遍历
+        itr.TraversalDFS();
+        //<111><222><444></444><111><222><444></444></222><333><555></555></333></111></222><333><555></555></333></111>
     }
 
     void MainTest()
     {
         std::cout << "--------------------------------------------------\n";
 
-        // std::cout << "--------------------TestArea01--------------------\n";
+        std::cout << "--------------------TestArea01--------------------\n";
         TestTreeNodeTraversal();
-        // std::cout << "--------------------TestArea02--------------------\n";
-        // TestBinaryTreeNodeTraversal();
+        std::cout << "--------------------TestArea02--------------------\n";
+        TestBinaryTreeNodeTraversal();
         
         std::cout << "--------------------------------------------------\n";
     }

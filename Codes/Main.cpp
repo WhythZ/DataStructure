@@ -19,6 +19,6 @@ int main()
     // Test_L_Queue::MainTest();
     // Test_S_Queue::MainTest();
     // Test_Tree_Node::MainTest();
-    Test_Binary_Tree_Node::MainTest();
-    // Test_Tree_Iterator::MainTest();
+    // Test_Binary_Tree_Node::MainTest();
+    Test_Tree_Iterator::MainTest();
 }

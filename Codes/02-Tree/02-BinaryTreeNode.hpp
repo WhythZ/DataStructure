@@ -34,6 +34,8 @@ public:
     BinaryTreeNode<T>* GetParentPtr() const;     //获取指向父节点的指针
     BinaryTreeNode<T>* GetLeftChildPtr() const;  //获取指向左子节点（树）的指针
     BinaryTreeNode<T>* GetRightChildPtr() const; //获取指向右子节点（树）的指针
+    BinaryTreeNode<T>* GetChildPtr(int) const;   //提供和TreeNode相同的接口
+    int FindChildIdx(BinaryTreeNode<T>*) const;  //提供和TreeNode相同的接口
     void PrintTree() const;                      //完整打印以该节点为根节点的树
 
     void SetLeftChild(BinaryTreeNode<T>*);       //以传指针的方式设置左子节点（会覆盖）
@@ -226,6 +228,54 @@ template <typename T>
 BinaryTreeNode<T>* BinaryTreeNode<T>::GetRightChildPtr() const
 {
     return rightChild;
+}
+
+template <typename T>
+BinaryTreeNode<T>* BinaryTreeNode<T>::GetChildPtr(int _idx) const
+{
+    if (_idx < 0 || _idx > 1)
+        throw std::invalid_argument("ERROR: Invalid Index {BinaryTreeNode<T>* BinaryTreeNode<T>::GetChildPtr(int _idx) const}");
+
+    //若是叶节点就返回nullptr
+    if (!IsLeaf())
+    {
+        //此函数目的是提供一个与TreeNode的获取子节点指针函数相连贯的逻辑，使得TreeNode的迭代器也可以迭代二叉树
+        if (_idx == 0)
+        {
+            if (HasLeftChild())
+                return leftChild;
+            else
+                return rightChild;
+        }
+        else
+        {
+            if (GetDegree() == 1)
+                throw std::invalid_argument("ERROR: Invalid Index {BinaryTreeNode<T>* BinaryTreeNode<T>::GetChildPtr(int _idx) const}");
+            else
+                return rightChild;
+        }
+    }
+    else
+        throw std::invalid_argument("ERROR: The Node Has No Child {BinaryTreeNode<T>* BinaryTreeNode<T>::GetChildPtr(int _idx) const}");
+}
+
+template <typename T>
+int BinaryTreeNode<T>::FindChildIdx(BinaryTreeNode<T>* _obj) const
+{
+    //该函数也是为了能够使用TreeNode的迭代器，而迭代器用到了TreeNode的这个同名函数，所以我们也提供一个
+    if (_obj == leftChild && HasLeftChild())
+        return 0;
+
+    if (_obj == rightChild && HasRightChild())
+    {
+        if (GetDegree() == 2)
+            return 1;
+        if (GetDegree() == 1)
+            return 0;
+    }
+
+    //经历上述过程都没找到，那就返回-1
+    return -1;
 }
 
 template <typename T>
