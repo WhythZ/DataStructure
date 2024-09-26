@@ -24,8 +24,8 @@ public:
     bool HasLeftChild() const;                               //该节点是否有左子节点
     bool HasRightChild() const;                              //该节点是否有右子节点
     bool IsLeaf() const;                                     //该节点是否是叶节点（树的末端）
-    // int GetSize() const;                                     //获取以该节点及其所有后代的个数
-    // int GetDepth() const;                                    //获取以该节点为根节点的树的深度
+    int GetSize() const;                                     //获取以该节点及其所有后代的个数
+    int GetDepth() const;                                    //获取以该节点为根节点的树的深度
     int GetDegree() const;                                   //获取该节点的度，即子节点个数
     BinaryTreeNode<T>* GetParentPtr() const;                 //获取指向父节点的指针
     BinaryTreeNode<T>* GetLeftChildPtr() const;              //获取指向左子节点（树）的指针
@@ -151,50 +151,49 @@ bool BinaryTreeNode<T>::IsLeaf() const
     return (GetDegree() == 0);
 }
 
-// template <typename T>
-// int BinaryTreeNode<T>::GetSize() const
-// {
-//     //将自身算进去
-//     int _counter = 1;
-//     //如果有子节点，那就需要加上子节点的节点数
-//     if (!IsLeaf())
-//     {
-//         //遍历子节点，加上每个子节点的所拥节点数（递归思想）
-//         for (int i = 0; i < GetDegree(); i++)
-//         {
-//             _counter += GetChildPtr(i)->GetSize();
-//         }
-//     }
-//     return _counter;
-// }
+template <typename T>
+int BinaryTreeNode<T>::GetSize() const
+{
+    //将自身算进去
+    int _counter = 1;
+    //如果有子节点，那就需要加上子节点的节点数
+    if (!IsLeaf())
+    {
+        //递归调用，加上子节点的体积
+        if (HasLeftChild())
+            _counter += leftChild->GetSize();
+        if (HasRightChild())
+            _counter += rightChild->GetSize();
+    }
+    return _counter;
+}
 
-// template <typename T>
-// int BinaryTreeNode<T>::GetDepth() const
-// {
-//     //计数器
-//     int _counter = 0;
-//     //若是叶节点，那么返回深度为0
-//     if (IsLeaf())
-//         return _counter;
-//     else
-//     {
-//         //否则不是叶节点，那么就说明还有下一层，故给计数器递增
-//         _counter++;
-//         //用于存储子结点中最大的深度
-//         int _maxDepth = 0;
-//         //迭代器，用于遍历子节点
-//         TreeNode<T>* _itr;
-//         for (int i = 0; i < GetDegree(); i++)
-//         {
-//             _itr = GetChildPtr(i);
-//             //递归的思想
-//             _maxDepth = std::max(_maxDepth, _itr->GetDepth());
-//         }
-//         //给计数器加上子结点中的最大深度
-//         _counter += _maxDepth;
-//         return _counter;
-//     }
-// }
+template <typename T>
+int BinaryTreeNode<T>::GetDepth() const
+{
+    //计数器
+    int _counter = 0;
+    //若是叶节点，那么返回深度为0
+    if (IsLeaf())
+        return _counter;
+    else
+    {
+        //否则不是叶节点，那么就说明还有下一层，故给计数器递增
+        _counter++;
+
+        //用于存储子结点中最大的深度
+        int _maxDepth = 0;
+        //递归调用，获取二者的最大深度
+        if (HasLeftChild())
+            _maxDepth = std::max(_maxDepth, leftChild->GetDepth());
+        if (HasRightChild())
+            _maxDepth = std::max(_maxDepth, rightChild->GetDepth());
+
+        //给计数器加上子结点中的最大深度
+        _counter += _maxDepth;
+        return _counter;
+    }
+}
 
 template <typename T>
 int BinaryTreeNode<T>::GetDegree() const
@@ -461,8 +460,10 @@ namespace Test_Binary_Tree_Node
         //        -R[999]
         //                -L[ ]
         //                -R[ ]
-        std::cout << "##btn.GetSize()\n";
-        std::cout << "##btn.GetDepth()\n";
+        std::cout << "##btn.GetSize(): " << btn.GetSize() << "\n";
+        //##btn.GetSize(): 6
+        std::cout << "##btn.GetDepth(): " << btn.GetDepth() << "\n";
+        //##btn.GetDepth(): 3
 
         std::cout << "--------------------------------------------------\n";
     }
