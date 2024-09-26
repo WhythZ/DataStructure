@@ -8,9 +8,9 @@ template <typename X>
 class BinaryTreeIterator
 {
 public:
-    void TraversalPreOrder(X);   //
-    void TraversalInOrder(X);    //
-    void TraversalPostOrder(X);  //
+    void TraversalPreOrder(X);   //自己--左子--右子
+    void TraversalInOrder(X);    //左子--自己--右子
+    void TraversalPostOrder(X);  //左子--右子--自己
 };
 
 template <typename X>
@@ -44,8 +44,8 @@ void BinaryTreeIterator<X>::TraversalPostOrder(X _node)
     if (_node == nullptr)
         return;
     //打印顺序：左子--右子--自己
-    TraversalPreOrder(_node->GetLeftChildPtr());
-    TraversalPreOrder(_node->GetRightChildPtr());
+    TraversalPostOrder(_node->GetLeftChildPtr());
+    TraversalPostOrder(_node->GetRightChildPtr());
     std::cout << "<" << _node->GetNodeData() << ">";
 }
 
@@ -57,45 +57,44 @@ namespace Test_Binary_Tree_Iterator
 
         //初始化一个二叉树
         BinaryTreeNode<int> btn(111);
-        BinaryTreeNode<int> temp1(222);
-        BinaryTreeNode<int> temp2(555);
-        btn.SetLeftChild(&temp1);
+        btn.SetLeftChild(222);
         btn.SetRightChild(333);
         btn.GetLeftChildPtr()->SetLeftChild(444);
-        btn.GetRightChildPtr()->SetRightChild(&temp2);
-        btn.GetLeftChildPtr()->SetRightChild(&btn);
+        btn.GetLeftChildPtr()->SetRightChild(555);
+        btn.GetRightChildPtr()->SetLeftChild(666);
+        btn.GetRightChildPtr()->SetRightChild(777);
+        btn.GetLeftChildPtr()->GetLeftChildPtr()->SetLeftChild(888);
+        btn.GetRightChildPtr()->GetLeftChildPtr()->SetLeftChild(999);
         std::cout << "**Print btn\n"; btn.PrintTree();
         //-[111]
         //        -L[222]
         //                -L[444]
-        //                -R[111]
-        //                        -L[222]
-        //                                -L[444]
-        //                                -R[ ]
-        //                        -R[333]
-        //                                -L[ ]
-        //                                -R[555]
-        //        -R[333]
-        //                -L[ ]
+        //                        -L[888]
+        //                        -R[ ]
         //                -R[555]
-        
+        //        -R[333]
+        //                -L[666]
+        //                        -L[999]
+        //                        -R[ ]
+        //                -R[777]
+
         //初始化一个BinaryTreeNode<int>*类型二叉树的迭代器
         BinaryTreeIterator<BinaryTreeNode<int>*> itr;
 
         //PreOrder遍历，效果与深度优先遍历一致
         itr.TraversalPreOrder(&btn);
         std::cout << "\n";
-        //<111><222><444><111><222><444><333><555><333><555>
+        //<111><222><444><888><555><333><666><999><777>
 
         //InOrder遍历，
         itr.TraversalInOrder(&btn);
         std::cout << "\n";
-        //<444><222><444><222><111><333><555><111><333><555>
+        //<888><444><222><555><111><999><666><333><777>
 
         //PostOrder遍历
         itr.TraversalPostOrder(&btn);
         std::cout << "\n";
-        //<222><444><111><222><444><333><555><333><555><111>
+        //<888><444><555><222><999><666><777><333><111>
 
         std::cout << "--------------------------------------------------\n";
     }
