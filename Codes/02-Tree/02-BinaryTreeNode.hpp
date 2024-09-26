@@ -8,39 +8,43 @@ template <typename T>
 class BinaryTreeNode
 {
 protected:
-    T nodeData;                                              //该节点存储的数据
-    BinaryTreeNode<T>* parentNode;                           //该节点的父节点指针
-    BinaryTreeNode<T>* leftChild;                            //该节点的左子节点（树）指针
-    BinaryTreeNode<T>* rightChild;                           //该节点的右子节点（树）指针
+    T nodeData;                                  //该节点存储的数据
+    BinaryTreeNode<T>* parentNode;               //该节点的父节点指针
+    BinaryTreeNode<T>* leftChild;                //该节点的左子节点（树）指针
+    BinaryTreeNode<T>* rightChild;               //该节点的右子节点（树）指针
 
 public:
-    BinaryTreeNode(const T& = T());                          //构造函数，初始化节点存储的数据
-    ~BinaryTreeNode();                                       //析构函数，此类没有子节点链表帮我们析构
-    BinaryTreeNode<T>& operator=(const BinaryTreeNode<T>&);  //运算符=的重载，实现深拷贝
-    BinaryTreeNode(const BinaryTreeNode<T>&);                //拷贝构造，实现深拷贝
+    //构造函数，初始化节点存储的数据
+    BinaryTreeNode(const T & = T());
+    //析构函数，此类没有子节点链表帮我们析构
+    ~BinaryTreeNode();
+    //运算符=的重载，实现深拷贝
+    BinaryTreeNode<T>& operator=(const BinaryTreeNode<T>&);
+    //拷贝构造，实现深拷贝
+    BinaryTreeNode(const BinaryTreeNode<T>&);
 
-    T GetNodeData() const;                                   //获取该树节点存储的数据值
-    bool IsRoot() const;                                     //该节点是否是根节点（树的发端）
-    bool HasLeftChild() const;                               //该节点是否有左子节点
-    bool HasRightChild() const;                              //该节点是否有右子节点
-    bool IsLeaf() const;                                     //该节点是否是叶节点（树的末端）
-    int GetSize() const;                                     //获取以该节点及其所有后代的个数
-    int GetDepth() const;                                    //获取以该节点为根节点的树的深度
-    int GetDegree() const;                                   //获取该节点的度，即子节点个数
-    BinaryTreeNode<T>* GetParentPtr() const;                 //获取指向父节点的指针
-    BinaryTreeNode<T>* GetLeftChildPtr() const;              //获取指向左子节点（树）的指针
-    BinaryTreeNode<T>* GetRightChildPtr() const;             //获取指向右子节点（树）的指针
-    void PrintTree() const;                                  //完整打印以该节点为根节点的树
+    T GetNodeData() const;                       //获取该树节点存储的数据值
+    bool IsRoot() const;                         //该节点是否是根节点（树的发端）
+    bool HasLeftChild() const;                   //该节点是否有左子节点
+    bool HasRightChild() const;                  //该节点是否有右子节点
+    bool IsLeaf() const;                         //该节点是否是叶节点（树的末端）
+    int GetSize() const;                         //获取以该节点及其所有后代的个数
+    int GetDepth() const;                        //获取以该节点为根节点的树的深度
+    int GetDegree() const;                       //获取该节点的度，即子节点个数
+    BinaryTreeNode<T>* GetParentPtr() const;     //获取指向父节点的指针
+    BinaryTreeNode<T>* GetLeftChildPtr() const;  //获取指向左子节点（树）的指针
+    BinaryTreeNode<T>* GetRightChildPtr() const; //获取指向右子节点（树）的指针
+    void PrintTree() const;                      //完整打印以该节点为根节点的树
 
-    void SetLeftChild(BinaryTreeNode<T>*);                   //以传入节点的方式设置左子节点（会覆盖）
-    void SetLeftChild(T);                                    //以传入新元素的方式设置左子节点（会覆盖）
-    void SetRightChild(BinaryTreeNode<T>*);                  //以传入节点的方式设置右子节点（会覆盖）
-    void SetRightChild(T);                                   //以传入新元素的方式设置右子节点（会覆盖）
-    void DelLeftChild();                                     //删除左子节点
-    void DelRightChild();                                    //删除右子节点
+    void SetLeftChild(BinaryTreeNode<T>*);       //以传指针的方式设置左子节点（会覆盖）
+    void SetLeftChild(T);                        //以传值的方式设置左子节点（会覆盖）
+    void SetRightChild(BinaryTreeNode<T>*);      //以传指针的方式设置右子节点（会覆盖）
+    void SetRightChild(T);                       //以传值的方式设置右子节点（会覆盖）
+    void DelLeftChild();                         //删除左子节点
+    void DelRightChild();                        //删除右子节点
 
 protected:
-    void PrintTree(int, int) const;                         //依据传入深度与树的类型，打印相应层级的树
+    void PrintTree(int, int) const;              //打印对应深度和类型的树
 };
 
 template <typename T>
@@ -358,7 +362,8 @@ void BinaryTreeNode<T>::PrintTree(int _depth, int _type) const
     //先检测左子节点，递归调用
     if (HasLeftChild())
         leftChild->PrintTree(_depth + 1, 1);
-    else
+    //若另一边的右节点存在，则打印以下内容表示该二叉树非满
+    else if (HasRightChild())
     {
         //注意此处是(_depth + 1)
         for (int i = 0; i < _depth + 1; i++)
@@ -371,7 +376,7 @@ void BinaryTreeNode<T>::PrintTree(int _depth, int _type) const
     //然后检测右子节点
     if (HasRightChild())
         rightChild->PrintTree(_depth + 1, 2);
-    else
+    else if (HasLeftChild())
     {
         //注意此处是(_depth + 1)
         for (int i = 0; i < _depth + 1; i++)
@@ -392,8 +397,6 @@ namespace Test_Binary_Tree_Node
         BinaryTreeNode<int> btn(111);
         std::cout << "**Print btn\n"; btn.PrintTree();
         //-[111]
-        //    -L[ ]
-        //    -R[ ]
         
         //扩增二叉树
         BinaryTreeNode<int> temp1(222);
@@ -406,14 +409,10 @@ namespace Test_Binary_Tree_Node
         //-[111]
         //        -L[222]
         //                -L[444]
-        //                        -L[ ]
-        //                        -R[ ]
         //                -R[ ]
         //        -R[333]
         //                -L[ ]
         //                -R[555]
-        //                        -L[ ]
-        //                        -R[ ]
 
         //测试拷贝构造与赋值运算符重载，下面两句是等效的
         // BinaryTreeNode<int> copy = btn;
@@ -422,14 +421,10 @@ namespace Test_Binary_Tree_Node
         //-[111]
         //        -L[222]
         //                -L[444]
-        //                        -L[ ]
-        //                        -R[ ]
         //                -R[ ]
         //        -R[333]
         //                -L[ ]
         //                -R[555]
-        //                        -L[ ]
-        //                        -R[ ]
 
         //测试覆盖
         btn.SetLeftChild(888);
@@ -438,11 +433,7 @@ namespace Test_Binary_Tree_Node
         std::cout << "**Print btn\n"; btn.PrintTree();
         //-[111]
         //        -L[888]
-        //                -L[ ]
-        //                -R[ ]
         //        -R[999]
-        //                -L[ ]
-        //                -R[ ]
 
         //测试树的深度与体积的获取
         btn.GetLeftChildPtr()->SetLeftChild(&btn);
@@ -451,15 +442,9 @@ namespace Test_Binary_Tree_Node
         //        -L[888]
         //                -L[111]
         //                        -L[888]
-        //                                -L[ ]
-        //                                -R[ ]
         //                        -R[999]
-        //                                -L[ ]
-        //                                -R[ ]
         //                -R[ ]
         //        -R[999]
-        //                -L[ ]
-        //                -R[ ]
         std::cout << "##btn.GetSize(): " << btn.GetSize() << "\n";
         //##btn.GetSize(): 6
         std::cout << "##btn.GetDepth(): " << btn.GetDepth() << "\n";
