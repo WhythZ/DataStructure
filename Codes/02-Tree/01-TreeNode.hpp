@@ -71,7 +71,7 @@ TreeNode<T>& TreeNode<T>::operator=(const TreeNode<T>& _obj)
     for (int i = 0; i < _obj.GetDegree(); ++i)
     {
         _itr = _obj.GetChildPtr(i);
-        //如果是叶节点，那便可以直接添加
+        //如果是叶节点，那便可以直接调用自己点链表的函数进行添加
         if (_itr->IsLeaf())
             this->childList.PushBack(TreeNode<T>(_itr->GetNodeData()));
         //如果有子节点，那就递归调用赋值重载运算符
@@ -81,6 +81,9 @@ TreeNode<T>& TreeNode<T>::operator=(const TreeNode<T>& _obj)
             //解引用获取刚刚推送到链表末尾的值（TreeNode<T>类型的值）的引用，对其进行赋值（递归）
             *this->childList.GetElemPtr(this->GetDegree() - 1) = *_itr;
         }
+
+        //维护父结点指针
+        this->GetChildPtr(i)->parentNode = this;
     }
 
     //返回自身引用
@@ -90,8 +93,8 @@ TreeNode<T>& TreeNode<T>::operator=(const TreeNode<T>& _obj)
 template <typename T>
 TreeNode<T>::TreeNode(const TreeNode<T>& _obj)
 {
-    //拷贝构造不继承被拷贝对象的父节点，不然会出很多问题
-    this->parentNode = nullptr;
+    //拷贝构造函数不会调用默认构造，所以此处要复制默认构造里的内容
+    parentNode = nullptr;
     this->nodeData = _obj.GetNodeData();
 
     //迭代器，遍历被传入节点的所有子节点，并将其一一附加到this节点上
@@ -457,7 +460,7 @@ namespace Test_Tree_Node
         //        -[22]
         //                -[55]
 
-        //测试赋值运算符初始化
+        //下面这个代码看似是调用赋值运算符，但其实调用的是重载的拷贝构造函数（神奇吧）
         copy1.DelChild(1);
         TreeNode<int> copy2 = copy1;
         std::cout << "**Print copy2:\n"; copy2.PrintTree();
@@ -466,6 +469,10 @@ namespace Test_Tree_Node
         //                -[33]
         //                        -[66]
         //                -[44]
+
+        //这个调用的才是赋值运算符
+        copy2 = tree;
+        std::cout << "**Print copy2:\n"; copy2.PrintTree();
     }
 
     void MainTest()

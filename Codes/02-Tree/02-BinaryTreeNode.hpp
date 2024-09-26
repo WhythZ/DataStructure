@@ -70,30 +70,41 @@ BinaryTreeNode<T>& BinaryTreeNode<T>::operator=(const BinaryTreeNode<T>& _obj)
 
     //拷贝节点数据
     this->nodeData = _obj.GetNodeData();
-
     //不要拷贝等号右侧对象的父节点，也不要清空this的父节点，保持原有的就好
     // this->parentNode = nullptr;
 
-    //拷贝传入节点的左子节点
+    //拷贝传入节点的左右子节点
     BinaryTreeNode<T>* _left = _obj.GetLeftChildPtr();
+    BinaryTreeNode<T>* _right = _obj.GetRightChildPtr();
+
     //如果是空的，那就赋空
     if (_left == nullptr)
         leftChild = nullptr;
     //如果是叶节点，那么就可以直接复制（注意不要用接收指针的SetXXChild函数重载版本，因其使用了赋值运算符的重载，会循环引用）
     else if (_left->IsLeaf())
         SetLeftChild(_left->GetNodeData());
-    //否则递归调用赋值运算符的重载（注意使用的是解引用，不然就是对指针的操作了）
+    //否则递归调用赋值运算符的重载
     else
+    {
+        //指向nullptr的leftChild被访问时会报错，所以先在堆区初始化
+        leftChild = new BinaryTreeNode<T>(0);
+        //注意使用的是解引用，不然就是对指针的操作了
         *leftChild = *_left;
+        //注意维护父指针，这个不能放外面，因为当第一个if满足时，nullptr没有自己的parentNode
+        leftChild->parentNode = this;
+    }
     
     //同样的操作对右子节点进行
-    BinaryTreeNode<T>* _right = _obj.GetRightChildPtr();
     if (_right == nullptr)
         rightChild = nullptr;
     else if (_right->IsLeaf())
-        SetLeftChild(_left->GetNodeData());
+        SetRightChild(_right->GetNodeData());
     else
+    {
+        rightChild = new BinaryTreeNode<T>(0);
         *rightChild = *_right;
+        rightChild->parentNode = this;
+    }
 
     //返回自身引用
     return *this;
@@ -102,6 +113,10 @@ BinaryTreeNode<T>& BinaryTreeNode<T>::operator=(const BinaryTreeNode<T>& _obj)
 template <typename T>
 BinaryTreeNode<T>::BinaryTreeNode(const BinaryTreeNode<T>& _obj)
 {
+    //注意，调用了此重载就不会调用默认构造函数，所以此处要再写一遍
+    parentNode = nullptr;
+    leftChild = nullptr;
+    rightChild = nullptr;
     //直接使用赋值运算符的重载
     *this = _obj;
 }
@@ -401,10 +416,22 @@ namespace Test_Binary_Tree_Node
         //                        -L[ ]
         //                        -R[ ]
 
-        //测试拷贝构造与赋值运算符重载
+        //测试拷贝构造与赋值运算符重载，下面两句是等效的
+        // BinaryTreeNode<int> copy = btn;
         BinaryTreeNode<int> copy(btn);
         std::cout << "**Print copy\n"; copy.PrintTree();
-        
+        //-[111]
+        //        -L[222]
+        //                -L[444]
+        //                        -L[ ]
+        //                        -R[ ]
+        //                -R[ ]
+        //        -R[333]
+        //                -L[ ]
+        //                -R[555]
+        //                        -L[ ]
+        //                        -R[ ]
+
         //测试覆盖
         btn.SetLeftChild(888);
         BinaryTreeNode<int> temp3(999);
@@ -417,6 +444,25 @@ namespace Test_Binary_Tree_Node
         //        -R[999]
         //                -L[ ]
         //                -R[ ]
+
+        //测试树的深度与体积的获取
+        btn.GetLeftChildPtr()->SetLeftChild(&btn);
+        std::cout << "**Print btn\n"; btn.PrintTree();
+        //-[111]
+        //        -L[888]
+        //                -L[111]
+        //                        -L[888]
+        //                                -L[ ]
+        //                                -R[ ]
+        //                        -R[999]
+        //                                -L[ ]
+        //                                -R[ ]
+        //                -R[ ]
+        //        -R[999]
+        //                -L[ ]
+        //                -R[ ]
+        std::cout << "##btn.GetSize()\n";
+        std::cout << "##btn.GetDepth()\n";
 
         std::cout << "--------------------------------------------------\n";
     }
