@@ -7,7 +7,7 @@
 #include "../01-LinearList/05-SStack.hpp"
 //引入普通的树节点类与二叉树节点类，用于测试
 #include "../02-Tree/01-TreeNode.hpp"
-#include "../02-Tree/02-BinaryTreeNode.hpp"
+#include "../02-Tree/03-BinaryTreeNode.hpp"
 
 //X指的是树节点指针，比如TreeNode<T>*，或BinaryTreeNode<T>*
 template <typename X>
