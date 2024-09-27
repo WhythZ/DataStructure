@@ -38,6 +38,7 @@ public:
     int FindChildIdx(BinaryTreeNode<T>*) const;  //提供和TreeNode相同的接口
     void PrintTree() const;                      //完整打印以该节点为根节点的树
 
+    void SetNodeData(T);                         //更改自身节点的值
     void SetLeftChild(BinaryTreeNode<T>*);       //以传指针的方式设置左子节点（会覆盖）
     void SetLeftChild(T);                        //以传值的方式设置左子节点（会覆盖）
     void SetRightChild(BinaryTreeNode<T>*);      //以传指针的方式设置右子节点（会覆盖）
@@ -283,6 +284,12 @@ void BinaryTreeNode<T>::PrintTree() const
 {
     //传入的初始深度为零、树类型为0，表示打印以此节点为根节点的整个树
     this->PrintTree(0, 0);
+}
+
+template <typename T>
+void BinaryTreeNode<T>::SetNodeData(T _val)
+{
+    nodeData = _val;
 }
 
 template <typename T>

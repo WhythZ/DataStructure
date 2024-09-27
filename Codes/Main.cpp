@@ -6,9 +6,10 @@
 #include "01-LinearList/06-LQueue.hpp"
 #include "01-LinearList/07-SQueue.hpp"
 #include "02-Tree/01-TreeNode.hpp"
-#include "02-Tree/03-BinaryTreeNode.hpp"
 #include "02-Tree/02-TreeIterator.hpp"
+#include "02-Tree/03-BinaryTreeNode.hpp"
 #include "02-Tree/04-BinaryTreeIterator.hpp"
+#include "02-Tree/05-BiSearchTree.hpp"
 
 int main()
 {
@@ -22,5 +23,6 @@ int main()
     // Test_Tree_Node::MainTest();
     // Test_Tree_Iterator::MainTest();
     // Test_Binary_Tree_Node::MainTest();
-    Test_Binary_Tree_Iterator::MainTest();
+    // Test_Binary_Tree_Iterator::MainTest();
+    Test_Bi_Search_Tree::MainTest();
 }
