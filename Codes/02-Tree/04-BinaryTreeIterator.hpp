@@ -8,9 +8,9 @@ template <typename X>
 class BinaryTreeIterator
 {
 public:
-    void TraversalPreOrder(X);   //自己--左子--右子
-    void TraversalInOrder(X);    //左子--自己--右子
-    void TraversalPostOrder(X);  //左子--右子--自己
+    void TraversalPreOrder(X);   //前序遍历，自己--左子--右子
+    void TraversalInOrder(X);    //中序遍历，左子--自己--右子
+    void TraversalPostOrder(X);  //后序遍历，左子--右子--自己
 };
 
 template <typename X>
@@ -86,7 +86,7 @@ namespace Test_Binary_Tree_Iterator
         std::cout << "\n";
         //<111><222><444><888><555><333><666><999><777>
 
-        //InOrder遍历，
+        //InOrder遍历
         itr.TraversalInOrder(&btn);
         std::cout << "\n";
         //<888><444><222><555><111><999><666><333><777>
