@@ -20,6 +20,9 @@ public:
     void PrintTree() const;                //打印整个搜索树
     T FindMin() const;                     //返回存储的最小值
     T FindMax() const;                     //返回存储的最大值
+    T FindFormer(const T&) const;          //寻找树中比传入值小的相邻值
+    T FindLatter(const T&) const;          //寻找树中比传入值大的相邻值
+    T FindByIdx(int) const;                //以索引k获取树中从小到大排在第(k+1)位的值
     bool Contains(const T&) const;         //查找是否存在某个节点
 
     void Insert(const T&);                 //直接将新的节点插入正确位置
@@ -29,6 +32,9 @@ public:
 private:
     BinaryTreeNode<T>* FindMinPtr(BinaryTreeNode<T>*) const;
     BinaryTreeNode<T>* FindMaxPtr(BinaryTreeNode<T>*) const;
+    T FindFormer(const T&, BinaryTreeNode<T>*) const;
+    T FindLatter(const T&, BinaryTreeNode<T>*) const;
+    T FindByIdx(int, BinaryTreeNode<T>*) const;
     bool Contains(const T&, BinaryTreeNode<T>*) const;
 
     void Insert(const T&, BinaryTreeNode<T>*);
@@ -99,6 +105,24 @@ T BiSearchTree<T>::FindMax() const
 }
 
 template <typename T>
+T BiSearchTree<T>::FindFormer(const T& _obj) const
+{
+    return FindFormer(_obj, root);
+}
+
+template <typename T>
+T BiSearchTree<T>::FindLatter(const T& _obj) const
+{
+    return FindLatter(_obj, root);
+}
+
+template <typename T>
+T BiSearchTree<T>::FindByIdx(int _idx) const
+{
+    return FindByIdx(_idx, root);
+}
+
+template <typename T>
 bool BiSearchTree<T>::Contains(const T& _obj) const
 {
     //从自身内核二叉树节点开始搜索
@@ -163,6 +187,42 @@ BinaryTreeNode<T>* BiSearchTree<T>::FindMaxPtr(BinaryTreeNode<T>* _btn) const
     }
     //那么此时自己就是最右侧的节点，即值最大的节点
     return _btn;
+}
+
+template <typename T>
+T BiSearchTree<T>::FindFormer(const T& _obj, BinaryTreeNode<T>* _btn) const
+{
+    return T();
+}
+
+template <typename T>
+T BiSearchTree<T>::FindLatter(const T& _obj, BinaryTreeNode<T>* _btn) const
+{
+    return T();
+}
+
+template <typename T>
+T BiSearchTree<T>::FindByIdx(int _idx, BinaryTreeNode<T>* _btn) const
+{
+    //排除空指针
+    if (_btn == nullptr)
+        throw std::invalid_argument("ERROR: Null Pointer {T BiSearchTree<T>::FindByIdx(int _idx, BinaryTreeNode<T>* _btn) const}");
+    //排除非法索引
+    else if (_idx < 0 || _idx >= _btn->GetSize())
+        throw std::invalid_argument("ERROR: Invalid Index {T BiSearchTree<T>::FindByIdx(int _idx, BinaryTreeNode<T>* _btn) const}");
+
+    //存储传入节点的左子节点的体积
+    int _leftSize = 0;
+    if (_btn->HasLeftChild())
+        _leftSize = _btn->GetLeftChildPtr()->GetSize();
+
+    //进行索引，原理解析参考笔记
+    if (_idx == _leftSize)
+        return _btn->GetNodeData();
+    else if (_idx < _leftSize)
+        return FindByIdx(_idx, _btn->GetLeftChildPtr());
+    else
+        return FindByIdx(_idx - _leftSize - 1, _btn->GetRightChildPtr());
 }
 
 template <typename T>
@@ -261,7 +321,7 @@ void BiSearchTree<T>::Erase(const T& _obj, BinaryTreeNode<T>* _btn)
         else
         {
             //获取_btn右子树的最小值所在的节点
-            BinaryTreeNode<T>* _node = FindMinPtr(_btn->GetLeftChildPtr());
+            BinaryTreeNode<T>* _node = FindMinPtr(_btn->GetRightChildPtr());
             //获取_btn右子树的最小值
             T _min = _node->GetNodeData();
             //递归调用此方法删除节点
@@ -292,10 +352,8 @@ void BiSearchTree<T>::MakeEmpty(BinaryTreeNode<T>* _btn)
 
 namespace Test_Bi_Search_Tree
 {
-    void MainTest()
+    void TestTreeBuild()
     {
-        std::cout << "--------------------------------------------------\n";
-
         //测试构造函数
         BiSearchTree<int> bst;
 
@@ -336,16 +394,6 @@ namespace Test_Bi_Search_Tree
         //                                        -R[15]
         //                                -R[ ]
         //                -R[23]
-
-        //测试值的查找
-        std::cout << "##bst.FindMin(): " << bst.FindMin() << "\n";
-        //##bst.FindMin(): 1
-        std::cout << "##bst.FindMax(): " << bst.FindMax() << "\n";
-        //##bst.FindMax(): 23
-        std::cout << "##bst.Contains(14): " << bst.Contains(14) << "\n";
-        //##bst.Contains(14): 1
-        std::cout << "##bst.Contains(99): " << bst.Contains(99) << "\n";
-        //##bst.Contains(99): 0
 
         //测试叶节点值的删除
         std::cout << "**bst.Erase(12)\n"; bst.Erase(12);
@@ -390,24 +438,98 @@ namespace Test_Bi_Search_Tree
         //测试有两个子节点的内部节点的删除
         std::cout << "**bst.Erase(9)\n"; bst.Erase(9);
         std::cout << "**bst.PrintTree()\n"; bst.PrintTree();
-        // -[5]
-        //         -L[2]
-        //                 -L[1]
-        //                 -R[4]
-        //         -R[21]
-        //                 -L[7]
-        //                         -L[8]
-        //                         -R[17]
-        //                                 -L[14]
-        //                                         -L[10]
-        //                                         -R[15]
-        //                                 -R[ ]
-        //                 -R[23]
+        //-[5]
+        //        -L[2]
+        //                -L[1]
+        //                -R[4]
+        //        -R[21]
+        //                -L[10]
+        //                        -L[7]
+        //                                -L[ ]
+        //                                -R[8]
+        //                        -R[17]
+        //                                -L[14]
+        //                                        -L[ ]
+        //                                        -R[15]
+        //                                -R[ ]
+        //                -R[23]
         
         //测试清空
         std::cout << "**bst.MakeEmpty()\n"; bst.MakeEmpty();
         std::cout << "##bst.IsEmpty(): " << bst.IsEmpty() << "\n";
         //##bst.IsEmpty(): 1
+    }
+
+    void TestFinding()
+    {
+        //测试构造函数
+        BiSearchTree<int> bst;
+
+        //测试添加新元素，第一个被添加到搜索树的值将作为根节点值
+        bst.Insert(5);
+        bst.Insert(5);
+        bst.Insert(2);
+        bst.Insert(21);
+        bst.Insert(1);
+        bst.Insert(9);
+        bst.Insert(4);
+        bst.Insert(6);
+        bst.Insert(7);
+        bst.Insert(17);
+        bst.Insert(8);
+        bst.Insert(14);
+        bst.Insert(23);
+        bst.Insert(10);
+        bst.Insert(15);
+        bst.Insert(12);
+        std::cout << "**bst.PrintTree()\n"; bst.PrintTree();
+        //-[5]
+        //        -L[2]
+        //                -L[1]
+        //                -R[4]
+        //        -R[21]
+        //                -L[9]
+        //                        -L[6]
+        //                                -L[ ]
+        //                                -R[7]
+        //                                        -L[ ]
+        //                                        -R[8]
+        //                        -R[17]
+        //                                -L[14]
+        //                                        -L[10]
+        //                                                -L[ ]
+        //                                                -R[12]
+        //                                        -R[15]
+        //                                -R[ ]
+        //                -R[23]
+
+        //测试极值查找、存在性判断
+        std::cout << "##bst.FindMin(): " << bst.FindMin() << "\n";
+        //##bst.FindMin(): 1
+        std::cout << "##bst.FindMax(): " << bst.FindMax() << "\n";
+        //##bst.FindMax(): 23
+        std::cout << "##bst.Contains(14): " << bst.Contains(14) << "\n";
+        //##bst.Contains(14): 1
+        std::cout << "##bst.Contains(99): " << bst.Contains(99) << "\n";
+        //##bst.Contains(99): 0
+
+        //测试中间值查找
+        std::cout << "##bst.FindByIdx(1) " << bst.FindByIdx(1) << "\n";
+        //##bst.FindByIdx(1) 2
+        std::cout << "##bst.FindByIdx(3) " << bst.FindByIdx(3) << "\n";
+        //##bst.FindByIdx(3) 5
+        std::cout << "##bst.FindByIdx(7) " << bst.FindByIdx(7) << "\n";
+        //##bst.FindByIdx(7) 9
+    }
+
+    void MainTest()
+    {
+        std::cout << "--------------------------------------------------\n";
+
+        std::cout << "--------------------TestArea01--------------------\n";
+        TestTreeBuild();
+        std::cout << "--------------------TestArea02--------------------\n";
+        TestFinding();
 
         std::cout << "--------------------------------------------------\n";
     }
