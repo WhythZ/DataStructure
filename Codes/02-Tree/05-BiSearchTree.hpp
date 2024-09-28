@@ -20,8 +20,8 @@ public:
     void PrintTree() const;                //打印整个搜索树
     T FindMin() const;                     //返回存储的最小值
     T FindMax() const;                     //返回存储的最大值
-    T FindFormer(const T&) const;          //寻找树中比传入值小的相邻值
-    T FindLatter(const T&) const;          //寻找树中比传入值大的相邻值
+    // T FindFormer(const T&) const;          //寻找树中比传入值小的相邻值
+    // T FindLatter(const T&) const;          //寻找树中比传入值大的相邻值
     T FindByIdx(int) const;                //以索引k获取树中从小到大排在第(k+1)位的值
     bool Contains(const T&) const;         //查找是否存在某个节点
 
@@ -32,8 +32,8 @@ public:
 private:
     BinaryTreeNode<T>* FindMinPtr(BinaryTreeNode<T>*) const;
     BinaryTreeNode<T>* FindMaxPtr(BinaryTreeNode<T>*) const;
-    T FindFormer(const T&, BinaryTreeNode<T>*) const;
-    T FindLatter(const T&, BinaryTreeNode<T>*) const;
+    // T FindFormer(const T&, BinaryTreeNode<T>*) const;
+    // T FindLatter(const T&, BinaryTreeNode<T>*) const;
     T FindByIdx(int, BinaryTreeNode<T>*) const;
     bool Contains(const T&, BinaryTreeNode<T>*) const;
 
@@ -104,17 +104,17 @@ T BiSearchTree<T>::FindMax() const
         return _node->GetNodeData();
 }
 
-template <typename T>
-T BiSearchTree<T>::FindFormer(const T& _obj) const
-{
-    return FindFormer(_obj, root);
-}
+// template <typename T>
+// T BiSearchTree<T>::FindFormer(const T& _obj) const
+// {
+//     return FindFormer(_obj, root);
+// }
 
-template <typename T>
-T BiSearchTree<T>::FindLatter(const T& _obj) const
-{
-    return FindLatter(_obj, root);
-}
+// template <typename T>
+// T BiSearchTree<T>::FindLatter(const T& _obj) const
+// {
+//     return FindLatter(_obj, root);
+// }
 
 template <typename T>
 T BiSearchTree<T>::FindByIdx(int _idx) const
@@ -189,17 +189,15 @@ BinaryTreeNode<T>* BiSearchTree<T>::FindMaxPtr(BinaryTreeNode<T>* _btn) const
     return _btn;
 }
 
-template <typename T>
-T BiSearchTree<T>::FindFormer(const T& _obj, BinaryTreeNode<T>* _btn) const
-{
-    return T();
-}
+// template <typename T>
+// T BiSearchTree<T>::FindFormer(const T& _obj, BinaryTreeNode<T>* _btn) const
+// {
+// }
 
-template <typename T>
-T BiSearchTree<T>::FindLatter(const T& _obj, BinaryTreeNode<T>* _btn) const
-{
-    return T();
-}
+// template <typename T>
+// T BiSearchTree<T>::FindLatter(const T& _obj, BinaryTreeNode<T>* _btn) const
+// {
+// }
 
 template <typename T>
 T BiSearchTree<T>::FindByIdx(int _idx, BinaryTreeNode<T>* _btn) const
@@ -514,12 +512,18 @@ namespace Test_Bi_Search_Tree
         //##bst.Contains(99): 0
 
         //测试中间值查找
-        std::cout << "##bst.FindByIdx(1) " << bst.FindByIdx(1) << "\n";
-        //##bst.FindByIdx(1) 2
-        std::cout << "##bst.FindByIdx(3) " << bst.FindByIdx(3) << "\n";
-        //##bst.FindByIdx(3) 5
-        std::cout << "##bst.FindByIdx(7) " << bst.FindByIdx(7) << "\n";
-        //##bst.FindByIdx(7) 9
+        std::cout << "##bst.FindByIdx(1): " << bst.FindByIdx(1) << "\n";
+        //##bst.FindByIdx(1): 2
+        std::cout << "##bst.FindByIdx(3): " << bst.FindByIdx(3) << "\n";
+        //##bst.FindByIdx(3): 5
+        std::cout << "##bst.FindByIdx(7): " << bst.FindByIdx(7) << "\n";
+        //##bst.FindByIdx(7): 9
+
+        // //测试某个值的前后相邻值的查找
+        // std::cout << "##bst.FindFormer(5): " << bst.FindFormer(5) << "\n";
+        // //##bst.FindFormer(5): 
+        // std::cout << "##bst.FindLatter(5): " << bst.FindLatter(5) << "\n";
+        // //##bst.FindLatter(5): 
     }
 
     void MainTest()
