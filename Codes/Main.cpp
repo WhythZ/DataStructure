@@ -7,9 +7,11 @@
 #include "01-LinearList/07-SQueue.hpp"
 #include "02-Tree/01-TreeNode.hpp"
 #include "02-Tree/02-TreeIterator.hpp"
-#include "02-Tree/03-BinaryTreeNode.hpp"
-#include "02-Tree/04-BinaryTreeIterator.hpp"
+#include "02-Tree/03-BiTreeNode.hpp"
+#include "02-Tree/04-BiTreeIterator.hpp"
 #include "02-Tree/05-BiSearchTree.hpp"
+#include "02-Tree/06-BalancedBiTree.hpp"
+#include "02-Tree/07-RedBlackTree.hpp"
 
 int main()
 {
@@ -22,7 +24,9 @@ int main()
     // Test_S_Queue::MainTest();
     // Test_Tree_Node::MainTest();
     // Test_Tree_Iterator::MainTest();
-    // Test_Binary_Tree_Node::MainTest();
-    // Test_Binary_Tree_Iterator::MainTest();
-    Test_Bi_Search_Tree::MainTest();
+    // Test_Bi_Tree_Node::MainTest();
+    // Test_Bi_Tree_Iterator::MainTest();
+    // Test_Bi_Search_Tree::MainTest();
+    // Test_Balanced_Bi_Tree::MainTest();
+    // Test_Red_Black_Tree::MainTest();
 }

@@ -1,11 +1,11 @@
-#ifndef _BINARY_TREE_ITERATOR_HPP_
-#define _BINARY_TREE_ITERATOR_HPP_
+#ifndef _BI_TREE_ITERATOR_HPP_
+#define _BI_TREE_ITERATOR_HPP_
 
 #include <iostream>
 
-//X是二叉树指针，如BinaryTreeNode<T>*
+//X是二叉树指针，如BiTreeNode<T>*
 template <typename X>
-class BinaryTreeIterator
+class BiTreeIterator
 {
 public:
     void TraversalPreOrder(X);   //前序遍历，自己--左子--右子
@@ -14,7 +14,7 @@ public:
 };
 
 template <typename X>
-void BinaryTreeIterator<X>::TraversalPreOrder(X _node)
+void BiTreeIterator<X>::TraversalPreOrder(X _node)
 {
     //防止无限循环
     if (_node == nullptr)
@@ -26,7 +26,7 @@ void BinaryTreeIterator<X>::TraversalPreOrder(X _node)
 }
 
 template <typename X>
-void BinaryTreeIterator<X>::TraversalInOrder(X _node)
+void BiTreeIterator<X>::TraversalInOrder(X _node)
 {
     //防止无限循环
     if (_node == nullptr)
@@ -38,7 +38,7 @@ void BinaryTreeIterator<X>::TraversalInOrder(X _node)
 }
 
 template <typename X>
-void BinaryTreeIterator<X>::TraversalPostOrder(X _node)
+void BiTreeIterator<X>::TraversalPostOrder(X _node)
 {
     //防止无限循环
     if (_node == nullptr)
@@ -49,14 +49,14 @@ void BinaryTreeIterator<X>::TraversalPostOrder(X _node)
     std::cout << "<" << _node->GetNodeData() << ">";
 }
 
-namespace Test_Binary_Tree_Iterator
+namespace Test_Bi_Tree_Iterator
 {
     void MainTest()
     {
         std::cout << "--------------------------------------------------\n";
 
         //初始化一个二叉树
-        BinaryTreeNode<int> btn(111);
+        BiTreeNode<int> btn(111);
         btn.SetLeftChild(222);
         btn.SetRightChild(333);
         btn.GetLeftChildPtr()->SetLeftChild(444);
@@ -78,8 +78,8 @@ namespace Test_Binary_Tree_Iterator
         //                        -R[ ]
         //                -R[777]
 
-        //初始化一个BinaryTreeNode<int>*类型二叉树的迭代器
-        BinaryTreeIterator<BinaryTreeNode<int>*> itr;
+        //初始化一个BiTreeNode<int>*类型二叉树的迭代器
+        BiTreeIterator<BiTreeNode<int>*> itr;
 
         //PreOrder遍历，效果与深度优先遍历一致
         itr.TraversalPreOrder(&btn);

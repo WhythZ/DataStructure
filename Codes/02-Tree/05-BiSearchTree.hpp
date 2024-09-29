@@ -3,14 +3,14 @@
 
 #include <iostream>
 //引入二叉树节点类
-#include "../02-Tree/03-BinaryTreeNode.hpp"
+#include "../02-Tree/03-BiTreeNode.hpp"
 
 //二叉搜索树类，使用组合而非继承的方法包装着一个二叉树节点，不支持存储相同数据的节点
 template <typename T>
 class BiSearchTree
 {
 private:
-    BinaryTreeNode<T>* root;               //维护一个二叉树节点内核
+    BiTreeNode<T>* root;               //维护一个二叉树节点内核
 
 public:
     BiSearchTree();                        //构造函数，无=或构造的重载函数
@@ -30,16 +30,16 @@ public:
     void MakeEmpty();                      //清空搜索树
 
 private:
-    BinaryTreeNode<T>* FindMinPtr(BinaryTreeNode<T>*) const;
-    BinaryTreeNode<T>* FindMaxPtr(BinaryTreeNode<T>*) const;
-    // T FindFormer(const T&, BinaryTreeNode<T>*) const;
-    // T FindLatter(const T&, BinaryTreeNode<T>*) const;
-    T FindByIdx(int, BinaryTreeNode<T>*) const;
-    bool Contains(const T&, BinaryTreeNode<T>*) const;
+    BiTreeNode<T>* FindMinPtr(BiTreeNode<T>*) const;
+    BiTreeNode<T>* FindMaxPtr(BiTreeNode<T>*) const;
+    // T FindFormer(const T&, BiTreeNode<T>*) const;
+    // T FindLatter(const T&, BiTreeNode<T>*) const;
+    T FindByIdx(int, BiTreeNode<T>*) const;
+    bool Contains(const T&, BiTreeNode<T>*) const;
 
-    void Insert(const T&, BinaryTreeNode<T>*);
-    void Erase(const T&, BinaryTreeNode<T>*);
-    void MakeEmpty(BinaryTreeNode<T>*);
+    void Insert(const T&, BiTreeNode<T>*);
+    void Erase(const T&, BiTreeNode<T>*);
+    void MakeEmpty(BiTreeNode<T>*);
 };
 
 template <typename T>
@@ -77,7 +77,7 @@ T BiSearchTree<T>::FindMin() const
         throw std::invalid_argument("ERROR: Tree Is Empty {T BiSearchTree<T>::FindMin() const}");
 
     //从自身的根节点开始调用递归搜索
-    BinaryTreeNode<T>* _node = FindMinPtr(root);
+    BiTreeNode<T>* _node = FindMinPtr(root);
 
     //如果返回空指针，则说明root没有左子节点，root存储的就是最小值
     if (_node == nullptr)
@@ -94,7 +94,7 @@ T BiSearchTree<T>::FindMax() const
         throw std::invalid_argument("ERROR: Tree Is Empty {T BiSearchTree<T>::FindMax() const}");
         
     //从自身的根节点开始调用递归搜索
-    BinaryTreeNode<T>* _node = FindMaxPtr(root);
+    BiTreeNode<T>* _node = FindMaxPtr(root);
 
     //如果返回空指针，则说明root没有右子节点，root存储的就是最大值
     if (_node == nullptr)
@@ -152,7 +152,7 @@ void BiSearchTree<T>::MakeEmpty()
 }
 
 template <typename T>
-BinaryTreeNode<T>* BiSearchTree<T>::FindMinPtr(BinaryTreeNode<T>* _btn) const
+BiTreeNode<T>* BiSearchTree<T>::FindMinPtr(BiTreeNode<T>* _btn) const
 {
     //若传入节点为空，则返回空指针
     if (_btn == nullptr)
@@ -166,7 +166,7 @@ BinaryTreeNode<T>* BiSearchTree<T>::FindMinPtr(BinaryTreeNode<T>* _btn) const
 }
 
 template <typename T>
-BinaryTreeNode<T>* BiSearchTree<T>::FindMaxPtr(BinaryTreeNode<T>* _btn) const
+BiTreeNode<T>* BiSearchTree<T>::FindMaxPtr(BiTreeNode<T>* _btn) const
 {
     //若传入节点为空，则返回空指针
     if (_btn == nullptr)
@@ -190,24 +190,24 @@ BinaryTreeNode<T>* BiSearchTree<T>::FindMaxPtr(BinaryTreeNode<T>* _btn) const
 }
 
 // template <typename T>
-// T BiSearchTree<T>::FindFormer(const T& _obj, BinaryTreeNode<T>* _btn) const
+// T BiSearchTree<T>::FindFormer(const T& _obj, BiTreeNode<T>* _btn) const
 // {
 // }
 
 // template <typename T>
-// T BiSearchTree<T>::FindLatter(const T& _obj, BinaryTreeNode<T>* _btn) const
+// T BiSearchTree<T>::FindLatter(const T& _obj, BiTreeNode<T>* _btn) const
 // {
 // }
 
 template <typename T>
-T BiSearchTree<T>::FindByIdx(int _idx, BinaryTreeNode<T>* _btn) const
+T BiSearchTree<T>::FindByIdx(int _idx, BiTreeNode<T>* _btn) const
 {
     //排除空指针
     if (_btn == nullptr)
-        throw std::invalid_argument("ERROR: Null Pointer {T BiSearchTree<T>::FindByIdx(int _idx, BinaryTreeNode<T>* _btn) const}");
+        throw std::invalid_argument("ERROR: Null Pointer {T BiSearchTree<T>::FindByIdx(int _idx, BiTreeNode<T>* _btn) const}");
     //排除非法索引
     else if (_idx < 0 || _idx >= _btn->GetSize())
-        throw std::invalid_argument("ERROR: Invalid Index {T BiSearchTree<T>::FindByIdx(int _idx, BinaryTreeNode<T>* _btn) const}");
+        throw std::invalid_argument("ERROR: Invalid Index {T BiSearchTree<T>::FindByIdx(int _idx, BiTreeNode<T>* _btn) const}");
 
     //存储传入节点的左子节点的体积
     int _leftSize = 0;
@@ -224,7 +224,7 @@ T BiSearchTree<T>::FindByIdx(int _idx, BinaryTreeNode<T>* _btn) const
 }
 
 template <typename T>
-bool BiSearchTree<T>::Contains(const T& _val, BinaryTreeNode<T>* _btn) const
+bool BiSearchTree<T>::Contains(const T& _val, BiTreeNode<T>* _btn) const
 {
     //如果传入节点为空节点，则说明找完了整棵树都不存在存储着传入值的节点
     if (_btn == nullptr)
@@ -242,12 +242,12 @@ bool BiSearchTree<T>::Contains(const T& _val, BinaryTreeNode<T>* _btn) const
 }
 
 template <typename T>
-void BiSearchTree<T>::Insert(const T& _obj, BinaryTreeNode<T>* _btn)
+void BiSearchTree<T>::Insert(const T& _obj, BiTreeNode<T>* _btn)
 {
     //如果是空二叉树则用传入值初始化内核节点（意味着该搜索树将被插入第一个值）
     if (_btn == nullptr)
     {
-        root = new BinaryTreeNode<T>(_obj);
+        root = new BiTreeNode<T>(_obj);
         return;
     }
 
@@ -273,7 +273,7 @@ void BiSearchTree<T>::Insert(const T& _obj, BinaryTreeNode<T>* _btn)
 }
 
 template <typename T>
-void BiSearchTree<T>::Erase(const T& _obj, BinaryTreeNode<T>* _btn)
+void BiSearchTree<T>::Erase(const T& _obj, BiTreeNode<T>* _btn)
 {
     //要删除的是空指针，说明要删除的对象不存在
     if (_btn == nullptr)
@@ -287,7 +287,7 @@ void BiSearchTree<T>::Erase(const T& _obj, BinaryTreeNode<T>* _btn)
     else
     {
         //记录传入节点的父节点以待使用
-        BinaryTreeNode<T>* _parent = _btn->GetParentPtr();
+        BiTreeNode<T>* _parent = _btn->GetParentPtr();
 
         //若是叶节点就好说，直接删除
         if (_btn->IsLeaf())
@@ -319,7 +319,7 @@ void BiSearchTree<T>::Erase(const T& _obj, BinaryTreeNode<T>* _btn)
         else
         {
             //获取_btn右子树的最小值所在的节点
-            BinaryTreeNode<T>* _node = FindMinPtr(_btn->GetRightChildPtr());
+            BiTreeNode<T>* _node = FindMinPtr(_btn->GetRightChildPtr());
             //获取_btn右子树的最小值
             T _min = _node->GetNodeData();
             //递归调用此方法删除节点
@@ -331,7 +331,7 @@ void BiSearchTree<T>::Erase(const T& _obj, BinaryTreeNode<T>* _btn)
 }
 
 template <typename T>
-void BiSearchTree<T>::MakeEmpty(BinaryTreeNode<T>* _btn)
+void BiSearchTree<T>::MakeEmpty(BiTreeNode<T>* _btn)
 {
     //如果传入对象为空，则结束函数即可，否则递归调用清空函数
     if (_btn == nullptr)

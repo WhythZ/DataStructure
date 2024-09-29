@@ -7,9 +7,9 @@
 #include "../01-LinearList/05-SStack.hpp"
 //引入普通的树节点类与二叉树节点类，用于测试
 #include "../02-Tree/01-TreeNode.hpp"
-#include "../02-Tree/03-BinaryTreeNode.hpp"
+#include "../02-Tree/03-BiTreeNode.hpp"
 
-//X指的是树节点指针，比如TreeNode<T>*，或BinaryTreeNode<T>*
+//X指的是树节点指针，比如TreeNode<T>*，或BiTreeNode<T>*
 template <typename X>
 class TreeIterator
 {
@@ -150,12 +150,12 @@ namespace Test_Tree_Iterator
         //<11><33><66></66></33><44></44></11>
     }
 
-    void TestBinaryTreeNodeTraversal()
+    void TestBiTreeNodeTraversal()
     {
         //初始化一个二叉树
-        BinaryTreeNode<int> btn(111);
-        BinaryTreeNode<int> temp1(222);
-        BinaryTreeNode<int> temp2(555);
+        BiTreeNode<int> btn(111);
+        BiTreeNode<int> temp1(222);
+        BiTreeNode<int> temp2(555);
         btn.SetLeftChild(&temp1);
         btn.SetRightChild(333);
         btn.GetLeftChildPtr()->SetLeftChild(444);
@@ -176,8 +176,8 @@ namespace Test_Tree_Iterator
         //                -L[ ]
         //                -R[555]
 
-        //创建BinaryTreeNode<int>*的迭代器
-        TreeIterator<BinaryTreeNode<int>*> itr(&btn);
+        //创建BiTreeNode<int>*的迭代器
+        TreeIterator<BiTreeNode<int>*> itr(&btn);
 
         //测试广度优先遍历
         itr.TraversalBFS();
@@ -195,7 +195,7 @@ namespace Test_Tree_Iterator
         std::cout << "--------------------TestArea01--------------------\n";
         TestTreeNodeTraversal();
         std::cout << "--------------------TestArea02--------------------\n";
-        TestBinaryTreeNodeTraversal();
+        TestBiTreeNodeTraversal();
         
         std::cout << "--------------------------------------------------\n";
     }
