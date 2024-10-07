@@ -10,7 +10,7 @@ template <typename T>
 class BiSearchTree
 {
 private:
-    BiTreeNode<T>* root;               //维护一个二叉树节点内核
+    BiTreeNode<T>* root;                   //维护一个二叉树节点内核
 
 public:
     BiSearchTree();                        //构造函数，无=或构造的重载函数
@@ -292,14 +292,33 @@ void BiSearchTree<T>::Erase(const T& _obj, BiTreeNode<T>* _btn)
         //若是叶节点就好说，直接删除
         if (_btn->IsLeaf())
         {
+            //若是根节点，则无需考虑父节点
+            if (_parent == nullptr)
+            {
+                //直接清空
+                root = nullptr;
+                return;
+            }
+            //否则就要考虑父节点
             if (_parent->GetLeftChildPtr() == _btn)
                 _parent->DelLeftChild();
             else
                 _parent->DelRightChild();
         }
-        //若是有一个子节点的内部节点
+        //若是有一个子节点的节点
         else if (_btn->GetDegree() == 1)
         {
+            //若是根节点
+            if (_parent == nullptr)
+            {
+                if (_btn->HasLeftChild())
+                    _btn = _btn->GetLeftChildPtr();
+                else
+                    _btn = _btn->GetRightChildPtr();
+                //直接结束
+                return;
+            }
+            //若是内部节点
             if (_parent->GetLeftChildPtr() == _btn)
             {
                 if (_btn->HasLeftChild())
@@ -315,7 +334,7 @@ void BiSearchTree<T>::Erase(const T& _obj, BiTreeNode<T>* _btn)
                     _parent->SetRightChild(_btn->GetRightChildPtr());
             }
         }
-        //否则说明有两个子节点
+        //若是有两个子节点的内部节点
         else
         {
             //获取_btn右子树的最小值所在的节点
@@ -451,7 +470,24 @@ namespace Test_Bi_Search_Tree
         //                                        -R[15]
         //                                -R[ ]
         //                -R[23]
-        
+
+        //测试根节点的删除
+        std::cout << "**bst.Erase(5)\n"; bst.Erase(5);
+        std::cout << "**bst.PrintTree()\n"; bst.PrintTree();
+        //-[7]
+        //        -L[2]
+        //                -L[1]
+        //                -R[4]
+        //        -R[21]
+        //                -L[10]
+        //                        -L[8]
+        //                        -R[17]
+        //                                -L[14]
+        //                                        -L[ ]
+        //                                        -R[15]
+        //                                -R[ ]
+        //                -R[23]
+
         //测试清空
         std::cout << "**bst.MakeEmpty()\n"; bst.MakeEmpty();
         std::cout << "##bst.IsEmpty(): " << bst.IsEmpty() << "\n";
