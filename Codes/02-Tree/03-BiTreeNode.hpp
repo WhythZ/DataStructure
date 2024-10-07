@@ -94,7 +94,7 @@ BiTreeNode<T>& BiTreeNode<T>::operator=(const BiTreeNode<T>& _obj)
     else
     {
         //指向nullptr的leftChild被访问时会报错，所以先在堆区初始化
-        leftChild = new BiTreeNode<T>(0);
+        leftChild = new BiTreeNode<T>();
         //注意使用的是解引用，不然就是对指针的操作了
         *leftChild = *_left;
         //注意维护父指针，这个不能放外面，因为当第一个if满足时，nullptr没有自己的parentNode
@@ -108,7 +108,7 @@ BiTreeNode<T>& BiTreeNode<T>::operator=(const BiTreeNode<T>& _obj)
         SetRightChild(_right->GetNodeData());
     else
     {
-        rightChild = new BiTreeNode<T>(0);
+        rightChild = new BiTreeNode<T>();
         *rightChild = *_right;
         rightChild->parentNode = this;
     }
@@ -301,7 +301,7 @@ void BiTreeNode<T>::SetLeftChild(BiTreeNode<T>* _node)
     if (!HasLeftChild())
     {
         //防止解引用得到无法被赋值的对象
-        leftChild = new BiTreeNode<T>(0);
+        leftChild = new BiTreeNode<T>();
         //赋值运算符拷贝给左子节点（注意解引用获取leftChild的引用）
         *leftChild = _new;
         //注意对父节点进行维护
@@ -343,7 +343,7 @@ void BiTreeNode<T>::SetRightChild(BiTreeNode<T>* _node)
     if (!HasRightChild())
     {
         //防止解引用得到无法被赋值的对象
-        rightChild = new BiTreeNode<T>(0);
+        rightChild = new BiTreeNode<T>();
         //赋值运算符拷贝给左子节点（注意解引用获取rightChild的引用）
         *rightChild = _new;
         //注意对父节点进行维护
