@@ -13,6 +13,7 @@ private:
 
 public:
     bool IsEmpty() const;     //返回栈是否为空栈
+    int GetLength() const;    //返回栈的长度
     T GetTop() const;         //返回栈顶部的元素值
     T* GetTopPtr() const;     //返回栈顶部的元素指针
     
@@ -24,6 +25,12 @@ template <typename T>
 bool LStack<T>::IsEmpty() const
 {
     return list.IsEmpty();
+}
+
+template <typename T>
+int LStack<T>::GetLength() const
+{
+    return list.GetLength();
 }
 
 template <typename T>
@@ -87,6 +94,10 @@ namespace Test_L_Stack
         stack.Push(33); std::cout << "**Push [33]" << "\n";
         std::cout << "##GetTop: " << stack.GetTop() << "\n";
         //##GetTop: 33
+
+        //测试长度获取
+        std::cout << "##GetLength: " << stack.GetLength() << "\n";
+        //
         
         //测试Pop函数
         stack.Pop(); std::cout << "**Pop" << "\n";

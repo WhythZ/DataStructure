@@ -12,6 +12,7 @@ private:
 
 public:
     bool IsEmpty() const;      //判断是否为空
+    int GetLength() const;     //返回队列长度
     T GetFront() const;        //获取下一个将被取出队列的元素值
     T* GetFrontPtr() const;    //获取下一个将被取出队列的元素指针
 
@@ -23,6 +24,12 @@ template <typename T>
 bool LQueue<T>::IsEmpty() const
 {
     return list.IsEmpty();
+}
+
+template <typename T>
+int LQueue<T>::GetLength() const
+{
+    return list.GetLength();
 }
 
 template <typename T>
@@ -66,12 +73,18 @@ namespace Test_L_Queue
         //初始化测试
         LQueue<std::string> queue;
 
-        //函数测试
+        //Push函数测试
         queue.Push("Tamako"); std::cout << "**Push(\"Tamako\")\n";
         queue.Push("Yui"); std::cout << "**Push(\"Yui\")\n";
         queue.Push("Nina"); std::cout << "**Push(\"Nina\")\n";
         std::cout << "##GetFront: " << queue.GetFront() << "\n";
         //##GetFront: Tamako
+
+        //测试长度获取
+        std::cout << "##GetLength: " << queue.GetLength() << "\n";
+        //
+
+        //Pop函数测试
         queue.Pop(); std::cout << "**Pop\n";
         std::cout << "##GetFront: " << queue.GetFront() << "\n";
         //##GetFront: Yui

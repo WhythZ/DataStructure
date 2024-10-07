@@ -17,6 +17,7 @@ public:
     ~BiSearchTree();                       //析构函数，清空搜索树
 
     bool IsEmpty() const;                  //判断搜索树是否为空
+    int GetSize() const;                   //获取树的节点数
     void PrintTree() const;                //打印整个搜索树
     T FindMin() const;                     //返回存储的最小值
     T FindMax() const;                     //返回存储的最大值
@@ -59,6 +60,12 @@ bool BiSearchTree<T>::IsEmpty() const
 {
     //只要内核为空，那么这个搜索树就为空
     return (root == nullptr);
+}
+
+template <typename T>
+int BiSearchTree<T>::GetSize() const
+{
+    return root->GetSize();
 }
 
 template <typename T>
@@ -487,6 +494,10 @@ namespace Test_Bi_Search_Tree
         //                                        -R[15]
         //                                -R[ ]
         //                -R[23]
+
+        //测试体积获取
+        std::cout << "##bst.GetSize(): " << bst.GetSize() << "\n";\
+        //##bst.GetSize(): 11
 
         //测试清空
         std::cout << "**bst.MakeEmpty()\n"; bst.MakeEmpty();
