@@ -26,7 +26,7 @@ int main()
     // Test_Tree_Iterator::MainTest();
     // Test_Bi_Tree_Node::MainTest();
     // Test_Bi_Tree_Iterator::MainTest();
-    // Test_Bi_Search_Tree::MainTest();
+    Test_Bi_Search_Tree::MainTest();
     // Test_Balanced_Bi_Tree::MainTest();
     // Test_Red_Black_Tree::MainTest();
 }

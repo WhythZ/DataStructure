@@ -161,6 +161,12 @@ bool BiTreeNode<T>::IsLeaf() const
 template <typename T>
 int BiTreeNode<T>::GetSize() const
 {
+    //warning: 'nonnull' argument 'this' compared to NULL [-Wnonnull-compare]
+    //this指针为空时代表了未定义的行为，参考https://stackoverflow.com/questions/48067323/c-why-cant-this-be-a-nullptr
+    //但是为什么实际上用nullptr的BiTreeNode<>指针调用该函数时，此处语句还是会运行并输出0呢？
+    // if (this == nullptr)
+    //     return 0;
+
     //将自身算进去
     int _counter = 1;
     //如果有子节点，那就需要加上子节点的节点数
@@ -379,12 +385,18 @@ void BiTreeNode<T>::SetRightChild(T _obj)
 template <typename T>
 void BiTreeNode<T>::DelLeftChild()
 {
+    //注意双向解除关系
+    if (leftChild != nullptr)
+        leftChild->parentNode = nullptr;
     leftChild = nullptr;
 }
 
 template <typename T>
 void BiTreeNode<T>::DelRightChild()
 {
+    //注意双向解除关系
+    if (rightChild != nullptr)
+        rightChild->parentNode = nullptr;
     rightChild = nullptr;
 }
 
@@ -446,10 +458,8 @@ void BiTreeNode<T>::PrintTree(int _depth, int _type) const
 
 namespace Test_Bi_Tree_Node
 {
-    void MainTest()
+    void TestBasic()
     {
-        std::cout << "--------------------------------------------------\n";
-
         //初始化二叉树节点
         BiTreeNode<int> btn(111);
         std::cout << "**Print btn\n"; btn.PrintTree();
@@ -506,7 +516,24 @@ namespace Test_Bi_Tree_Node
         //##btn.GetSize(): 6
         std::cout << "##btn.GetDepth(): " << btn.GetDepth() << "\n";
         //##btn.GetDepth(): 3
+    }
 
+    void TestGetSize()
+    {
+        // //测试空节点的体积获取
+        // BiTreeNode<int>* nullbtn = nullptr;
+        // std::cout << "##nullbtn->GetSize(): " << nullbtn->GetSize() << "\n";        
+    }
+
+    void MainTest()
+    {
+        std::cout << "--------------------------------------------------\n";
+
+        // std::cout << "--------------------TestArea01--------------------\n";
+        TestBasic();
+        // std::cout << "--------------------TestArea02--------------------\n";
+        // TestGetSize();
+        
         std::cout << "--------------------------------------------------\n";
     }
 }

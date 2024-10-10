@@ -65,6 +65,9 @@ bool BiSearchTree<T>::IsEmpty() const
 template <typename T>
 int BiSearchTree<T>::GetSize() const
 {
+    //对nullptr进行检测，若root==nullptr，则直接像下面那样调用其GetSize()会报错
+    if (IsEmpty())
+        return 0;
     return root->GetSize();
 }
 
@@ -73,7 +76,10 @@ void BiSearchTree<T>::PrintTree() const
 {
     //健壮性
     if (IsEmpty())
+    {
+        std::cout << "-[ ]\n";
         return;
+    }
     root->PrintTree();
 }
 
@@ -139,6 +145,7 @@ bool BiSearchTree<T>::Contains(const T& _obj) const
 template <typename T>
 void BiSearchTree<T>::Insert(const T& _obj)
 {
+    //从二叉树根节点开始递归
     Insert(_obj, root);
 }
 
@@ -154,6 +161,7 @@ void BiSearchTree<T>::MakeEmpty()
 {
     //清空内核节点
     MakeEmpty(root);
+
     //置空根节点
     root = nullptr;
 }
@@ -258,9 +266,11 @@ void BiSearchTree<T>::Insert(const T& _obj, BiTreeNode<T>* _btn)
         return;
     }
 
-    //若是值相等，则直接结束，我不想让二叉搜索树中有相等的值（除非有需求要求我必须这么做）
+    //若是值等于传入节点值，则直接结束，我不想让二叉搜索树中有相等的值（除非有需求要求我必须这么做）
     if (_obj == _btn->GetNodeData())
         return;
+
+    //若值小于传入节点值
     if (_obj < _btn->GetNodeData())
     {
         //如果左子节点为空，则说明就该把新节点插在这里
@@ -270,6 +280,8 @@ void BiSearchTree<T>::Insert(const T& _obj, BiTreeNode<T>* _btn)
         else
             Insert(_obj, _btn->GetLeftChildPtr());
     }
+
+    //若值大于传入节点值
     if (_obj > _btn->GetNodeData())
     {
         if (_btn->GetRightChildPtr() == nullptr)
@@ -285,7 +297,8 @@ void BiSearchTree<T>::Erase(const T& _obj, BiTreeNode<T>* _btn)
     //要删除的是空指针，说明要删除的对象不存在
     if (_btn == nullptr)
         return;
-    //若是小于/大于，则从传入节点的左/右子树继续搜寻
+
+    //若是小于/大于，则从传入节点的左/右子树继续搜寻，直到找到目标值
     if (_obj < _btn->GetNodeData())
         Erase(_obj, _btn->GetLeftChildPtr());
     else if (_obj > _btn->GetNodeData())
@@ -303,6 +316,7 @@ void BiSearchTree<T>::Erase(const T& _obj, BiTreeNode<T>* _btn)
             if (_parent == nullptr)
             {
                 //直接清空
+                delete root;
                 root = nullptr;
                 return;
             }
@@ -319,9 +333,19 @@ void BiSearchTree<T>::Erase(const T& _obj, BiTreeNode<T>* _btn)
             if (_parent == nullptr)
             {
                 if (_btn->HasLeftChild())
-                    _btn = _btn->GetLeftChildPtr();
+                {
+                    //将_btn的左子节点存储起来
+                    BiTreeNode<T>* _temp = _btn->GetLeftChildPtr();
+                    //断绝root与其左子节点间的关系，不然若是直接root = _temp会导致root的parentNode不为空，而搜索树的根节点是不能有父节点的
+                    _btn->DelLeftChild();
+                    root = _temp;
+                }
                 else
-                    _btn = _btn->GetRightChildPtr();
+                {
+                    BiTreeNode<T>* _temp = _btn->GetRightChildPtr();
+                    root->DelRightChild();
+                    root = _temp;
+                }
                 //直接结束
                 return;
             }
@@ -344,11 +368,10 @@ void BiSearchTree<T>::Erase(const T& _obj, BiTreeNode<T>* _btn)
         //若是有两个子节点的内部节点
         else
         {
-            //获取_btn右子树的最小值所在的节点
-            BiTreeNode<T>* _node = FindMinPtr(_btn->GetRightChildPtr());
             //获取_btn右子树的最小值
-            T _min = _node->GetNodeData();
-            //递归调用此方法删除节点
+            BiTreeNode<T>* _minNode = FindMinPtr(_btn->GetRightChildPtr());
+            T _min = _minNode->GetNodeData();
+            //从树中删除该节点
             Erase(_min, _btn);
             //将_btn的值替换为_min
             _btn->SetNodeData(_min);
@@ -573,6 +596,59 @@ namespace Test_Bi_Search_Tree
         // //##bst.FindLatter(5): 
     }
 
+    void TestReUse()
+    {
+        BiSearchTree<int> bst;
+        bst.Insert(9);
+        bst.Insert(2);
+        bst.Insert(4);
+        bst.Insert(1);
+        bst.Insert(16);
+        bst.Insert(12);
+        bst.Insert(23);
+        std::cout << "**bst.PrintTree()\n"; bst.PrintTree();
+        //-[9]
+        //        -L[2]
+        //                -L[1]
+        //                -R[4]
+        //        -R[16]
+        //                -L[12]
+        //                -R[23]
+        std::cout << "##bst.GetSize(): " << bst.GetSize() << "\n";
+        //##bst.GetSize(): 7
+
+        std::cout << "**bst.Erase(bst.FindMin())\n"; bst.Erase(bst.FindMin());
+        std::cout << "**bst.Erase(bst.FindMin())\n"; bst.Erase(bst.FindMin());
+        std::cout << "**bst.Erase(bst.FindMin())\n"; bst.Erase(bst.FindMin());
+        std::cout << "**bst.Erase(bst.FindMin())\n"; bst.Erase(bst.FindMin());
+        std::cout << "**bst.PrintTree()\n"; bst.PrintTree();
+        //-[16]
+        //        -L[12]
+        //        -R[23]
+        std::cout << "##bst.GetSize(): " << bst.GetSize() << "\n";
+        //##bst.GetSize(): 3
+
+        std::cout << "**bst.Erase(bst.FindMin())\n"; bst.Erase(bst.FindMin());
+        std::cout << "**bst.PrintTree()\n"; bst.PrintTree();
+        //-[16]
+        //        -L[ ]
+        //        -R[23]
+        std::cout << "##bst.GetSize(): " << bst.GetSize() << "\n";
+        //##bst.GetSize(): 2
+
+        std::cout << "**bst.Erase(bst.FindMin())\n"; bst.Erase(bst.FindMin());
+        std::cout << "**bst.PrintTree()\n"; bst.PrintTree();
+        //-[23]
+        std::cout << "##bst.GetSize(): " << bst.GetSize() << "\n";
+        //##bst.GetSize(): 1
+
+        std::cout << "**bst.Erase(bst.FindMin())\n"; bst.Erase(bst.FindMin());
+        std::cout << "**bst.PrintTree()\n"; bst.PrintTree();
+        //-[ ]
+        std::cout << "##bst.GetSize(): " << bst.GetSize() << "\n";
+        //##bst.GetSize(): 0
+    }
+
     void MainTest()
     {
         std::cout << "--------------------------------------------------\n";
@@ -581,6 +657,8 @@ namespace Test_Bi_Search_Tree
         TestTreeBuild();
         std::cout << "--------------------TestArea02--------------------\n";
         TestFinding();
+        std::cout << "--------------------TestArea03--------------------\n";
+        TestReUse();
 
         std::cout << "--------------------------------------------------\n";
     }
