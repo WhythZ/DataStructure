@@ -10,8 +10,12 @@
 #include "02-Tree/03-BiTreeNode.hpp"
 #include "02-Tree/04-BiTreeIterator.hpp"
 #include "02-Tree/05-BiSearchTree.hpp"
-#include "02-Tree/06-BalancedBiTree.hpp"
+#include "02-Tree/06-AVLTree.hpp"
 #include "02-Tree/07-RedBlackTree.hpp"
+#include "02-Tree/08-NaryTreeNode.hpp"
+#include "02-Tree/09-MultiSearchTree.hpp"
+#include "02-Tree/10-BPlusTree.hpp"
+#include "02-Tree/11-MinHeap.hpp"
 
 int main()
 {
@@ -26,7 +30,11 @@ int main()
     // Test_Tree_Iterator::MainTest();
     // Test_Bi_Tree_Node::MainTest();
     // Test_Bi_Tree_Iterator::MainTest();
-    Test_Bi_Search_Tree::MainTest();
-    // Test_Balanced_Bi_Tree::MainTest();
+    // Test_Bi_Search_Tree::MainTest();
+    // Test_AVL_Tree::MainTest();
     // Test_Red_Black_Tree::MainTest();
+    // Test_Nary_Tree_Node::MainTest();
+    // Test_Multi_Search_Tree::MainTest();
+    // Test_B_Plus_Tree::MainTest();
+    // Test_Min_Heap::MainTest();
 }
