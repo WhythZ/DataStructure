@@ -16,6 +16,7 @@
 #include "02-Tree/09-MultiSearchTree.hpp"
 #include "02-Tree/10-BPlusTree.hpp"
 #include "02-Tree/11-MinHeap.hpp"
+#include "03-Sorting/01-SelectionSort.hpp"
 
 int main()
 {
