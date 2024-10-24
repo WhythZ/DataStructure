@@ -18,15 +18,6 @@
 #include "02-Tree/10-BPlusTree.hpp"
 #include "02-Tree/11-MinHeap.hpp"
 
-#include "03-Sorting/01-SelectionSort.hpp"
-#include "03-Sorting/02-InsertionSort.hpp"
-#include "03-Sorting/03-BubbleSort.hpp"
-#include "03-Sorting/04-HeapSort.hpp"
-#include "03-Sorting/05-MergeSort.hpp"
-#include "03-Sorting/06-QuickSort.hpp"
-#include "03-Sorting/07-BucketSort.hpp"
-#include "03-Sorting/08-RadixSort.hpp"
-
 int main()
 {
     // Test_Sequential_List::MainTest();
@@ -48,13 +39,4 @@ int main()
     // Test_Multi_Search_Tree::MainTest();
     // Test_B_Plus_Tree::MainTest();
     // Test_Min_Heap::MainTest();
-
-    // Test_Selection_Sort::MainTest();
-    // Test_Insertion_Sort::MainTest();
-    // Test_Bubble_Sort::MainTest();
-    // Test_Heap_Sort::MainTest();
-    // Test_Merge_Sort::MainTest();
-    // Test_Quick_Sort::MainTest();
-    // Test_Bucket_Sort::MainTest();
-    // Test_Radix_Sort::MainTest();
 }

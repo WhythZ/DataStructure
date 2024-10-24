@@ -7,16 +7,4 @@ std::vector<int> QuickSort(std::vector<int> & _list)
 {
 }
 
-namespace Test_Quick_Sort
-{
-    void MainTest()
-    {
-        std::cout << "--------------------------------------------------\n";
-
-        // std::cout << "--------------------TestArea01--------------------\n";
-
-        std::cout << "--------------------------------------------------\n";
-    }
-}
-
 #endif
