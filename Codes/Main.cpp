@@ -18,6 +18,8 @@
 #include "02-Tree/10-BPlusTree.hpp"
 #include "02-Tree/11-MinHeap.hpp"
 
+#include "03-Sorting/IntSortingVisualizer.hpp"
+
 int main()
 {
     // Test_Sequential_List::MainTest();
@@ -39,4 +41,6 @@ int main()
     // Test_Multi_Search_Tree::MainTest();
     // Test_B_Plus_Tree::MainTest();
     // Test_Min_Heap::MainTest();
+
+    IntSortingVisualizer::GetInstance()->Run();
 }

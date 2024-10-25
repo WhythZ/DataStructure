@@ -3,8 +3,6 @@
 
 #include <vector>
 
-std::vector<int> HeapSort(std::vector<int> & _list)
-{
-}
+
 
 #endif

@@ -51,6 +51,8 @@
         "xutility": "cpp",
         "stack": "cpp",
         "algorithm": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "fstream": "cpp",
+        "vector": "cpp"
     }
 }

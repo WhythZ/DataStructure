@@ -3,8 +3,6 @@
 
 #include <vector>
 
-std::vector<int> MergeSort(std::vector<int> & _list)
-{
-}
+
 
 #endif
