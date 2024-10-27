@@ -53,6 +53,10 @@
         "algorithm": "cpp",
         "optional": "cpp",
         "fstream": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "functional": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "xhash": "cpp"
     }
 }
