@@ -40,7 +40,13 @@ Though several of them are not completed because of my lack of leisure, you can 
 
 ## Using
 
-Several test cases are prepared, you can directly run the `Main.cpp` in `Codes` folder to call all the test functions for partcular data structures and algorithms, just comment the unwanted ones in the `main()` function to hide them
+1. Ensure that your VSCode has installed these addons: `C/C++`, `CMake`, `CMake Tools`
 
-- Test functions of the lists and trees will print related information in the console lines
-- SDL2 Libraries are used to visualize the processes of how the sorting algorithms work
+2. Use `Ctrl + F5` to use CMake to generate the executable file and run it
+    - You can comment the unwanted test cases in `Main.cpp` to hide them
+    - Test functions of the lists and trees will print related information in the console lines
+    - SDL2 Libraries are used to visualize the processes of how the sorting algorithms work
+
+3. If you want to debug with gdb, follow the steps, else you can ignore this part
+    - Firstly change the `"miDebuggerPath"` value in the `launch.json` to your local MinGW `gdb.exe` directory
+    - Then use `Ctrl + Shift + D` and click the related button to start debugging with breakpoints

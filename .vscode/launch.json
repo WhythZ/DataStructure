@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "preLaunchTask": "Build The Project", //对应tasks.json文件中标签为"Build The Project"的任务，即先完成tasks.json中的对应工作内容，再完成launch.json的工作内容
+    "configurations": [
+        {
+            "name": "(gdb) 启动",
+            "type": "cppdbg", //正在使用的调试器，使用Visual Studio Windows时必须为cppvsdbg；使用GDB或LLDB时必须为cppdbg
+            "request": "launch", //表示此配置是用于启动程序还是附加到已运行的实例上
+            // "program": "输入程序名称，例如 ${workspaceFolder}/a.exe", //要执行的可执行文件的完整路径
+            "program": "${workspaceFolder}/build/Main.exe", //CMake系列方法生成的可执行文件位置，此处.exe文件名字要与CMakeLists.txt内的保持一致
+            "args": [],
+            "stopAtEntry": false,
+            // "cwd": "${fileDirname}", //设置调试器启动的应用程序的工作目录
+            "cwd": "${workspaceFolder}/build", //CMake生成的可执行文件目录
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:\\VSCODE\\mingw64\\bin\\gdb.exe", //指定gdb调试器位置
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "将反汇编风格设置为 Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

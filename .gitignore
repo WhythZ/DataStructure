@@ -1,3 +1,6 @@
 # VSCode Cache
 output/
 Main.exe
+
+# CMake Cache
+build/

@@ -1,30 +1,33 @@
 {
+    "version": "2.0.0",
+    "options": {
+        "cwd": "${fileDirname}/build/" //相当于一个cd命令，进入build文件的目录
+    },
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "C/C++: g++.exe 生成活动文件",
-            "command": "D:\\VSCODE\\mingw64\\bin\\g++.exe", //编译器路径
-            "args": [
-                "-fdiagnostics-color=always",
-                "-g",
-                "${file}", //参与编译的文件，此处为单个文件
-                // "*.cpp", //编译当前文件夹下的所有的.cpp源文件
-                "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe" //链接生成的可执行文件，与代码文件同名
-                // "${fileDirname}\\Main.exe" //指定所有源文件编译并链接后产出可执行文件的名字
+            "label": "cmake", //标签设置为cmake
+            "type": "shell", //在命令行中执行指令
+            "command": "cmake", //（在build目录下的命令行）执行cmake指令
+            "args": [ //上述命令的参数列表
+                ".." //相当于使用"cmake .."命令
             ],
-            "options": {
-                "cwd": "${fileDirname}" //当前工作目录
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
+        },
+        {
+            "label": "make",
+            "group":{
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "调试器生成的任务。"
+            "command": "mingw32-make.exe", //执行该命令生成可执行文件
+            "args":[ //无需参数
+            ]
+        },
+        {
+            "label": "Build The Project", //将此标签指定给launch.json中的"preLaunchTask"参数，使得自动化完成程序的链接与编译
+            "dependsOn":[
+                "cmake", //执行上述"label"为"cmake"的花括号内的"command"指令
+                "make" //执行上述标签为"make"的"command"指令
+            ]
         }
-    ],
-    "version": "2.0.0"
+    ]
 }
