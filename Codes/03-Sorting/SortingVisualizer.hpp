@@ -14,15 +14,27 @@
 #include "07-BucketSort.hpp"
 #include "08-RadixSort.hpp"
 
+enum class SortType
+{
+	Selection = 0,
+	Insertion = 1,
+	Bubble = 2,
+	Heap = 3,
+	Merge = 4,
+	Quick = 5,
+	Bucket = 6,
+	Radix = 7
+};
+
 class SortingVisualizer
 {
 private:
-	static SortingVisualizer* instance;                     //该类的单例
-	std::vector<int> unorderedList;                         //存储原始的乱序列表
+	static SortingVisualizer* instance;           //该类的单例
+	std::vector<int> unorderedList;               //存储原始的乱序列表
 
 public:
-	static SortingVisualizer* GetInstance();                //获取类单例
-	void Run();                                             //运行可视化程序
+	static SortingVisualizer* GetInstance();      //获取类单例
+	void Run();                                   //运行可视化程序
 
 private:
 	SortingVisualizer();
@@ -30,9 +42,11 @@ private:
 	SortingVisualizer(const SortingVisualizer&) = delete;
 	SortingVisualizer& operator=(const SortingVisualizer&) = delete;
 	
-	void InitAssert(bool, std::string);                     //初始化断言
-	bool LoadTestCase(std::string);                         //加载乱序列表测试用例文件
-	void TestWith(std::function<void(std::vector<int>&)>);  //使用传入的排序算法对列表进行排序测试
+	void InitAssert(bool, std::string);           //初始化断言
+	bool LoadTestCase(std::string);               //加载乱序列表测试用例文件
+
+	//使用传入的排序算法对列表进行排序测试
+	void TestWith(std::function<void(std::vector<int>&)>, SortType);
 };
 
 SortingVisualizer* SortingVisualizer::instance = nullptr;
@@ -46,13 +60,13 @@ SortingVisualizer* SortingVisualizer::GetInstance()
 
 void SortingVisualizer::Run()
 {
-	TestWith(SelectionSort<int>);
+	TestWith(SelectionSort<int>, SortType::Selection);
 }
 
 SortingVisualizer::SortingVisualizer()
 {
 	//加载测试案例文件中的整数列表
-	InitAssert(LoadTestCase("03-Sorting/IntTestCase.csv"), "ERROR: File \"IntTestCase.csv\" Not Found!");
+	InitAssert(LoadTestCase("../Codes/03-Sorting/IntTestCase.csv"), "ERROR: File \"IntTestCase.csv\" Not Found!");
 }
 
 SortingVisualizer::~SortingVisualizer()
@@ -63,7 +77,7 @@ SortingVisualizer::~SortingVisualizer()
 void SortingVisualizer::InitAssert(bool _flag, std::string _msg)
 {
 	if (!_flag)
-		std::cout << _msg << "\n";
+		throw std::runtime_error(_msg);
 }
 
 bool SortingVisualizer::LoadTestCase(std::string _path)
@@ -86,12 +100,42 @@ bool SortingVisualizer::LoadTestCase(std::string _path)
 	return true;
 }
 
-void SortingVisualizer::TestWith(std::function<void(std::vector<int>&)> _algorithm)
+void SortingVisualizer::TestWith(std::function<void(std::vector<int>&)> _algorithm, SortType _tag)
 {
+	switch (_tag)
+	{
+	case SortType::Selection:
+		std::cout<<">>Selection Sort\n";
+		break;
+	case SortType::Insertion:
+		std::cout<<">>Insertion Sort\n";
+		break;
+	case SortType::Bubble:
+		std::cout<<">>Bubble Sort\n";
+		break;
+	case SortType::Heap:
+		std::cout<<">>Heap Sort\n";
+		break;
+	case SortType::Merge:
+		std::cout<<">>Merge Sort\n";
+		break;
+	case SortType::Quick:
+		std::cout<<">>Quick Sort\n";
+		break;
+	case SortType::Bucket:
+		std::cout<<">>Bucket Sort\n";
+		break;
+	case SortType::Radix:
+		std::cout<<">>Radix Sort\n";
+		break;
+	default:
+		break;
+	}
+
 	//复制一份原始乱序列表
 	std::vector<int> _copy = unorderedList;
-
-	//打印乱序状态
+	
+	//打印原始的乱序状态
 	std::cout << "Before=[";
 	for (std::vector<int>::iterator _it = _copy.begin(); _it != _copy.end(); _it++)
 	{
