@@ -5,6 +5,9 @@
 #include <fstream>
 #include <functional>
 
+// #include "SDL.h"
+#include "../../Libs/SDL2/include/SDL.h"
+
 #include "01-SelectionSort.hpp"
 #include "02-InsertionSort.hpp"
 #include "03-BubbleSort.hpp"

@@ -20,6 +20,8 @@
 
 #include "03-Sorting/SortingVisualizer.hpp"
 
+//防止main被定义为SDL_main
+#undef main
 int main()
 {
     // Test_Sequential_List::MainTest();
