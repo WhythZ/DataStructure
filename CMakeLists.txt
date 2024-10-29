@@ -11,11 +11,16 @@ aux_source_directory(Codes SrcMain)   # 搜索根目录下的源文件
 
 # 该函数用于指定头文件的搜索路径，可以有多个路径
 include_directories(Libs/SDL2/include) # 引入第三方库SDL的头文件
+
 # 该函数用于指定第三方库的静态链接库所在目录
 link_directories(Libs/SDL2/lib)
+# 表示将具体的库文件引入到当前工程中
+link_libraries(Libs/SDL2/lib/SDL2)
 
 # 该函数用于生成可执行文件，第一个参数指定文件名，往后的参数以空格间隔，传入先前导出的相关变量
 add_executable(Main ${SrcMain})
 
-# 该函数用于指定静态链接库的具体库文件名
+# 将具体库文件应用到子项目上
 target_link_libraries(Main SDL2)
+# 指定头文件应用于子项目上
+# target_include_directories(Main)

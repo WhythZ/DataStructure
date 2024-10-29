@@ -1,12 +1,9 @@
-#ifndef _SORTING_VISUALIZER_HPP_
-#define _SORTING_VISUALIZER_HPP_
+#ifndef _SORTING_MANAGER_HPP_
+#define _SORTING_MANAGER_HPP_
 
 #include <vector>
 #include <fstream>
 #include <functional>
-
-// #include "SDL.h"
-#include "../../Libs/SDL2/include/SDL.h"
 
 #include "01-SelectionSort.hpp"
 #include "02-InsertionSort.hpp"
@@ -29,61 +26,56 @@ enum class SortType
 	Radix = 7
 };
 
-class SortingVisualizer
+class SortingManager
 {
 private:
-	static SortingVisualizer* instance;           //该类的单例
-	std::vector<int> unorderedList;               //存储原始的乱序列表
+	static SortingManager* instance;         //该类的单例
+	std::vector<int> unorderedList;          //存储原始的乱序列表
 
 public:
-	static SortingVisualizer* GetInstance();      //获取类单例
-	void Run();                                   //运行可视化程序
+	static SortingManager* GetInstance();    //获取类单例
+	void Run();                              //运行可视化程序
 
 private:
-	SortingVisualizer();
-	~SortingVisualizer();
-	SortingVisualizer(const SortingVisualizer&) = delete;
-	SortingVisualizer& operator=(const SortingVisualizer&) = delete;
+	SortingManager();
+	~SortingManager() = default;
+	SortingManager(const SortingManager&) = delete;
+	SortingManager& operator=(const SortingManager&) = delete;
 	
-	void InitAssert(bool, std::string);           //初始化断言
-	bool LoadTestCase(std::string);               //加载乱序列表测试用例文件
+	void InitAssert(bool, std::string);      //初始化断言
+	bool LoadTestCase(std::string);          //加载乱序列表测试用例文件
 
 	//使用传入的排序算法对列表进行排序测试
 	void TestWith(std::function<void(std::vector<int>&)>, SortType);
 };
 
-SortingVisualizer* SortingVisualizer::instance = nullptr;
+SortingManager* SortingManager::instance = nullptr;
 
-SortingVisualizer* SortingVisualizer::GetInstance()
+SortingManager* SortingManager::GetInstance()
 {
 	if (!instance)
-		instance = new SortingVisualizer();
+		instance = new SortingManager();
 	return instance;
 }
 
-void SortingVisualizer::Run()
+void SortingManager::Run()
 {
 	TestWith(SelectionSort<int>, SortType::Selection);
 }
 
-SortingVisualizer::SortingVisualizer()
+SortingManager::SortingManager()
 {
 	//加载测试案例文件中的整数列表
 	InitAssert(LoadTestCase("../Codes/03-Sorting/IntTestCase.csv"), "ERROR: File \"IntTestCase.csv\" Not Found!");
 }
 
-SortingVisualizer::~SortingVisualizer()
-{
-
-}
-
-void SortingVisualizer::InitAssert(bool _flag, std::string _msg)
+void SortingManager::InitAssert(bool _flag, std::string _msg)
 {
 	if (!_flag)
 		throw std::runtime_error(_msg);
 }
 
-bool SortingVisualizer::LoadTestCase(std::string _path)
+bool SortingManager::LoadTestCase(std::string _path)
 {
 	//加载路径下的文件
 	std::ifstream _file(_path);
@@ -103,7 +95,7 @@ bool SortingVisualizer::LoadTestCase(std::string _path)
 	return true;
 }
 
-void SortingVisualizer::TestWith(std::function<void(std::vector<int>&)> _algorithm, SortType _tag)
+void SortingManager::TestWith(std::function<void(std::vector<int>&)> _algorithm, SortType _tag)
 {
 	switch (_tag)
 	{
