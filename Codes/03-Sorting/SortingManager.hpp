@@ -35,7 +35,7 @@ private:
 
 public:
 	static SortingManager* GetInstance();                              //获取类单例
-	void Run();                                                        //运行可视化程序
+	void Run(SortType);                                                //运行排序算法
 
 private:
 	SortingManager();
@@ -58,9 +58,37 @@ SortingManager* SortingManager::GetInstance()
 	return instance;
 }
 
-void SortingManager::Run()
+void SortingManager::Run(SortType _type)
 {
-	TestWith(SelectionSort<int>, SortType::Selection);
+	switch (_type)
+	{
+	case SortType::Selection:
+		TestWith(SelectionSort<int>, _type);
+		break;
+	case SortType::Insertion:
+		TestWith(InsertionSort<int>, _type);
+		break;
+	case SortType::Bubble:
+		TestWith(BubbleSort<int>, _type);
+		break;
+	case SortType::Heap:
+		TestWith(HeapSort<int>, _type);
+		break;
+	case SortType::Merge:
+		TestWith(MergeSort<int>, _type);
+		break;
+	case SortType::Quick:
+		TestWith(QuickSort<int>, _type);
+		break;
+	case SortType::Bucket:
+		TestWith(BucketSort<int>, _type);
+		break;
+	case SortType::Radix:
+		TestWith(RadixSort<int>, _type);
+		break;
+	default:
+		break;
+	}
 }
 
 SortingManager::SortingManager()
