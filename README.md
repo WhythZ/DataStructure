@@ -15,7 +15,7 @@ This repo stores C++ implementations of common data structures and algorithms as
 - Tree Structures
     - Multi
         - ~~N-ary~~
-        - Search
+        - ~~Search~~
         - ~~B+~~
     - Binary
         - Search
@@ -44,8 +44,7 @@ Though several of them are not completed because of my lack of leisure, you can 
 
 2. Use `Ctrl + F5` to use CMake to generate the executable file and run it
     - You can comment the unwanted test cases in `Main.cpp` to hide them
-    - Test functions of the lists and trees will print related information in the console lines
-    - SDL2 Libraries are used to visualize the processes of how the sorting algorithms work
+    - The data structures and algorithms' process will be visually printed in console
 
 3. If you want to debug with gdb, follow the steps, else you can ignore this part
     - Firstly change the `"miDebuggerPath"` value in the `launch.json` to your local MinGW `gdb.exe` directory
