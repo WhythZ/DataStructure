@@ -20,9 +20,6 @@
 
 #include "03-Sorting/SortingManager.hpp"
 
-#include "../Libs/SDL2/include/SDL.h"
-#undef main
-
 int main()
 {
     // Test_Sequential_List::MainTest();
@@ -45,8 +42,5 @@ int main()
     // Test_B_Plus_Tree::MainTest();
     // Test_Min_Heap::MainTest();
 
-    // SortingManager::GetInstance()->Run();
-
-    //尝试初始化SDL库的所有子系统
-    SDL_Init(SDL_INIT_EVERYTHING);
+    SortingManager::GetInstance()->Run();
 }
