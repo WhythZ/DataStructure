@@ -1,7 +1,7 @@
 #ifndef _SELECTION_SORT_HPP_
 #define _SELECTION_SORT_HPP_
 
-#include "SortingManager.hpp"
+#include <vector>
 
 //交换列表中的两个元素，额外使用O(1)的内存空间
 template <typename T>
