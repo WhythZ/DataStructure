@@ -32,6 +32,10 @@ void SelectionSort(std::vector<T>& _list, std::vector<std::vector<T>>& _states)
                 _minIdx = j;
         }
 
+        //如果已经是最小的了，则直接跳过该轮循环，无需执行Swap操作
+        if (i == _minIdx)
+            continue;
+
         //将未排序部分列表的最小值放到其首（即已排序部分列表的末尾）
         Swap(_list, i, _minIdx);
         //每交换一次即实现了一次操作，记录该操作后的列表状态

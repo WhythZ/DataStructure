@@ -46,7 +46,9 @@ private:
 	void LoadTestCase(std::string);                                    //加载乱序列表测试用例文件
 
 	//使用传入的排序算法对列表进行排序测试
-	void TestWith(std::function<void(std::vector<int>&, std::vector<std::vector<int>>&)>, SortType);
+	void TestWith(std::function<void(std::vector<int>&, std::vector<std::vector<int>>&)>, SortType) const;
+	//对比列表的相邻两个状态，找出被交换的两个元素索引（此函数的复杂度的确高，但是可以和排序算法本身逻辑分离）
+	std::tuple<size_t, size_t> GetComparison(const std::vector<int>&, const std::vector<int>&) const;
 };
 
 SortingManager* SortingManager::instance = nullptr;
@@ -116,7 +118,7 @@ void SortingManager::LoadTestCase(std::string _path)
 	_file.close();
 }
 
-void SortingManager::TestWith(std::function<void(std::vector<int>&, std::vector<std::vector<int>>&)> _algorithm, SortType _tag)
+void SortingManager::TestWith(std::function<void(std::vector<int>&, std::vector<std::vector<int>>&)> _algorithm, SortType _tag) const
 {
 	//复制一份原始乱序列表并对其进行排序
 	std::vector<int> _copy = srcList;
@@ -158,24 +160,67 @@ void SortingManager::TestWith(std::function<void(std::vector<int>&, std::vector<
 		break;
 	}
 
-	//外层循环遍历排序算法执行过程中的各个状态
-	size_t _counter = 0;
-	for (std::vector<std::vector<int>>::iterator _it1 = _states.begin(); _it1 != _states.end(); _it1++)
+	//在外层的列表状态遍历过程中存储当前状态和前一个状态的差异（即一个Swap操作造成的差异）
+	size_t _idx1 = 0, _idx2 = 0;
+	for (size_t i = 0; i < _states.size(); i++)
 	{
 		//打印状态顺序索引
-		std::cout << "[" << _counter << "]: ";
+		std::cout << "[" << i << "]:\t";
 
-		//内层循环遍历打印每个状态下的列表状况
-		for (std::vector<int>::iterator _it2 = _it1->begin(); _it2 != _it1->end(); _it2++)
+		//获取和前一个列表状态的差异位置索引
+		if (i > 0)
 		{
-			std::cout << *_it2 << ",";
+			_idx1 = std::get<0>(GetComparison(_states[i], _states[i - 1]));
+			_idx2 = std::get<1>(GetComparison(_states[i], _states[i - 1]));
 		}
 
-		_counter++;
+		//内层循环遍历打印每个状态下的列表状况
+		for (size_t j = 0; j < _states[i].size(); j++)
+		{
+			if ((j == _idx1 || j == _idx2) && _idx1 != _idx2)
+			{
+				std::cout << "{" << _states[i][j] << "},";
+				continue;
+			}
+			std::cout << _states[i][j] << ",";
+		}
+
 		std::cout << "\n";
 	}
 
 	std::cout << "--------------------------------------------------\n";
+}
+
+std::tuple<size_t, size_t> SortingManager::GetComparison(const std::vector<int>& _list1, const std::vector<int>& _list2) const
+{
+	//使用vector重载的==运算符进行比较（会考虑元素的顺序）
+	if (_list1 == _list2)
+		throw std::runtime_error("ERROR: Two states of the list are equal");
+	
+	if (_list1.size() != _list2.size())
+		throw std::runtime_error("ERROR: Size of the two states of the list are unequal");
+
+	//记录两个差异位置的索引
+	size_t _idx1, _idx2;
+	//记录两列表共有几个相同索引位置处的元素值不同，若超过了两个则说明两个状态的差异并不是单个Swap操作造成的
+	size_t _diffCounter = 0;
+
+	//对比两个列表相同索引位置的值
+	for (size_t i = 0; i < _list1.size(); i++)
+	{
+		if (_list1[i] != _list2[i])
+		{
+			_diffCounter++;
+			if (_diffCounter == 1)
+				_idx1 = i;
+			else if (_diffCounter == 2)
+				_idx2 = i;
+			else if (_diffCounter > 2)
+				throw std::runtime_error("ERROR: More than one \"Swap\" operation between the two list states");
+		}
+	}
+
+	return std::tuple<size_t, size_t>(_idx1, _idx2);
 }
 
 #endif

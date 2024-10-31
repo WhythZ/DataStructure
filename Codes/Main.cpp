@@ -43,7 +43,7 @@ int main()
     // Test_Min_Heap::MainTest();
 
     SortingManager::GetInstance()->Run(SortType::Selection);
-    SortingManager::GetInstance()->Run(SortType::Insertion);
+    // SortingManager::GetInstance()->Run(SortType::Insertion);
     // SortingManager::GetInstance()->Run(SortType::Bubble);
     // SortingManager::GetInstance()->Run(SortType::Heap);
     // SortingManager::GetInstance()->Run(SortType::Merge);
