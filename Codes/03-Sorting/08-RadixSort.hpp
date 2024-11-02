@@ -3,6 +3,8 @@
 
 #include <vector>
 
+//基数排序：
+//
 template <typename T>
 void RadixSort(std::vector<T>& _list, std::vector<std::vector<T>>& _states)
 {

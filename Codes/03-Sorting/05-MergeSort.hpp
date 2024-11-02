@@ -3,6 +3,8 @@
 
 #include <vector>
 
+//归并排序：
+//
 template <typename T>
 void MergeSort(std::vector<T>& _list, std::vector<std::vector<T>>& _states)
 {

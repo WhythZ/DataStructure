@@ -3,6 +3,8 @@
 
 #include <vector>
 
+//堆排序：
+//
 template <typename T>
 void HeapSort(std::vector<T>& _list, std::vector<std::vector<T>>& _states)
 {

@@ -3,6 +3,8 @@
 
 #include <vector>
 
+//快速排序：
+//
 template <typename T>
 void QuickSort(std::vector<T>& _list, std::vector<std::vector<T>>& _states)
 {

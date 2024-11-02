@@ -15,9 +15,12 @@ void Swap(std::vector<T>& _list, int _idx1, int _idx2)
     _list[_idx2] = _temp;
 }
 
-//选择排序，传入被排序的列表的引用与用于存储排序过程的容器的引用
+//选择排序：
+//从列表的未排序部分（在最开始，整个列表视为未排序的）中取出最小的值，交换到该部分列表的首位（若首位本来就是最小的，则无需进行Swap操作）
+//交换至首位后，该位置的值被纳入整个列表的已排序部分，下次判断操作则从剩余的未排序部分开始
 template <typename T>
 void SelectionSort(std::vector<T>& _list, std::vector<std::vector<T>>& _states)
+//传入需要被排序的列表的引用，以及用于存储排序过程的容器的引用
 {
     //记录初始状态
     _states.emplace_back(_list);

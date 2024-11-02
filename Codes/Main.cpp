@@ -35,15 +35,9 @@ int main()
     // Test_Bi_Tree_Node::MainTest();
     // Test_Bi_Tree_Iterator::MainTest();
     // Test_Bi_Search_Tree::MainTest();
-    // Test_AVL_Tree::MainTest();
-    // Test_Red_Black_Tree::MainTest();
-    // Test_Nary_Tree_Node::MainTest();
-    // Test_Multi_Search_Tree::MainTest();
-    // Test_B_Plus_Tree::MainTest();
-    // Test_Min_Heap::MainTest();
 
-    SortingManager::GetInstance()->Run(SortType::Selection);
-    // SortingManager::GetInstance()->Run(SortType::Insertion);
+    // SortingManager::GetInstance()->Run(SortType::Selection);
+    SortingManager::GetInstance()->Run(SortType::Insertion);
     // SortingManager::GetInstance()->Run(SortType::Bubble);
     // SortingManager::GetInstance()->Run(SortType::Heap);
     // SortingManager::GetInstance()->Run(SortType::Merge);

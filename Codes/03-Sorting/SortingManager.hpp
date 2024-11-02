@@ -30,12 +30,12 @@ enum class SortType
 class SortingManager
 {
 private:
-	static SortingManager* instance;                                   //该类的单例
-	std::vector<int> srcList;                                          //存储原始的乱序列表
+	static SortingManager* instance;            //该类的单例
+	std::vector<int> srcList;                   //存储原始的乱序列表
 
 public:
-	static SortingManager* GetInstance();                              //获取类单例
-	void Run(SortType);                                                //运行排序算法
+	static SortingManager* GetInstance();       //获取类单例
+	void Run(SortType);                         //运行排序算法
 
 private:
 	SortingManager();
@@ -43,7 +43,7 @@ private:
 	SortingManager(const SortingManager&) = delete;
 	SortingManager& operator=(const SortingManager&) = delete;
 	
-	void LoadTestCase(std::string);                                    //加载乱序列表测试用例文件
+	void LoadTestCase(std::string);             //加载乱序列表测试用例文件
 
 	//使用传入的排序算法对列表进行排序测试
 	void TestWith(std::function<void(std::vector<int>&, std::vector<std::vector<int>>&)>, SortType) const;
@@ -133,28 +133,28 @@ void SortingManager::TestWith(std::function<void(std::vector<int>&, std::vector<
 	switch (_tag)
 	{
 	case SortType::Selection:
-		std::cout << ">>SelectionSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##SelectionSort=O(" << _states.size() - 1 << ")\n";
 		break;
 	case SortType::Insertion:
-		std::cout << ">>InsertionSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##InsertionSort=O(" << _states.size() - 1 << ")\n";
 		break;
 	case SortType::Bubble:
-		std::cout << ">>BubbleSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##BubbleSort=O(" << _states.size() - 1 << ")\n";
 		break;
 	case SortType::Heap:
-		std::cout << ">>HeapSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##HeapSort=O(" << _states.size() - 1 << ")\n";
 		break;
 	case SortType::Merge:
-		std::cout << ">>MergeSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##MergeSort=O(" << _states.size() - 1 << ")\n";
 		break;
 	case SortType::Quick:
-		std::cout << ">>QuickSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##QuickSort=O(" << _states.size() - 1 << ")\n";
 		break;
 	case SortType::Bucket:
-		std::cout << ">>BucketSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##BucketSort=O(" << _states.size() - 1 << ")\n";
 		break;
 	case SortType::Radix:
-		std::cout << ">>RadixSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##RadixSort=O(" << _states.size() - 1 << ")\n";
 		break;
 	default:
 		break;
