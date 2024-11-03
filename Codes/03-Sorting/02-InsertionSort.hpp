@@ -2,49 +2,36 @@
 #define _INSERTION_SORT_HPP_
 
 #include <vector>
-
-//交换列表中的两个元素，额外使用O(1)的内存空间
-template <typename T>
-void Swap(std::vector<T>& _list, int _idx1, int _idx2)
-{
-    if (_idx1 == _idx2)
-        return;
-
-    T _temp = _list[_idx1];
-    _list[_idx1] = _list[_idx2];
-    _list[_idx2] = _temp;
-}
+#include "SortingStates.hpp"
 
 //插入排序：
-//从0索引处开始，取出1索引值，其与0索引值比较，若[1]比[0]大则无需移动，若小则将[1]插入[0]左侧
-//然后从1索引处开始，取出2索引值，其与1索引值比较，若[2]比[1]大则无需移动，若小则将其与[0]比较；若[2]比[0]大则将[2]插入[0]右侧、[1]左侧，若小则将[2]插入[0]左侧
-//以此类推后续过程，直到遍历至列表中的最后一个元素并完成其判断与可能的移动，排序结束
+//取出列表索引1处的值，其与0索引值比较，若[1]比[0]大则无需移动，若小则将[1]插入[0]左侧
+//然后取出索引2处的值，其与1索引值比较，若[2]比[1]大则无需移动，若小则将其与[0]比较；若[2]比[0]大则将[2]插入[0]右侧、[1]左侧，若小则将[2]插入[0]左侧
+//依此类推后续过程，直到遍历至列表中的最后一个元素并完成其判断与可能的移动，排序结束
 template <typename T>
-void InsertionSort(std::vector<T>& _list, std::vector<std::vector<T>>& _states)
+void InsertionSort(std::vector<T>& _list, SortingStates& _states)
 {
+    #pragma region StatesRecord
     //记录初始状态
-    _states.emplace_back(_list);
+    _states.EmplaceBack(_list);
+    #pragma endregion
 
-    //注意从索引1处开始而不是0，因为0索引处的左侧没有元素，其无需进行插入操作
-    for (std::vector<T>::iterator _it = _list.begin() + 1; _it != _list.end(); _it++)
+    //注意我们从索引1处开始，因为索引0处的左侧无元素可以比较
+    for (size_t i = 1; i < _list.size(); i++)
     {
-        //取出索引处的元素，并在存储了指向其前一个元素的迭代器后将索引处元素移除
-        T _pop = *_it;
-        std::vector<T>::iterator _temp = _it - 1;
-        _list.erase(_it);
-
-        //从迭代器_it左侧的第一个元素开始向左遍历，依次将_pop与*_temp进行比较
-        while (_temp != _list.begin())
+        //将i索引处的值向左浮动至符合顺序的位置进行"插入"
+        size_t _idx = i;
+        while (_list[_idx - 1] > _list[_idx])
         {
-            //若不比该元素小，则将_pop插入该元素右侧
-            if (_pop >= *_temp)
-            {
-                _list.insert(_temp + 1, _pop);
-                break;
-            }
-
-            _temp--;
+            std::swap(_list[_idx - 1], _list[_idx]);
+            _idx--;
         }
+
+        #pragma region StatesRecord
+        //标记被插入处的索引
+        std::vector<size_t> _tags = { _idx };
+        _states.EmplaceBack(_list, _tags);
+        #pragma endregion
     }
 }
 

@@ -2,14 +2,17 @@
 #define _MERGE_SORT_HPP_
 
 #include <vector>
+#include "SortingStates.hpp"
 
 //归并排序：
 //
 template <typename T>
-void MergeSort(std::vector<T>& _list, std::vector<std::vector<T>>& _states)
+void MergeSort(std::vector<T>& _list, SortingStates& _states)
 {
+    #pragma region StatesRecord
     //记录初始状态
-    _states.emplace_back(_list);
+    _states.EmplaceBack(_list);
+    #pragma endregion
 }
 
 #endif

@@ -2,28 +2,19 @@
 #define _SELECTION_SORT_HPP_
 
 #include <vector>
-
-//交换列表中的两个元素，额外使用O(1)的内存空间
-template <typename T>
-void Swap(std::vector<T>& _list, int _idx1, int _idx2)
-{
-    if (_idx1 == _idx2)
-        return;
-
-    T _temp = _list[_idx1];
-    _list[_idx1] = _list[_idx2];
-    _list[_idx2] = _temp;
-}
+#include "SortingStates.hpp"
 
 //选择排序：
 //从列表的未排序部分（在最开始，整个列表视为未排序的）中取出最小的值，交换到该部分列表的首位（若首位本来就是最小的，则无需进行Swap操作）
 //交换至首位后，该位置的值被纳入整个列表的已排序部分，下次判断操作则从剩余的未排序部分开始
 template <typename T>
-void SelectionSort(std::vector<T>& _list, std::vector<std::vector<T>>& _states)
+void SelectionSort(std::vector<T>& _list, SortingStates& _states)
 //传入需要被排序的列表的引用，以及用于存储排序过程的容器的引用
 {
+    #pragma region StatesRecord
     //记录初始状态
-    _states.emplace_back(_list);
+    _states.EmplaceBack(_list);
+    #pragma endregion
 
     for (size_t i = 0; i < _list.size(); i++)
     {
@@ -40,9 +31,13 @@ void SelectionSort(std::vector<T>& _list, std::vector<std::vector<T>>& _states)
             continue;
 
         //将未排序部分列表的最小值放到其首（即已排序部分列表的末尾）
-        Swap(_list, i, _minIdx);
-        //每交换一次即实现了一次操作，记录该操作后的列表状态
-        _states.emplace_back(_list);
+        std::swap(_list[i], _list[_minIdx]);
+
+        #pragma region StatesRecord
+        //每交换一次即实现了一次操作，记录该操作后的列表状态，标记被交换的两个索引
+        std::vector<size_t> _tags = { i, _minIdx };
+        _states.EmplaceBack(_list, _tags);
+        #pragma endregion
     }
 }
 

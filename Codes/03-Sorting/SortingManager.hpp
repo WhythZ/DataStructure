@@ -5,6 +5,7 @@
 #include <fstream>
 #include <functional>
 
+#include "SortingStates.hpp"
 #include "01-SelectionSort.hpp"
 #include "02-InsertionSort.hpp"
 #include "03-BubbleSort.hpp"
@@ -46,9 +47,7 @@ private:
 	void LoadTestCase(std::string);             //加载乱序列表测试用例文件
 
 	//使用传入的排序算法对列表进行排序测试
-	void TestWith(std::function<void(std::vector<int>&, std::vector<std::vector<int>>&)>, SortType) const;
-	//对比列表的相邻两个状态，找出被交换的两个元素索引（此函数的复杂度的确高，但是可以和排序算法本身逻辑分离）
-	std::tuple<size_t, size_t> GetComparison(const std::vector<int>&, const std::vector<int>&) const;
+	void TestWith(std::function<void(std::vector<int>&, SortingStates&)>, SortType) const;
 };
 
 SortingManager* SortingManager::instance = nullptr;
@@ -118,109 +117,52 @@ void SortingManager::LoadTestCase(std::string _path)
 	_file.close();
 }
 
-void SortingManager::TestWith(std::function<void(std::vector<int>&, std::vector<std::vector<int>>&)> _algorithm, SortType _tag) const
+void SortingManager::TestWith(std::function<void(std::vector<int>&, SortingStates&)> _algorithm, SortType _tag) const
 {
 	//复制一份原始乱序列表并对其进行排序
 	std::vector<int> _copy = srcList;
 	//将排序过程存储在容器中，该容器记录了一个存储int的线性表从unordered到ordered的全过程
-	std::vector<std::vector<int>> _states;
+	SortingStates _states;
 	_algorithm(_copy, _states);
 
 	std::cout << "--------------------------------------------------\n";
 	std::cout << "##LengthOfUnorderedList=" << srcList.size() << "\n";
 	
-	//打印算法名称与复杂度
+	//打印算法名称与复杂度，并依据不同的算法进行不同的可视化打印
 	switch (_tag)
 	{
 	case SortType::Selection:
-		std::cout << "##SelectionSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##SelectionSort=O(" << _states.GetSize() - 1 << ")\n";
 		break;
 	case SortType::Insertion:
-		std::cout << "##InsertionSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##InsertionSort=O(" << _states.GetSize() - 1 << ")\n";
 		break;
 	case SortType::Bubble:
-		std::cout << "##BubbleSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##BubbleSort=O(" << _states.GetSize() - 1 << ")\n";
 		break;
 	case SortType::Heap:
-		std::cout << "##HeapSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##HeapSort=O(" << _states.GetSize() - 1 << ")\n";
 		break;
 	case SortType::Merge:
-		std::cout << "##MergeSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##MergeSort=O(" << _states.GetSize() - 1 << ")\n";
 		break;
 	case SortType::Quick:
-		std::cout << "##QuickSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##QuickSort=O(" << _states.GetSize() - 1 << ")\n";
 		break;
 	case SortType::Bucket:
-		std::cout << "##BucketSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##BucketSort=O(" << _states.GetSize() - 1 << ")\n";
 		break;
 	case SortType::Radix:
-		std::cout << "##RadixSort=O(" << _states.size() - 1 << ")\n";
+		std::cout << "##RadixSort=O(" << _states.GetSize() - 1 << ")\n";
 		break;
 	default:
 		break;
 	}
 
-	//在外层的列表状态遍历过程中存储当前状态和前一个状态的差异（即一个Swap操作造成的差异）
-	size_t _idx1 = 0, _idx2 = 0;
-	for (size_t i = 0; i < _states.size(); i++)
-	{
-		//打印状态顺序索引
-		std::cout << "[" << i << "]:\t";
-
-		//获取和前一个列表状态的差异位置索引
-		if (i > 0)
-		{
-			_idx1 = std::get<0>(GetComparison(_states[i], _states[i - 1]));
-			_idx2 = std::get<1>(GetComparison(_states[i], _states[i - 1]));
-		}
-
-		//内层循环遍历打印每个状态下的列表状况
-		for (size_t j = 0; j < _states[i].size(); j++)
-		{
-			if ((j == _idx1 || j == _idx2) && _idx1 != _idx2)
-			{
-				std::cout << "{" << _states[i][j] << "},";
-				continue;
-			}
-			std::cout << _states[i][j] << ",";
-		}
-
-		std::cout << "\n";
-	}
+	//打印算法实现过程
+	_states.Print();
 
 	std::cout << "--------------------------------------------------\n";
-}
-
-std::tuple<size_t, size_t> SortingManager::GetComparison(const std::vector<int>& _list1, const std::vector<int>& _list2) const
-{
-	//使用vector重载的==运算符进行比较（会考虑元素的顺序）
-	if (_list1 == _list2)
-		throw std::runtime_error("ERROR: Two states of the list are equal");
-	
-	if (_list1.size() != _list2.size())
-		throw std::runtime_error("ERROR: Size of the two states of the list are unequal");
-
-	//记录两个差异位置的索引
-	size_t _idx1, _idx2;
-	//记录两列表共有几个相同索引位置处的元素值不同，若超过了两个则说明两个状态的差异并不是单个Swap操作造成的
-	size_t _diffCounter = 0;
-
-	//对比两个列表相同索引位置的值
-	for (size_t i = 0; i < _list1.size(); i++)
-	{
-		if (_list1[i] != _list2[i])
-		{
-			_diffCounter++;
-			if (_diffCounter == 1)
-				_idx1 = i;
-			else if (_diffCounter == 2)
-				_idx2 = i;
-			else if (_diffCounter > 2)
-				throw std::runtime_error("ERROR: More than one \"Swap\" operation between the two list states");
-		}
-	}
-
-	return std::tuple<size_t, size_t>(_idx1, _idx2);
 }
 
 #endif
