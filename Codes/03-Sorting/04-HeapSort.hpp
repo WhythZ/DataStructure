@@ -5,7 +5,6 @@
 #include "SortingStates.hpp"
 
 //堆排序：
-//
 template <typename T>
 void HeapSort(std::vector<T>& _list, SortingStates& _states)
 {

@@ -5,7 +5,6 @@
 #include "SortingStates.hpp"
 
 //快速排序：
-//
 template <typename T>
 void QuickSort(std::vector<T>& _list, SortingStates& _states)
 {

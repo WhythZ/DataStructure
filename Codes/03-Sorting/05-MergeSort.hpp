@@ -5,7 +5,6 @@
 #include "SortingStates.hpp"
 
 //归并排序：
-//
 template <typename T>
 void MergeSort(std::vector<T>& _list, SortingStates& _states)
 {
