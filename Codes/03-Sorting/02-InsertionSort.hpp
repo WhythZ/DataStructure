@@ -21,6 +21,7 @@ void InsertionSort(std::vector<T>& _list, SortingStates& _states)
     {
         //将i索引处的值向左浮动至符合顺序的位置进行"插入"
         size_t _idx = i;
+        
         while (_list[_idx - 1] > _list[_idx])
         {
             std::swap(_list[_idx - 1], _list[_idx]);
@@ -33,6 +34,27 @@ void InsertionSort(std::vector<T>& _list, SortingStates& _states)
             #pragma endregion
         }
     }
+
+    // //优化掉std::swap函数后的算法
+    // for (size_t i = 1; i < _list.size(); i++)
+    // {
+    //     size_t _idx = i;
+    //     //临时存储该值
+    //     T _tmp = _list[i];
+    //     //注意这里是与上述存储的值进行比较
+    //     while (_list[_idx - 1] > _tmp)
+    //     {
+    //         _list[_idx] = _list[_idx - 1];
+    //         _idx--;
+    //     }
+    //     //将之前临时存下的值赋值到此处
+    //     _list[_idx] = _tmp;
+    //     #pragma region StatesRecord
+    //     if (_idx == i) continue;
+    //     std::vector<size_t> _tags = { _idx };
+    //     _states.EmplaceBack(_list, _tags);
+    //     #pragma endregion
+    // }
 }
 
 #endif

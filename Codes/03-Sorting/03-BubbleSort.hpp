@@ -4,7 +4,6 @@
 #include <vector>
 
 //冒泡排序：
-//进行
 template <typename T>
 void BubbleSort(std::vector<T>& _list, SortingStates& _states)
 {
