@@ -25,13 +25,13 @@ void InsertionSort(std::vector<T>& _list, SortingStates& _states)
         {
             std::swap(_list[_idx - 1], _list[_idx]);
             _idx--;
+            
+            #pragma region StatesRecord
+            //标记被插入处的索引
+            std::vector<size_t> _tags = { _idx };
+            _states.EmplaceBack(_list, _tags);
+            #pragma endregion
         }
-
-        #pragma region StatesRecord
-        //标记被插入处的索引
-        std::vector<size_t> _tags = { _idx };
-        _states.EmplaceBack(_list, _tags);
-        #pragma endregion
     }
 }
 

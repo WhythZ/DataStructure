@@ -132,28 +132,28 @@ void SortingManager::TestWith(std::function<void(std::vector<int>&, SortingState
 	switch (_tag)
 	{
 	case SortType::Selection:
-		std::cout << "##SelectionSort=O(" << _states.GetSize() - 1 << ")\n";
+		std::cout << "##SelectionSort\n";
 		break;
 	case SortType::Insertion:
-		std::cout << "##InsertionSort=O(" << _states.GetSize() - 1 << ")\n";
+		std::cout << "##InsertionSort\n";
 		break;
 	case SortType::Bubble:
-		std::cout << "##BubbleSort=O(" << _states.GetSize() - 1 << ")\n";
+		std::cout << "##BubbleSort\n";
 		break;
 	case SortType::Heap:
-		std::cout << "##HeapSort=O(" << _states.GetSize() - 1 << ")\n";
+		std::cout << "##HeapSort\n";
 		break;
 	case SortType::Merge:
-		std::cout << "##MergeSort=O(" << _states.GetSize() - 1 << ")\n";
+		std::cout << "##MergeSort\n";
 		break;
 	case SortType::Quick:
-		std::cout << "##QuickSort=O(" << _states.GetSize() - 1 << ")\n";
+		std::cout << "##QuickSort\n";
 		break;
 	case SortType::Bucket:
-		std::cout << "##BucketSort=O(" << _states.GetSize() - 1 << ")\n";
+		std::cout << "##BucketSort\n";
 		break;
 	case SortType::Radix:
-		std::cout << "##RadixSort=O(" << _states.GetSize() - 1 << ")\n";
+		std::cout << "##RadixSort\n";
 		break;
 	default:
 		break;

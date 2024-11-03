@@ -19,7 +19,7 @@ void SelectionSort(std::vector<T>& _list, SortingStates& _states)
     for (size_t i = 0; i < _list.size(); i++)
     {
         //获取列表的未排序部分的最小元素索引
-        int _minIdx = i;
+        size_t _minIdx = i;
         for (size_t j = i + 1; j < _list.size(); j++)
         {
             if (_list[j] < _list[_minIdx])

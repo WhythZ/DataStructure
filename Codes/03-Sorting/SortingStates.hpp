@@ -35,11 +35,13 @@ std::ostream& operator<<(std::ostream& _cout, const State& _state)
         if (std::find(_state.tags.begin(), _state.tags.end(), i) != _state.tags.end())
         {
             //使用特殊方法打印
-            _cout << "<" << _state.list[i] << ">,";
+            _cout << "<" << _state.list[i] << ">";
+            if (i != _state.list.size() - 1) std::cout << ",";
             continue;
         }
         //否则正常打印
-        _cout << " " << _state.list[i] << " ,";
+        _cout << " " << _state.list[i];
+        if (i != _state.list.size() - 1) std::cout << " ,";
     }
     return _cout;
 }
