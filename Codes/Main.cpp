@@ -35,7 +35,7 @@ int main()
     // Test_Bi_Tree_Node::MainTest();
     // Test_Bi_Tree_Iterator::MainTest();
     // Test_Bi_Search_Tree::MainTest();
-    Test_Max_Heap::MainTest();
+    // Test_Max_Heap::MainTest();
 
     // SortingManager::GetInstance()->Run(SortType::Selection);
     // SortingManager::GetInstance()->Run(SortType::Insertion);
