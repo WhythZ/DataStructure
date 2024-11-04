@@ -16,7 +16,7 @@
 #include "02-Tree/08-NaryTreeNode.hpp"
 #include "02-Tree/09-MultiSearchTree.hpp"
 #include "02-Tree/10-BPlusTree.hpp"
-#include "02-Tree/11-MinHeap.hpp"
+#include "02-Tree/11-MaxHeap.hpp"
 
 #include "03-Sorting/SortingManager.hpp"
 
@@ -35,10 +35,11 @@ int main()
     // Test_Bi_Tree_Node::MainTest();
     // Test_Bi_Tree_Iterator::MainTest();
     // Test_Bi_Search_Tree::MainTest();
+    Test_Max_Heap::MainTest();
 
     // SortingManager::GetInstance()->Run(SortType::Selection);
     // SortingManager::GetInstance()->Run(SortType::Insertion);
-    SortingManager::GetInstance()->Run(SortType::Bubble);
+    // SortingManager::GetInstance()->Run(SortType::Bubble);
     // SortingManager::GetInstance()->Run(SortType::Heap);
     // SortingManager::GetInstance()->Run(SortType::Merge);
     // SortingManager::GetInstance()->Run(SortType::Quick);

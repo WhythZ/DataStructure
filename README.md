@@ -21,7 +21,7 @@ This repo stores C++ implementations of common data structures and algorithms as
         - Search
             - ~~AVL~~
             - ~~Red-Black~~
-        - ~~Heap~~
+        - Heap
 
 - Sorting Methods
     - $O(n^2)$
@@ -29,7 +29,7 @@ This repo stores C++ implementations of common data structures and algorithms as
         - Insertion
         - Bubble
     - $O(n\ln{n})$
-        - ~~Heap~~
+        - Heap
         - ~~Merge~~
         - ~~Quick~~
     - $O(n)$
