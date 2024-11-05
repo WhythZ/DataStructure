@@ -3,7 +3,7 @@
 
 #include <vector>
 
-// //基础的冒泡排序：
+// //基础的冒泡排序
 // template <typename T>
 // void BubbleSort(std::vector<T>& _list, SortingStates& _states)
 // {
@@ -32,7 +32,7 @@
 //     }
 // }
 
-// //优化后的冒泡排序：
+// //优化后的冒泡排序
 // template <typename T>
 // void BubbleSort(std::vector<T>& _list, SortingStates& _states)
 // {

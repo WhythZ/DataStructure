@@ -4,7 +4,7 @@
 #include <vector>
 #include "SortingStates.hpp"
 
-//桶排序：
+//桶排序
 template <typename T>
 void BucketSort(std::vector<T>& _list, SortingStates& _states)
 {

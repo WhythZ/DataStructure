@@ -44,7 +44,7 @@ void PercolateDown(std::vector<T>& _list, size_t _size, typename std::vector<T>:
     }
 }
 
-//堆排序：
+//堆排序
 template <typename T>
 void HeapSort(std::vector<T>& _list, SortingStates& _states)
 {

@@ -4,7 +4,7 @@
 #include <vector>
 #include "SortingStates.hpp"
 
-//基数排序：
+//基数排序
 template <typename T>
 void RadixSort(std::vector<T>& _list, SortingStates& _states)
 {

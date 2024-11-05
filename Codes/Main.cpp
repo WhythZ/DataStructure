@@ -41,7 +41,7 @@ int main()
     // SortingManager::GetInstance()->Run(SortType::Insertion);
     // SortingManager::GetInstance()->Run(SortType::Bubble);
     // SortingManager::GetInstance()->Run(SortType::Heap);
-    // SortingManager::GetInstance()->Run(SortType::Merge);
+    SortingManager::GetInstance()->Run(SortType::Merge);
     // SortingManager::GetInstance()->Run(SortType::Quick);
     // SortingManager::GetInstance()->Run(SortType::Bucket);
     // SortingManager::GetInstance()->Run(SortType::Radix);
