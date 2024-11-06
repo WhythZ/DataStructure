@@ -2,6 +2,7 @@
 #define _BUBBLE_SORT_HPP_
 
 #include <vector>
+#include "SortingStates.hpp"
 
 // //基础的冒泡排序
 // template <typename T>
