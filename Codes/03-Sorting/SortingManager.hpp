@@ -7,8 +7,8 @@
 
 #include "SortingStates.hpp"
 #include "01-SelectionSort.hpp"
-#include "02-InsertionSort.hpp"
-#include "03-BubbleSort.hpp"
+#include "02-BubbleSort.hpp"
+#include "03-InsertionSort.hpp"
 #include "04-HeapSort.hpp"
 #include "05-MergeSort.hpp"
 #include "06-QuickSort.hpp"
