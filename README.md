@@ -30,8 +30,8 @@ This repo stores C++ implementations of common data structures and algorithms as
         - Bubble
     - $O(n\ln{n})$
         - Heap
-        - ~~Merge~~
-        - ~~Quick~~
+        - Merge
+        - Quick
     - $O(n)$
         - ~~Bucket~~
         - ~~Radix~~
