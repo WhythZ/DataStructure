@@ -7,34 +7,50 @@ This repo is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licen
 This repo stores C++ implementations of common data structures and algorithms as listed below, note that the lists and trees are completed without STL
 
 - Linear Lists
-    - Sequential
-    - Linked
-    - Stack
-    - Queue
+    - Sequential (Completed)
+    - Linked (Completed)
+    - Stack (Completed)
+    - Queue (Completed)
 
 - Tree Structures
     - Multi
+        - Basic (Completed)
         - ~~N-ary~~
         - ~~Search~~
         - ~~B+~~
     - Binary
-        - Search
+        - Basic (Completed)
+        - Search (Completed)
             - ~~AVL~~
             - ~~Red-Black~~
-        - Heap
+        - Heap (Completed)
 
 - Sorting Methods
     - $O(n^2)$
-        - Selection
-        - Insertion
-        - Bubble
+        - Selection (Completed)
+        - Insertion (Completed)
+        - Bubble (Completed)
     - $O(n\ln{n})$
-        - Heap
-        - Merge
-        - Quick
+        - Heap (Completed)
+        - Merge (Completed)
+        - Quick (Completed)
     - $O(n)$
         - ~~Bucket~~
         - ~~Radix~~
+
+- Graph
+    - Structures
+        - ~~Adjacency-Matrix~~
+        - ~~Adjacency-List~~
+    - Algorithms
+        - MST
+            - ~~Prim-List~~
+            - ~~Prim-Heap~~
+            - ~~Kruskal~~
+        - Search
+            - ~~BFS/DFS~~ 
+            - ~~Dijkstra~~
+            - ~~A*~~
 
 Though several of them are not completed because of my lack of leisure, you can also check related notes posted on my own [blog](https://whythz.github.io/) for detailed explanations
 
