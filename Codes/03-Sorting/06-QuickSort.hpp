@@ -52,7 +52,7 @@ void MetaQuickSort(std::vector<T>& _list, size_t _begin, size_t _end, SortingSta
         }
         return;
     }
-    // //可以在长度低于某阈值时使用低空间复杂度排序，如传入排序
+    // //可以在长度低于某阈值时使用低空间复杂度排序，如插入排序
     // if (_length <= N) { return; }
     
     //计算列表中点位置元素的索引，此变量仅在确定基准时使用一次，不影响后续实际排序时的逻辑
