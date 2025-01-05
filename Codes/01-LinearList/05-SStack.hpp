@@ -107,7 +107,7 @@ void SStack<T>::DoubleTheCapacity()
     }
     //销毁原数组占用的内存
     delete[] array;
-    //将栈的数组指针指向新数组，无需管此作用域内的临时指针
+    //将栈的数组指针指向新数组
     array = _temp;
     //登记一下新的数组容量
     arrayCapacity *= 2;
