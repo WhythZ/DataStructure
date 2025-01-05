@@ -95,7 +95,7 @@ void TreeIterator<X>::TraversalDFS(X _node, int _idx)
         if (stack.IsEmpty())
             return;
 
-        //记录这个叶节点的父节点，不能用_node->GetParentPtr()获取，因为调用TraversalDFS()重载函数的节点不一定是根节点（只是把它当成根节点来打印而已）
+        //记录这个被弹出的节点的父节点，不能用_node->GetParentPtr()获取，因为调用TraversalDFS()重载函数的节点不一定是根节点（只是把它当成根节点来打印而已）
         X _parent = stack.GetTop();
         //获取该父节点的下一个子节点分支的索引
         int _nextBranchIdx = _parent->FindChildIdx(_node) + 1;
