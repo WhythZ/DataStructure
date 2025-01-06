@@ -177,21 +177,18 @@ void SQueue<T>::DoubleTheCapacity()
     if (backIdx > frontIdx)
     {
         for (int i = 0; i <= backIdx; i++)
-        {
             _temp[i] = array[i];
-        }
     }
     else if (backIdx < frontIdx)
     {
         for (int i = frontIdx; i < arrayCapacity; i++)
-        {
             _temp[i - frontIdx] = array[i];
-        }
         for (int j = 0; j <= backIdx; j++)
-        {
             _temp[j + frontIdx] = array[j];
-        }
     }
+    //特殊处理数组容量为1且其内只有一个元素的情况
+    else
+        _temp[0]=array[0]
 
     //将头尾索引摆到正确位置
     frontIdx = 0;
