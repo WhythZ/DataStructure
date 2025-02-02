@@ -15,15 +15,17 @@ This repo stores C++ implementations of common data structures and algorithms as
 - Tree Structures
     - Multi
         - Basic (Completed)
-        - ~~N-ary~~
-        - ~~Search~~
-        - ~~B+~~
     - Binary
         - Basic (Completed)
-        - Search (Completed)
+        - Heap (Completed)
+        - Search
+            - Basic (Completed)
             - ~~AVL~~
             - ~~Red-Black~~
-        - Heap (Completed)
+    - N-ary
+        - ~~Basic~~
+        - ~~Search~~
+        - ~~B+~~
 
 - Sorting Methods
     - $O(n^2)$
