@@ -66,11 +66,11 @@ void SortingManager::Run(SortType _type)
 	case SortType::Selection:
 		TestWith(SelectionSort<int>, _type);
 		break;
-	case SortType::Insertion:
-		TestWith(InsertionSort<int>, _type);
-		break;
 	case SortType::Bubble:
 		TestWith(BubbleSort<int>, _type);
+		break;
+	case SortType::Insertion:
+		TestWith(InsertionSort<int>, _type);
 		break;
 	case SortType::Heap:
 		TestWith(HeapSort<int>, _type);

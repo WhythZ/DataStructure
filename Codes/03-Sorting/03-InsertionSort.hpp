@@ -26,7 +26,11 @@ void InsertionSort(std::vector<T>& _list, SortingStates& _states)
         {
             std::swap(_list[_idx - 1], _list[_idx]);
             _idx--;
-            
+
+            //防止在下一个循环出现试图取得_list[-1]的数组越界问题
+            if (_idx == 0)
+                break;
+
             #pragma region StatesRecord
             //标记被插入处的索引
             std::vector<size_t> _tags = { _idx };
