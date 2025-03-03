@@ -58,12 +58,24 @@ Though several of them are not completed because of my lack of leisure, you can 
 
 ## Using
 
-1. Ensure that your VSCode has installed these addons: `C/C++`, `CMake`, `CMake Tools`
+Ensure that your VSCode has installed these addons: `C/C++`, `CMake`, `CMake Tools`, then clone this repo and open it in VSCode
+```
+git clone https://github.com/WhythZ/DataStructure.git
+```
 
-2. Use `Ctrl + F5` to use CMake to generate the executable file and run it
-    - You can comment the unwanted test cases in `Main.cpp` to hide them
-    - The data structures and algorithms' process will be visually printed in console
+Use `Ctrl+Shift+P` and then find `CMake: Configure`, choose your local compiler such as gcc from mingw, read [here](https://whythz.github.io/posts/VSCode%E4%B8%AD%E7%9A%84CMake%E7%BC%96%E8%AF%91%E4%B8%8E%E8%B0%83%E8%AF%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/) for details of this and following steps
 
-3. If you want to debug with gdb, follow the steps, else you can ignore this part
-    - Firstly change the `"miDebuggerPath"` value in the `launch.json` to your local MinGW `gdb.exe` directory
-    - Then use `Ctrl + Shift + D` and click the related button to start debugging with breakpoints
+Then you will find a `build` folder generated in root directory, cd into it in terminal, use instructions below to compile for the first time
+```
+cd build
+cmake ..
+mingw32-make.exe
+```
+
+After finished all before, you can use `Ctrl+F5` to re-generate the executable file after you edit the codes and run it
+- You can comment the unwanted test cases in `Main.cpp` to hide them
+- The data structures and algorithms' process will be visually printed in console
+
+If you want to debug with gdb
+- Firstly change the `"miDebuggerPath"` value in the `launch.json` to your local MinGW `gdb.exe` directory
+- Then use `Ctrl + Shift + D` and click the related button to start debugging with breakpoints
