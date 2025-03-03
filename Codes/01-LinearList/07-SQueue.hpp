@@ -188,7 +188,7 @@ void SQueue<T>::DoubleTheCapacity()
     }
     //特殊处理数组容量为1且其内只有一个元素的情况
     else
-        _temp[0]=array[0]
+        _temp[0] = array[0];
 
     //将头尾索引摆到正确位置
     frontIdx = 0;
