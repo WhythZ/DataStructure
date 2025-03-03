@@ -63,7 +63,7 @@ Ensure that your VSCode has installed these addons: `C/C++`, `CMake`, `CMake Too
 git clone https://github.com/WhythZ/DataStructure.git
 ```
 
-Use `Ctrl+Shift+P` and then find `CMake: Configure`, choose your local compiler such as gcc from mingw, read [here](https://whythz.github.io/posts/VSCode%E4%B8%AD%E7%9A%84CMake%E7%BC%96%E8%AF%91%E4%B8%8E%E8%B0%83%E8%AF%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/) for details of this and following steps
+Use `Ctrl+Shift+P` and then find `CMake: Configure`, choose your local compiler such as gcc from MinGW, read [here](https://whythz.github.io/posts/VSCode%E4%B8%AD%E7%9A%84CMake%E7%BC%96%E8%AF%91%E4%B8%8E%E8%B0%83%E8%AF%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/) for details of this and following steps
 
 Then you will find a `build` folder generated in root directory, cd into it in terminal, use instructions below to compile for the first time
 ```
