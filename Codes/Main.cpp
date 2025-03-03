@@ -22,27 +22,27 @@
 
 int main()
 {
-    // Test_Sequential_List::MainTest();
-    // Test_Single_Linked_List::MainTest();
-    // Test_Double_Linked_List::MainTest();
-    // Test_L_Stack::MainTest();
-    // Test_S_Stack::MainTest();
-    // Test_L_Queue::MainTest();
-    // Test_S_Queue::MainTest();
+    Test_Sequential_List::MainTest();
+    Test_Single_Linked_List::MainTest();
+    Test_Double_Linked_List::MainTest();
+    Test_L_Stack::MainTest();
+    Test_S_Stack::MainTest();
+    Test_L_Queue::MainTest();
+    Test_S_Queue::MainTest();
 
-    // Test_Tree_Node::MainTest();
+    Test_Tree_Node::MainTest();
     Test_Tree_Iterator::MainTest();
-    // Test_Bi_Tree_Node::MainTest();
-    // Test_Bi_Tree_Iterator::MainTest();
-    // Test_Bi_Search_Tree::MainTest();
-    // Test_Max_Heap::MainTest();
+    Test_Bi_Tree_Node::MainTest();
+    Test_Bi_Tree_Iterator::MainTest();
+    Test_Bi_Search_Tree::MainTest();
+    Test_Max_Heap::MainTest();
 
-    // SortingManager::GetInstance()->Run(SortType::Selection);
-    // SortingManager::GetInstance()->Run(SortType::Bubble);
-    // SortingManager::GetInstance()->Run(SortType::Insertion);
-    // SortingManager::GetInstance()->Run(SortType::Heap);
-    // SortingManager::GetInstance()->Run(SortType::Merge);
-    // SortingManager::GetInstance()->Run(SortType::Quick);
-    // SortingManager::GetInstance()->Run(SortType::Bucket);
-    // SortingManager::GetInstance()->Run(SortType::Radix);
+    SortingManager::GetInstance()->Run(SortType::Selection);
+    SortingManager::GetInstance()->Run(SortType::Bubble);
+    SortingManager::GetInstance()->Run(SortType::Insertion);
+    SortingManager::GetInstance()->Run(SortType::Heap);
+    SortingManager::GetInstance()->Run(SortType::Merge);
+    SortingManager::GetInstance()->Run(SortType::Quick);
+    SortingManager::GetInstance()->Run(SortType::Bucket);
+    SortingManager::GetInstance()->Run(SortType::Radix);
 }
