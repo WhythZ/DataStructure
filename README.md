@@ -57,8 +57,8 @@ This repo stores C++ implementations of common data structures and algorithms as
 Though several of them are not completed because of my lack of leisure, you can also check related notes posted on my own [blog](https://whythz.github.io/) for detailed explanations
 
 ## Using
-
 Ensure that your VSCode has installed these addons: `C/C++`, `CMake`, `CMake Tools`, then clone this repo and open it in VSCode
+
 ```
 git clone https://github.com/WhythZ/DataStructure.git
 ```
@@ -66,6 +66,7 @@ git clone https://github.com/WhythZ/DataStructure.git
 Use `Ctrl + Shift + P` and then find `CMake: Configure`, choose your local compiler such as gcc from MinGW, read [here](https://whythz.github.io/posts/VSCode%E4%B8%AD%E7%9A%84CMake%E7%BC%96%E8%AF%91%E4%B8%8E%E8%B0%83%E8%AF%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/) for details of this and following steps
 
 Then you will find a `build` folder generated in root directory, cd into it in terminal, use instructions below to compile for the first time
+
 ```
 cd build
 cmake ..
