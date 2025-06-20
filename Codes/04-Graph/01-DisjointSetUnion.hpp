@@ -22,6 +22,7 @@ public:
     size_t Find(size_t);             //路径压缩优化，查询某个元素所处不相交集合的根节点
     void Union(size_t, size_t);      //按秩合并优化，合并两个不相交集合集为一个新的集合
 
+    size_t GetSetNum() const;        //获取并查集中不相交集合的数量
     void Print() const;              //打印内核数组用于测试，特别标注根节点
 };
 
@@ -93,6 +94,17 @@ void DisjointSetUnion::Union(size_t _idx1, size_t _idx2)
     }
 }
 
+size_t DisjointSetUnion::GetSetNum() const
+{
+    size_t _num = 0;
+    for (size_t i = 0; i < parent.size(); i++)
+    {
+        if (i == parent[i])
+            _num++;
+    }
+    return _num;
+}
+
 void DisjointSetUnion::Print() const
 {
     for (size_t i = 0; i < parent.size(); i++)
@@ -114,9 +126,14 @@ namespace Test_Disjoint_Set_Union
         //开辟一个包含10个元素的并查集
         DisjointSetUnion dsu(10); dsu.Print();
         //{0} {1} {2} {3} {4} {5} {6} {7} {8} {9}
+
         //测试下Find函数
         std::cout << "**dsu.Find(2)\n"; std::cout << dsu.Find(2) << "\n";
         //2
+
+        //测试下GetSetNum函数
+        std::cout << "##dsu.GetSetNum()\n"; std::cout << dsu.GetSetNum() << "\n";
+        //10
 
         //测试下Union函数
         std::cout << "**dsu.Union(0, 1)\n"; dsu.Union(0, 1); dsu.Print();
@@ -140,6 +157,12 @@ namespace Test_Disjoint_Set_Union
         std::cout << "**dsu.Union(2, 9)\n"; dsu.Union(2, 9); dsu.Print();
         //按秩合并优化前： 9   9   9   9  {4} {5} {6}  9   9  {9}
         //按秩合并优化后： 9   9   9   9  {4} {5} {6}  9   9  {9}
+
+        //测试下GetSetNum函数
+        std::cout << "##dsu.GetSetNum()\n"; std::cout << dsu.GetSetNum() << "\n";
+        //4
+
+        //继续测试Union函数
         std::cout << "**dsu.Union(4, 9)\n"; dsu.Union(4, 9); dsu.Print();
         //按秩合并优化前： 9   9   9   9  {4} {5} {6}  9   9   4
         //按秩合并优化后： 9   9   9   9   9  {5} {6}  9   9  {9}
@@ -157,6 +180,10 @@ namespace Test_Disjoint_Set_Union
         dsu.Print();
         //按秩合并优化前： 6   4   9   9   6   4  {6}  9   9   4
         //按秩合并优化后： 9   9   9   9   9   9   9   9   9  {9}
+
+        //测试下GetSetNum函数
+        std::cout << "##dsu.GetSetNum()\n"; std::cout << dsu.GetSetNum() << "\n";
+        //1
 
         std::cout << "--------------------------------------------------\n";
     }
