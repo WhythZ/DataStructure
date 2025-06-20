@@ -20,6 +20,8 @@
 
 #include "03-Sorting/SortingManager.hpp"
 
+#include "04-Graph/01-DisjointSetUnion.hpp"
+
 int main()
 {
     Test_Sequential_List::MainTest();
@@ -45,4 +47,6 @@ int main()
     SortingManager::GetInstance()->Run(SortType::Quick);
     // SortingManager::GetInstance()->Run(SortType::Bucket);
     // SortingManager::GetInstance()->Run(SortType::Radix);
+
+    Test_Disjoint_Set_Union::MainTest();
 }
