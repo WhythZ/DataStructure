@@ -78,4 +78,4 @@ cmake --build .
 
 - After that you can use `Ctrl + F5` to run the executable file to print the running process of the test cases visually in console, by the way if you want to debug the codes with gdb
     - Change the `"miDebuggerPath"` value in the `launch.json` to your local MinGW `gdb.exe` directory
-    - Then use `Ctrl + Shift + D` and click the related button to start debugging with debug tools like breakpoints
+    - Then input `Ctrl + Shift + D` and click related button to start debugging with gdb tools
