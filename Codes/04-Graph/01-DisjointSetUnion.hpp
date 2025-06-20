@@ -10,8 +10,11 @@ class DisjointSetUnion
 private:
     //对于元素值等于索引值的元素，其为所在不相交集合的根节点
     //对于元素值等于索引值的元素，其元素值是其父节点的索引值
-    std::vector<size_t> trees;
-    
+    std::vector<size_t> parent;
+
+    //记录树高，合并时将矮树挂到高树下以避免深度增加（按秩合并优化）
+    // std::vector<size_t> rank;
+
 public:
     DisjointSetUnion(size_t);        //并查集中元素的个数
     
@@ -23,69 +26,61 @@ public:
 
 DisjointSetUnion::DisjointSetUnion(size_t _size)
 {
-    trees.resize(_size);
+    parent.resize(_size);
     //初始时，每个元素都作为一个独立的不相交集合
     for (size_t i = 0; i < _size; i++)
-        trees[i] = i;
+        parent[i] = i;
 }
 
 size_t DisjointSetUnion::Find(size_t _idx)
 {
-    #pragma region WithoutOptimization
-    //暴力实现，直接找到目标根节点，时间复杂度为O(h)=O(\ln n)
-
-    // //递归法，递归地向上查询最顶层的根节点
-    // return (_idx == trees[_idx]) ? _idx : Find(trees[_idx]);
-
-    // //迭代法，直接通过循环找到根节点
-    // while (_idx != trees[_idx])
-    //     _idx = trees[_idx];
-    // return _idx;
-    #pragma endregion
-
-    #pragma region PathCompression
     //路径压缩，在搜索过程中将每个树铺平开来以使得最大深度为1，时间复杂度为O(1)
 
-    // //递归法
-    // if (_idx != trees[_idx])
+    // //递归法，集合链极长时可能导致栈溢出，最好采用迭代法
+    // if (_idx != parent[_idx])
     // {
-    //     trees[_idx] = Find(trees[_idx]);
-    //     return trees[_idx];
+    //     parent[_idx] = Find(parent[_idx]);
+    //     return parent[_idx];
     // }
     // else
     //     return _idx;
 
     //迭代法，先获取根节点索引
     size_t _root = _idx;
-    while (_root != trees[_idx])
-        _root = trees[_idx];
+    while (_root != parent[_root])
+        _root = parent[_root];
     //然后再压缩路径
     while (_idx != _root)
     {
-        size_t _backup = trees[_idx];
-        trees[_idx] = _root;
+        size_t _backup = parent[_idx];
+        parent[_idx] = _root;
         _idx = _backup;
     }
     //最后返回根节点索引
     return _root;
-    #pragma endregion
 }
 
 void DisjointSetUnion::Union(size_t _idx1, size_t _idx2)
 {
-    //将第二个索引对应的根节点并到第一个索引对应的根节点上
-    //此处使用的Find实现了路径压缩，无需再额外实现
-    trees[Find(_idx2)] = Find(_idx1);
+    //将第二个索引节点所属集合并入第一个索引节点所属集合
+    parent[Find(_idx2)] = Find(_idx1);
+
+    // //确保两个索引处的元素是根节点
+    // _idx1 = Find(_idx1);
+    // _idx2 = Find(_idx2);
+    // //将_idx2所属集合合并到_idx1所属集合上
+    // if (_idx1 != _idx2)
+    //     parent[_idx2] = _idx1;
 }
 
 void DisjointSetUnion::Print() const
 {
-    for (size_t i = 0; i < trees.size(); i++)
+    for (size_t i = 0; i < parent.size(); i++)
     {
-        if (i == trees[i])
-            std::cout << "{" << trees[i] << "} ";
+        if (i == parent[i])
+            std::cout << "{" << parent[i] << "} ";
         else
-            std::cout << " " << trees[i] << "  ";
+            std::cout << " " << parent[i] << "  ";
     }
     std::cout << "\n";
 }
@@ -97,8 +92,7 @@ namespace Test_Disjoint_Set_Union
         std::cout << "--------------------------------------------------\n";
 
         //开辟一个包含10个元素的并查集
-        DisjointSetUnion dsu(10);
-        dsu.Print();
+        DisjointSetUnion dsu(10); dsu.Print();
         //{0} {1} {2} {3} {4} {5} {6} {7} {8} {9}
 
         //测试下Find函数
@@ -106,20 +100,32 @@ namespace Test_Disjoint_Set_Union
         //2
 
         //测试下Union函数
+        std::cout << "**dsu.Union(0, 1)\n"; dsu.Union(0, 1); dsu.Print();
+        //{0}  0  {2} {3} {4} {5} {6} {7} {8} {9}
         std::cout << "**dsu.Union(1, 2)\n"; dsu.Union(1, 2); dsu.Print();
-        //{0} {1}  1  {3} {4} {5} {6} {7} {8} {9}
-        std::cout << "**dsu.Union(2, 3)\n"; dsu.Union(2, 3); dsu.Print();
-        //{0} {1}  1   1  {4} {5} {6} {7} {8} {9}
-        std::cout << "**dsu.Union(3, 4)\n"; dsu.Union(3, 4); dsu.Print();
-        //{0} {1}  1   1   1  {5} {6} {7} {8} {9}
-        std::cout << "**dsu.Union(4, 5)\n"; dsu.Union(4, 5); dsu.Print();
-        //{0} {1}  1   1   1   1  {6} {7} {8} {9}
+        //{0}  0   0  {3} {4} {5} {6} {7} {8} {9}
+        std::cout << "**dsu.Union(9, 8)\n"; dsu.Union(9, 8); dsu.Print();
+        //{0}  0   0  {3} {4} {5} {6} {7}  9  {9}
+        std::cout << "**dsu.Union(8, 7)\n"; dsu.Union(8, 7); dsu.Print();
+        //{0}  0   0  {3} {4} {5} {6}  9   9  {9}
+        std::cout << "**dsu.Union(7, 0)\n"; dsu.Union(7, 0); dsu.Print();
+        // 9   0   0  {3} {4} {5} {6}  9   9  {9}
+        std::cout << "**dsu.Union(1, 3)\n"; dsu.Union(1, 3); dsu.Print();
+        // 9   9   0   9  {4} {5} {6}  9   9  {9}
+        std::cout << "**dsu.Union(2, 9)\n"; dsu.Union(2, 9); dsu.Print();
+        // 9   9   9   9  {4} {5} {6}  9   9  {9}
+        std::cout << "**dsu.Union(4, 9)\n"; dsu.Union(4, 9); dsu.Print();
+        // 9   9   9   9  {4} {5} {6}  9   9   4
+        std::cout << "**dsu.Union(1, 5)\n"; dsu.Union(1, 5); dsu.Print();
+        // 9   4   9   9  {4}  4  {6}  9   9   4
+        std::cout << "**dsu.Union(6, 0)\n"; dsu.Union(6, 0); dsu.Print();
+        // 4   4   9   9   6   4  {6}  9   9   4
 
         //测试下Find函数
-        std::cout << "**dsu.Find(5)\n"; std::cout << dsu.Find(5) << "\n";
-        //1
-        std::cout << "**dsu.Find(6)\n"; std::cout << dsu.Find(6) << "\n";
+        std::cout << "**dsu.Find(0)\n"; std::cout << dsu.Find(0) << "\n";
         //6
+        dsu.Print();
+        // 6   4   9   9   6   4  {6}  9   9   4
 
         std::cout << "--------------------------------------------------\n";
     }
