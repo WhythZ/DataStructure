@@ -12,8 +12,9 @@ private:
     //对于元素值等于索引值的元素，其元素值是其父节点的索引值
     std::vector<size_t> parent;
 
-    //记录树高，合并时将矮树挂到高树下以避免深度增加（按秩合并优化）
-    // std::vector<size_t> rank;
+    //用于按秩合并优化，合并时将矮树挂到高树下以降低树的高度
+    //只有当某节点为根节点时，其秩值才有意义，用于衡量其树高度
+    std::vector<size_t> rank;
 
 public:
     DisjointSetUnion(size_t);        //并查集中元素的个数
@@ -26,10 +27,13 @@ public:
 
 DisjointSetUnion::DisjointSetUnion(size_t _size)
 {
+    //每个元素初始时都作为一个独立的不相交集合
     parent.resize(_size);
-    //初始时，每个元素都作为一个独立的不相交集合
     for (size_t i = 0; i < _size; i++)
         parent[i] = i;
+
+    //所有的秩初始为0
+    rank.resize(_size, 0);
 }
 
 size_t DisjointSetUnion::Find(size_t _idx)
@@ -63,7 +67,7 @@ size_t DisjointSetUnion::Find(size_t _idx)
 void DisjointSetUnion::Union(size_t _idx1, size_t _idx2)
 {
     //将第二个索引节点所属集合并入第一个索引节点所属集合
-    parent[Find(_idx2)] = Find(_idx1);
+    // parent[Find(_idx2)] = Find(_idx1);
 
     // //确保两个索引处的元素是根节点
     // _idx1 = Find(_idx1);
@@ -71,6 +75,24 @@ void DisjointSetUnion::Union(size_t _idx1, size_t _idx2)
     // //将_idx2所属集合合并到_idx1所属集合上
     // if (_idx1 != _idx2)
     //     parent[_idx2] = _idx1;
+
+    _idx1 = Find(_idx1);
+    _idx2 = Find(_idx2);
+    //若归属集合相同，则无需进行后续检查
+    if (_idx1 == _idx2) return;
+    
+    //按秩合并决策树，若树1较矮则挂到树2，若树2较矮则挂到树1
+    if (rank[_idx1] < rank[_idx2])
+        parent[_idx1] = _idx2;
+    else if(rank[_idx1] > rank[_idx2])
+        parent[_idx2] = _idx1;
+    else
+    {
+        //秩相等时任意挂接
+        parent[_idx2] = _idx1;
+        //被挂载根节点对应的秩值递增
+        rank[_idx1]++;
+    }
 }
 
 void DisjointSetUnion::Print() const
@@ -94,38 +116,49 @@ namespace Test_Disjoint_Set_Union
         //开辟一个包含10个元素的并查集
         DisjointSetUnion dsu(10); dsu.Print();
         //{0} {1} {2} {3} {4} {5} {6} {7} {8} {9}
-
         //测试下Find函数
         std::cout << "**dsu.Find(2)\n"; std::cout << dsu.Find(2) << "\n";
         //2
 
         //测试下Union函数
         std::cout << "**dsu.Union(0, 1)\n"; dsu.Union(0, 1); dsu.Print();
-        //{0}  0  {2} {3} {4} {5} {6} {7} {8} {9}
+        //按秩合并优化前：{0}  0  {2} {3} {4} {5} {6} {7} {8} {9}
+        //按秩合并优化后：{0}  0  {2} {3} {4} {5} {6} {7} {8} {9}
         std::cout << "**dsu.Union(1, 2)\n"; dsu.Union(1, 2); dsu.Print();
-        //{0}  0   0  {3} {4} {5} {6} {7} {8} {9}
+        //按秩合并优化前：{0}  0   0  {3} {4} {5} {6} {7} {8} {9}
+        //按秩合并优化后：{0}  0   0  {3} {4} {5} {6} {7} {8} {9}
         std::cout << "**dsu.Union(9, 8)\n"; dsu.Union(9, 8); dsu.Print();
-        //{0}  0   0  {3} {4} {5} {6} {7}  9  {9}
+        //按秩合并优化前：{0}  0   0  {3} {4} {5} {6} {7}  9  {9}
+        //按秩合并优化后：{0}  0   0  {3} {4} {5} {6} {7}  9  {9}
         std::cout << "**dsu.Union(8, 7)\n"; dsu.Union(8, 7); dsu.Print();
-        //{0}  0   0  {3} {4} {5} {6}  9   9  {9}
+        //按秩合并优化前：{0}  0   0  {3} {4} {5} {6}  9   9  {9}
+        //按秩合并优化后：{0}  0   0  {3} {4} {5} {6}  9   9  {9}
         std::cout << "**dsu.Union(7, 0)\n"; dsu.Union(7, 0); dsu.Print();
-        // 9   0   0  {3} {4} {5} {6}  9   9  {9}
+        //按秩合并优化前： 9   0   0  {3} {4} {5} {6}  9   9  {9}
+        //按秩合并优化后： 9   0   0  {3} {4} {5} {6}  9   9  {9}
         std::cout << "**dsu.Union(1, 3)\n"; dsu.Union(1, 3); dsu.Print();
-        // 9   9   0   9  {4} {5} {6}  9   9  {9}
+        //按秩合并优化前： 9   9   0   9  {4} {5} {6}  9   9  {9}
+        //按秩合并优化后： 9   9   0   9  {4} {5} {6}  9   9  {9}
         std::cout << "**dsu.Union(2, 9)\n"; dsu.Union(2, 9); dsu.Print();
-        // 9   9   9   9  {4} {5} {6}  9   9  {9}
+        //按秩合并优化前： 9   9   9   9  {4} {5} {6}  9   9  {9}
+        //按秩合并优化后： 9   9   9   9  {4} {5} {6}  9   9  {9}
         std::cout << "**dsu.Union(4, 9)\n"; dsu.Union(4, 9); dsu.Print();
-        // 9   9   9   9  {4} {5} {6}  9   9   4
+        //按秩合并优化前： 9   9   9   9  {4} {5} {6}  9   9   4
+        //按秩合并优化后： 9   9   9   9   9  {5} {6}  9   9  {9}
         std::cout << "**dsu.Union(1, 5)\n"; dsu.Union(1, 5); dsu.Print();
-        // 9   4   9   9  {4}  4  {6}  9   9   4
+        //按秩合并优化前： 9   4   9   9  {4}  4  {6}  9   9   4
+        //按秩合并优化后： 9   9   9   9   9   9  {6}  9   9  {9}
         std::cout << "**dsu.Union(6, 0)\n"; dsu.Union(6, 0); dsu.Print();
-        // 4   4   9   9   6   4  {6}  9   9   4
+        //按秩合并优化前： 4   4   9   9   6   4  {6}  9   9   4
+        //按秩合并优化后： 9   9   9   9   9   9   9   9   9  {9}
 
         //测试下Find函数
         std::cout << "**dsu.Find(0)\n"; std::cout << dsu.Find(0) << "\n";
-        //6
+        //按秩合并优化前：6
+        //按秩合并优化后：9
         dsu.Print();
-        // 6   4   9   9   6   4  {6}  9   9   4
+        //按秩合并优化前： 6   4   9   9   6   4  {6}  9   9   4
+        //按秩合并优化后： 9   9   9   9   9   9   9   9   9  {9}
 
         std::cout << "--------------------------------------------------\n";
     }
