@@ -19,8 +19,8 @@ private:
 public:
     DisjointSetUnion(size_t);        //并查集中元素的个数
     
-    size_t Find(size_t);             //查询某个元素所处不相交集合的根节点
-    void Union(size_t, size_t);      //合并两个不相交集合集为一个新的集合
+    size_t Find(size_t);             //路径压缩优化，查询某个元素所处不相交集合的根节点
+    void Union(size_t, size_t);      //按秩合并优化，合并两个不相交集合集为一个新的集合
 
     void Print() const;              //打印内核数组用于测试，特别标注根节点
 };
@@ -38,8 +38,6 @@ DisjointSetUnion::DisjointSetUnion(size_t _size)
 
 size_t DisjointSetUnion::Find(size_t _idx)
 {
-    //路径压缩，在搜索过程中将每个树铺平开来以使得最大深度为1，时间复杂度为O(1)
-
     // //递归法，集合链极长时可能导致栈溢出，最好采用迭代法
     // if (_idx != parent[_idx])
     // {
